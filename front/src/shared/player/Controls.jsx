@@ -42,7 +42,7 @@ const Controls = forwardRef(function Controls(props, ref) {
           width={"32px"}
           bg={"neutral.300"}
           color={"neutral.900"}
-          // isDisabled={!loaded}
+          isDisabled={!loaded}
         >
           <Icon
             as={paused ? FaPlay : FaPause}

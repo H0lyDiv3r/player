@@ -13,6 +13,7 @@ const initialState = {
 const addPath = "ADD_PATH";
 const popPath = "POP_PAtH";
 const setCurrentTrack = "SET_CURRENT_TRACK";
+const setPath = "SET_PATH";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -30,6 +31,12 @@ const reducer = (state = initialState, action) => {
     case setCurrentTrack:
       console.log("setting");
       return { ...state, currentTrack: action.payload.currentTrack };
+    case setPath:
+      return {
+        ...state,
+        url: action.payload.dir,
+        filePath: path.join("/", action.payload.newPath, "/"),
+      };
     default:
       return state;
   }
@@ -68,11 +75,27 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
+
+  const handleSetPath = (dir) => {
+    const newUrl = dir;
+    let newPath = "";
+    newUrl.map((item) => {
+      newPath = path.join(newPath, item);
+    });
+    dispatch({
+      type: setPath,
+      payload: {
+        dir,
+        newPath,
+      },
+    });
+  };
   const vals = {
     ...state,
     handleAddPath,
     handlePopPath,
     handleSetCurrentTrack,
+    handleSetPath,
   };
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>

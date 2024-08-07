@@ -6,6 +6,7 @@ import TimeLine from "./TimeLine";
 
 import { PlayerContext } from "./PlayerContextProvider";
 import { GlobalContext } from "../../store/GlobalContextProvider";
+import { useEffect } from "react";
 // import { GlobalContext } from '@/app/providers/GlobalProvider'
 
 export default function Player() {
@@ -15,21 +16,20 @@ export default function Player() {
     handlePosition,
     handlePause,
     handleLoaded,
+    loaded,
   } = useContext(PlayerContext);
   const { currentTrack } = useContext(GlobalContext);
   // const {currentEpisode} = useContext(GlobalContext)
 
   const audioRef = useRef(null);
 
-  const buffer = () => {
-    // if(audioRef.current.duration!=audioRef.current.currentTime){
-    //     setBuffered((audioRef.current.buffered.end( audioRef.current.buffered.length - 1 )/audioRef.current.duration)*100)
-    // }
-  };
   const handleLoad = (ref) => {
     handleSetPlayerValues(ref);
     handlePosition(0, ref);
   };
+  useEffect(() => {
+    console.log("loding loading loadlong", audioRef.current);
+  }, [loaded]);
 
   return (
     <>
@@ -47,7 +47,6 @@ export default function Player() {
             controls
             ref={audioRef}
             onPlaying={() => handleTimeline(audioRef)}
-            onProgress={buffer}
             src={`http://localhost:3000/${currentTrack}`}
             onLoadedData={() => handleSetPlayerValues(audioRef)}
             onEnded={() => handlePause(audioRef)}

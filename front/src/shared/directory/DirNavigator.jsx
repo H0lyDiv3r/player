@@ -23,8 +23,14 @@ import { BsFileEarmarkMusicFill } from "react-icons/bs";
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dir, setDir] = useState([{ name: "lala", type: "dir" }]);
-  const { filePath, url, handleAddPath, handlePopPath, handleSetCurrentTrack } =
-    useContext(GlobalContext);
+  const {
+    filePath,
+    url,
+    handleAddPath,
+    handlePopPath,
+    handleSetCurrentTrack,
+    handleSetPath,
+  } = useContext(GlobalContext);
   useEffect(() => {
     console.log("Fetcing");
     axios
@@ -47,13 +53,14 @@ export const DirNavigator = () => {
           minWidth={"600px"}
           maxWidth={"700px"}
           height={"95%"}
-          bg={"trans.100"}
+          bg={"trans.800"}
           backdropFilter={"auto"}
           backdropBlur={"12px"}
           borderColor={"neutral.700"}
           borderStyle={"solid"}
           borderWidth={"1px"}
           my={"1%"}
+          py={"12px"}
         >
           {/* <ModalCloseButton /> */}
           <ModalBody
@@ -62,7 +69,9 @@ export const DirNavigator = () => {
             display={"flex"}
             flexDir={"column"}
           >
-            {/* <Box width={"100%"} p={"12px"} bg={"red"}></Box> */}
+            <Box width={"100%"} p={"6px"}>
+              <Text>Files</Text>
+            </Box>
             <Box
               width={"100%"}
               px={"12px"}
@@ -70,22 +79,45 @@ export const DirNavigator = () => {
               display={"flex"}
               justifyContent={"space-between"}
             >
-              <Box>
-                <Image src={"./folder3.svg"} width={"100px"} />
+              <Box onClick={() => handleSetPath(["home", "yuri", "Desktop"])}>
+                <Image src={"./folder3.svg"} width={"80px"} />
+                <Text>Desktop</Text>
               </Box>
-              <Box>
-                <Image src={"./folder3.svg"} width={"100px"} />
+              <Box onClick={() => handleSetPath(["home", "yuri", "Music"])}>
+                <Image src={"./folder3.svg"} width={"80px"} />
+                <Text>Music</Text>
               </Box>
-              <Box>
-                <Image src={"./folder3.svg"} width={"100px"} />
+              <Box onClick={() => handleSetPath(["home", "yuri", "Videos"])}>
+                <Image src={"./folder3.svg"} width={"80px"} />
+                <Text>Videos</Text>
               </Box>
-              <Box>
-                <Image src={"./folder3.svg"} width={"100px"} />
+              <Box onClick={() => handleSetPath(["home", "yuri", "Downloads"])}>
+                <Image src={"./folder3.svg"} width={"80px"} />
+                <Text>Downloads</Text>
               </Box>
             </Box>
-            <Box my={"12px"} display={"flex"} alignItems={"center"}>
-              <Icon as={FaArrowLeft} onClick={() => handlePopPath()} />
-              <Box display={"flex"}>
+            <Box
+              my={"12px"}
+              display={"flex"}
+              alignItems={"center"}
+              // borderY={`solid 1px white`}
+              py={"6px"}
+              bg={"trans.100"}
+              borderRadius={"4px"}
+            >
+              <Icon
+                as={FaArrowLeft}
+                onClick={() => handlePopPath()}
+                _hover={{ cursor: "pointer" }}
+                mx={"8px"}
+              />
+              <Box
+                display={"flex"}
+                width={"100%"}
+                flexWrap={"nowrap"}
+                overflow={"hidden"}
+                whiteSpace={"nowrap"}
+              >
                 <Text>root:/</Text>
                 {url.map((item, idx) => (
                   <Text key={idx}>{item}/</Text>
@@ -99,28 +131,28 @@ export const DirNavigator = () => {
                     key={idx}
                     p={"6px"}
                     // bg={"trans.200"}
+                    onClick={() => handleSetCurrentTrack(item.name)}
                     borderRadius={"4px"}
                     display={"flex"}
                     alignItems={"center"}
+                    _hover={{ cursor: "pointer", bg: "trans.100" }}
                   >
                     <Icon as={BsFileEarmarkMusicFill} mr={"8px"} />
-                    <Text onClick={() => handleSetCurrentTrack(item.name)}>
-                      {item.name}
-                    </Text>
+                    <Text>{item.name}</Text>
                   </Box>
                 ) : (
                   <Box
                     key={idx}
                     p={"6px"}
                     // bg={"trans.200"}
+                    onClick={() => handleAddPath(item.name)}
                     borderRadius={"4px"}
                     display={"flex"}
                     alignItems={"center"}
+                    _hover={{ cursor: "pointer", bg: "trans.100" }}
                   >
                     <Icon as={FaFolder} mr={"8px"} />
-                    <Text onClick={() => handleAddPath(item.name)}>
-                      {item.name}
-                    </Text>
+                    <Text>{item.name}</Text>
                   </Box>
                 ),
               )}

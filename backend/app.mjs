@@ -19,12 +19,16 @@ app.get("/", async (req, res) => {
   } else {
     try {
       const files = await fs.readdir(dirPath, { withFileTypes: true });
-      console.log(files);
+      // console.log(files);
       for (const file of files) {
         const fullPath = path.join(dirPath + file.name);
         if (file.isSymbolicLink()) {
           continue;
         }
+        if (!(await fileType.checkHealth(fullPath))) {
+          continue;
+        }
+        console.log(await fileType.checkHealth(fullPath));
         if (
           (await fileType.isMusicFile(fullPath)) ||
           (await fileType.isDir(fullPath))
@@ -37,7 +41,7 @@ app.get("/", async (req, res) => {
       }
       res.send(directory);
     } catch (error) {
-      res.send(error);
+      res.status(500).json({ message: "error" });
     }
   }
 });
@@ -45,13 +49,22 @@ app.get("/", async (req, res) => {
 ///
 const fileType = {
   isMusicFile: async (dir) => {
-    return (
-      (await fs.stat(dir)).isFile() && extensions.includes(path.extname(dir))
-    );
+    return fs
+      .stat(dir)
+      .then((res) => res.isFile() && extensions.includes(path.extname(dir)))
+      .catch((error) => false);
   },
   isDir: async (dir) => {
-    const stats = await fs.stat(dir);
-    return stats.isDirectory();
+    return fs
+      .stat(dir)
+      .then((res) => res.isDirectory())
+      .catch((error) => false);
+  },
+  checkHealth: async (dir) => {
+    return fs
+      .access(dir, fs.constants.R_OK)
+      .then(() => true)
+      .catch(() => false);
   },
 };
 
