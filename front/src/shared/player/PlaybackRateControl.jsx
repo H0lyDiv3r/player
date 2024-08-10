@@ -50,12 +50,11 @@ const PlaybackRateControl = forwardRef(
                     minWidth={"70px"}
                     fontSize={"12px"}
                     fontWeight={400}
-                    bg={"neutral.700"}
-                    borderWidth={"1px"}
-                    borderColor={"neutral.600"}
-                    borderStyle={"solid"}
-                    borderRadius={"4px"}
-                    py={"4px"}
+                    // bg={"brand.500"}
+                    bgImage={"linear-gradient(120deg,brand.500,brand.600)"}
+                    borderRadius={"6px"}
+                    color={"white"}
+                    py={"6px"}
                   >
                     {val.name}
                   </MenuButton>
@@ -64,10 +63,10 @@ const PlaybackRateControl = forwardRef(
             ))}
 
             <MenuList
-              bg={"neutral.800"}
+              bg={"neutral.200"}
               minW={0}
               width={"70px"}
-              p={0}
+              p={"4px"}
               fontSize={"12px"}
               fontWeight={400}
             >
@@ -76,8 +75,9 @@ const PlaybackRateControl = forwardRef(
                   key={val.id}
                   id={val.id}
                   onClick={() => handlePlaybackRate(val.value, ref)}
-                  bg={val.value == playbackRate && "neutral.300"}
-                  color={val.value == playbackRate && "neutral.700"}
+                  bg={val.value == playbackRate && "brand.500"}
+                  color={val.value == playbackRate && "neutral.200"}
+                  borderRadius={"8px"}
                   display={"flex"}
                   justifyContent={"center"}
                 >

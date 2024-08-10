@@ -37,7 +37,7 @@ export default function Player() {
         display={"flex"}
         bg={"transparent"}
         bgGradient={
-          "linear-gradient(135deg,rgba(255,255,255,0.2),rgba(100,100,100,0.2))"
+          "linear-gradient(135deg,rgba(255,255,255,0.4),rgba(100,100,100,0.4))"
         }
         backdropFilter={"auto"}
         backdropBlur={"10px"}

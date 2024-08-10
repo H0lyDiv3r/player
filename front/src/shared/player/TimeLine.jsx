@@ -27,7 +27,7 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
         <Text>{Math.floor(position % 60)}</Text>
       </Box>
       <Box
-        bg={"neutral.400"}
+        // bg={"neutral.400"}
         height={"4px"}
         mx={"4px"}
         display={"flex"}

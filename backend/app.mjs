@@ -2,9 +2,12 @@ import * as fs from "fs/promises";
 import * as path from "node:path";
 import express from "express";
 import cors from "cors";
+import { isString } from "util";
 
 const app = express();
 const root = "";
+const files = "./files/";
+const directoryFile = "dir.json";
 const extensions = [".mp3", ".wav", ".ogg", ".aac", ".m4a", ".webm"];
 
 app.use(express.static("/"));
@@ -45,10 +48,26 @@ app.get("/", async (req, res) => {
 
 app.get("/addDir", async (req, res) => {
   const dirPath = path.join(root, req.query.dir || "");
-  let directory = {};
+  const jsonFilePath = path.join(files, directoryFile);
+  let data = await fs.readFile(jsonFilePath, "utf8");
+  let directory = JSON.parse(data);
   await scanDir(dirPath, directory);
-  // await scanDir(path.join(root, "/home/yuri/Downloads/"));
+  fs.writeFile(jsonFilePath, JSON.stringify(directory)).catch((error) => error);
   res.send(directory);
+});
+app.get("/getFromDir", async (req, res) => {
+  const dirPath = path.join(root, req.query.dir || "");
+  const jsonFilePath = path.join(files, directoryFile);
+  let data = await fs.readFile(jsonFilePath, "utf8");
+  //
+  const chain = dirPath.split("/").slice(1).slice(0, -1);
+  let directory = JSON.parse(data);
+  for (let i = 0; i < chain.length; i++) {
+    directory = directory[chain[i]];
+  }
+  let songs = [];
+  getAllAudio(directory, songs);
+  res.send(songs);
 });
 
 ///
@@ -56,7 +75,6 @@ app.get("/addDir", async (req, res) => {
 const scanDir = async (url, dir) => {
   const files = await fs.readdir(url, { withFileTypes: true });
   let current = dir;
-  let musicCounter = 0;
   for (const file of files) {
     const fullPath = path.join(url, file.name);
     if (file.isSymbolicLink()) {
@@ -86,10 +104,25 @@ const scanDir = async (url, dir) => {
         tempCurrent[chain[i]] = tempCurrent[chain[i]] || {};
         tempCurrent = tempCurrent[chain[i]];
       }
-      tempCurrent[musicCounter] = file.name;
-      musicCounter += 1;
+      tempCurrent[file.name] = file.path;
     }
   }
+};
+const getAllAudio = async (dir, store) => {
+  let songs = store;
+  for (const item of Object.keys(dir)) {
+    if (typeof dir[item] === "string") {
+      songs.push({
+        name: item,
+        path: path.join(dir[item], item),
+        type: "file",
+      });
+      console.log(songs);
+    } else {
+      getAllAudio(dir[item], songs);
+    }
+  }
+  return songs;
 };
 const fileType = {
   isMusicFile: async (dir) => {
