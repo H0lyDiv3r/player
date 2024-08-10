@@ -35,12 +35,21 @@ export default function Player() {
     <>
       <Box
         display={"flex"}
-        bg={"neutral.800"}
+        bg={"transparent"}
+        bgGradient={
+          "linear-gradient(135deg,rgba(255,255,255,0.2),rgba(100,100,100,0.2))"
+        }
+        backdropFilter={"auto"}
+        backdropBlur={"10px"}
         width={"500px"}
         padding={"24px"}
         mx={"24px"}
         borderRadius={"12px"}
         color={"rose.500"}
+        borderColor={"trans.100"}
+        borderWidth={"1px"}
+        borderStyle={"solid"}
+        boxShadow={"md"}
       >
         <Box display={"none"}>
           <audio

@@ -53,7 +53,10 @@ export const DirNavigator = () => {
           minWidth={"600px"}
           maxWidth={"700px"}
           height={"95%"}
-          bg={"trans.800"}
+          bg={"transparent"}
+          bgImage={
+            "linear-gradient(150deg,rgba(255,255,255,0.2),rgba(0,0,0,0.2))"
+          }
           backdropFilter={"auto"}
           backdropBlur={"12px"}
           borderColor={"neutral.700"}
@@ -61,6 +64,7 @@ export const DirNavigator = () => {
           borderWidth={"1px"}
           my={"1%"}
           py={"12px"}
+          borderRadius={"12px"}
         >
           {/* <ModalCloseButton /> */}
           <ModalBody
@@ -135,7 +139,7 @@ export const DirNavigator = () => {
                     borderRadius={"4px"}
                     display={"flex"}
                     alignItems={"center"}
-                    _hover={{ cursor: "pointer", bg: "trans.100" }}
+                    _hover={{ cursor: "pointer", bg: "brand.500" }}
                   >
                     <Icon as={BsFileEarmarkMusicFill} mr={"8px"} />
                     <Text>{item.name}</Text>

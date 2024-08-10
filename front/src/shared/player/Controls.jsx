@@ -12,6 +12,7 @@ import {
 import { PlayerContext } from "./PlayerContextProvider";
 import VolumeControl from "./VolumeControl";
 import PlaybackRateControl from "./PlaybackRateControl";
+import { IconButton } from "../bottons";
 
 const Controls = forwardRef(function Controls(props, ref) {
   const { handlePlay, paused, loaded, handleFastForward, handleFastBackward } =
@@ -22,7 +23,7 @@ const Controls = forwardRef(function Controls(props, ref) {
       display={"flex"}
       alignItems={"center"}
       justifyContent={"center"}
-      color={"neutral.300"}
+      color={"neutral.400"}
     >
       <Box width={"25%"}>
         <PlaybackRateControl ref={ref} />
@@ -34,24 +35,44 @@ const Controls = forwardRef(function Controls(props, ref) {
         width={"50%"}
         px={"18px"}
       >
-        <Icon as={FaRepeat} onClick={() => handleFastForward(ref)} />
-        <Icon as={FaBackward} onClick={() => handleFastBackward(ref)} />
-        <Button
-          onClick={() => handlePlay(ref)}
-          borderRadius={"50%"}
-          width={"32px"}
-          bg={"neutral.300"}
-          color={"neutral.900"}
+        <IconButton
+          icon={FaRepeat}
+          action={() => handleFastForward(ref)}
+          color={"neutral.400"}
+          bg={"none"}
+          _hover={{ bg: "none" }}
+        />
+        <IconButton
+          icon={FaBackward}
+          action={() => handleFastForward(ref)}
+          color={"neutral.400"}
+          bg={"none"}
+          _hover={{ bg: "none" }}
+        />
+        <IconButton
+          icon={paused ? FaPlay : FaPause}
+          action={() => handlePlay(ref)}
+          size={5}
           isDisabled={!loaded}
-        >
-          <Icon
-            as={paused ? FaPlay : FaPause}
-            color={"neutral.800"}
-            boxSize={5}
-          />
-        </Button>
-        <Icon as={FaForward} onClick={() => handleFastForward(ref)} />
-        <Icon as={FaShuffle} onClick={() => handleFastForward(ref)} />
+          color={"neutral.800"}
+          bg={"neutral.300"}
+          borderRadius={"50%"}
+          _hover={{ bg: "trans.200" }}
+        />
+        <IconButton
+          icon={FaForward}
+          action={() => handleFastForward(ref)}
+          color={"neutral.400"}
+          bg={"none"}
+          _hover={{ bg: "none" }}
+        />
+        <IconButton
+          icon={FaShuffle}
+          action={() => handleFastForward(ref)}
+          color={"neutral.400"}
+          bg={"none"}
+          _hover={{ bg: "none" }}
+        />
       </Box>
       <Spacer />
       <Box

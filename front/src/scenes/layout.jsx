@@ -10,12 +10,12 @@ import { DirNavigator } from "../shared/directory/DirNavigator";
 export const Layout = () => {
   return (
     <Box
-      bg={"rgba(0,0,0,0.5)"}
+      bg={"rgba(0,0,0,0.2)"}
       w={"100%"}
       h={"100vh"}
       pos={"absolute"}
       backdropFilter={"auto"}
-      backdropBlur={"12px"}
+      backdropBlur={"1px"}
       display={"flex"}
     >
       <Box
