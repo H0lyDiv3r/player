@@ -65,30 +65,30 @@ const scanDir = async (url, dir) => {
     if (!(await fileType.checkHealth(fullPath))) {
       continue;
     }
-    console.log(await fileType.containsMusicFileOrDir(fullPath));
-    // const chain = url.split("/").slice(1).slice(0, -1);
-    // if (
-    //   (await fileType.isDir(fullPath)) &&
-    //   (await fileType.containsMusicFileOrDir(fullPath))
-    // ) {
-    //   let tempCurrent = current;
-    //   for (let i = 0; i < chain.length; i++) {
-    //     tempCurrent[chain[i]] = tempCurrent[chain[i]] || {};
-    //     tempCurrent = tempCurrent[chain[i]];
-    //   }
-    //   tempCurrent[file.name] = {};
-    //   await scanDir(path.join(fullPath + "/"), dir);
-    // }
-    // if (await fileType.isMusicFile(fullPath)) {
-    //   let tempCurrent = current;
 
-    //   for (let i = 0; i < chain.length; i++) {
-    //     tempCurrent[chain[i]] = tempCurrent[chain[i]] || {};
-    //     tempCurrent = tempCurrent[chain[i]];
-    //   }
-    //   tempCurrent[musicCounter] = file.name;
-    //   musicCounter += 1;
-    // }
+    const chain = url.split("/").slice(1).slice(0, -1);
+    if (
+      (await fileType.isDir(fullPath)) &&
+      (await fileType.containsMusicFileOrDir(fullPath))
+    ) {
+      let tempCurrent = current;
+      for (let i = 0; i < chain.length; i++) {
+        tempCurrent[chain[i]] = tempCurrent[chain[i]] || {};
+        tempCurrent = tempCurrent[chain[i]];
+      }
+      tempCurrent[file.name] = {};
+      await scanDir(path.join(fullPath + "/"), dir);
+    }
+    if (await fileType.isMusicFile(fullPath)) {
+      let tempCurrent = current;
+
+      for (let i = 0; i < chain.length; i++) {
+        tempCurrent[chain[i]] = tempCurrent[chain[i]] || {};
+        tempCurrent = tempCurrent[chain[i]];
+      }
+      tempCurrent[musicCounter] = file.name;
+      musicCounter += 1;
+    }
   }
 };
 const fileType = {
@@ -111,11 +111,18 @@ const fileType = {
       .catch(() => false);
   },
   containsMusicFileOrDir: async (dir) => {
-    const files = await fs.readdir(dir);
     if (await fileType.isDir(dir)) {
+      const files = await fs.readdir(dir, { withFileTypes: true });
       for (const file of files) {
-        console.log(file);
+        const fullPath = path.join(dir, file.name);
+        if (await fileType.isDir(fullPath)) {
+          fileType.containsMusicFileOrDir(path.join(fullPath, "/"));
+        }
+        if (await fileType.isMusicFile(fullPath)) {
+          return true;
+        }
       }
+      return false;
     }
   },
 };
