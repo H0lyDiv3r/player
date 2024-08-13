@@ -19,6 +19,8 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaFolder } from "react-icons/fa6";
 import { BsFileEarmarkMusicFill } from "react-icons/bs";
+import { ButtonIcon } from "../bottons";
+import { FaFolderOpen } from "react-icons/fa";
 
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,7 +47,9 @@ export const DirNavigator = () => {
   }, [filePath]);
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <ButtonIcon icon={FaFolderOpen} onClick={onOpen}>
+        Open File
+      </ButtonIcon>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay p={0} bg={"none"} />

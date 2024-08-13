@@ -6,6 +6,7 @@ import axios from "axios";
 import { GlobalContext } from "../store/GlobalContextProvider";
 import { useContext } from "react";
 import { DirNavigator } from "../shared/directory/DirNavigator";
+import { Sidebar } from "../shared/sidebar";
 
 export const Layout = () => {
   return (
@@ -18,15 +19,7 @@ export const Layout = () => {
       backdropBlur={"1px"}
       display={"flex"}
     >
-      <Box
-        minWidth={"300px"}
-        width={"300px"}
-        bg={"neutral.800"}
-        h={"100%"}
-        overflow={"scroll"}
-      >
-        <DirNavigator />
-      </Box>
+      <Sidebar />
       <Box width={"100%"} minW={"500px"}>
         <PlayerContextProvider>
           <Player />

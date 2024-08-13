@@ -49,7 +49,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/addDir", async (req, res) => {
+app.post("/addDir", async (req, res) => {
   const dirPath = path.join(root, req.query.dir || "");
   const jsonFilePath = path.join(files, directoryFile);
   let data = await fs.readFile(jsonFilePath, "utf8");
@@ -61,6 +61,30 @@ app.get("/addDir", async (req, res) => {
   fs.writeFile(jsonFilePath, JSON.stringify(directory)).catch((error) => error);
   res.send(directory);
 });
+
+app.get("/getDirs", async (req, res) => {
+  const chain = req.query.url
+    ? req.query.url.split("/").slice(1).slice(0, -1)
+    : [];
+  const jsonFilePath = path.join(files, directoryFile);
+  let data = await fs.readFile(jsonFilePath, "utf8");
+  if (!data) {
+    res.status(500).json({ message: "failed to read data" });
+  }
+  //
+  let directory = JSON.parse(data);
+  for (const item of chain) {
+    directory = directory[item];
+  }
+  let list = [];
+  for (const item of Object.keys(directory)) {
+    if (typeof directory[item] === "object") {
+      list.push(item);
+    }
+  }
+  res.send(list);
+});
+
 app.get("/getFromDir", async (req, res) => {
   const dirPath = path.join(root, req.query.dir || "");
   const jsonFilePath = path.join(files, directoryFile);
@@ -77,6 +101,20 @@ app.get("/getFromDir", async (req, res) => {
   let songs = [];
   getAllAudio(directory, songs);
   res.send(songs);
+});
+//===========================
+app.get("/getPlaylists", async (req, res) => {
+  const playlistPath = path.join(files, playlistFile);
+  // await fs.writeFile(playlistPath, JSON.stringify({}));
+  if (!(await fileType.checkFileHealth(playlistPath))) {
+    res.status(400).json({ message: "you dont have any playlists" });
+  }
+  let data = await fs.readFile(playlistPath, "utf8");
+  if (!data) {
+    res.status(500).json({ message: "failed to read data" });
+  }
+  let playlists = JSON.parse(data);
+  res.send(playlists);
 });
 
 app.post("/createPlaylist", async (req, res) => {
@@ -112,14 +150,15 @@ app.delete("/deletePlaylist", async (req, res) => {
     res.status(500).json({ message: "failed to read data" });
   }
 
-  if (!Object.keys(JSON.parse(data)).includes(req.body.name)) {
+  if (!Object.keys(JSON.parse(data)).includes(req.query.name)) {
     res.status(400).json({ message: "playlist doenst exist" });
   }
   let playlists = JSON.parse(data);
-  delete playlists[req.body.name];
+  delete playlists[req.query.name];
   await fs.writeFile(playlistPath, JSON.stringify(playlists));
   res.send();
 });
+//===============================
 
 app.get("/getPlaylist", async (req, res) => {
   const playlistPath = path.join(files, playlistFile);
@@ -221,6 +260,9 @@ const scanDir = async (url, dir) => {
     }
   }
 };
+
+const getDirs = (url, obj) => {};
+
 const getAllAudio = async (dir, store) => {
   let songs = store;
   for (const item of Object.keys(dir)) {
@@ -236,6 +278,7 @@ const getAllAudio = async (dir, store) => {
   }
   return songs;
 };
+
 const fileType = {
   isMusicFile: async (dir) => {
     return fs
