@@ -15,7 +15,12 @@ import { DirNavigator } from "../directory/DirNavigator";
 import { DefaultButton } from "../bottons";
 import useRequest from "../../hooks/useRequest";
 import { useEffect } from "react";
-import { FaFolder, FaRecordVinyl } from "react-icons/fa6";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaFolder,
+  FaRecordVinyl,
+} from "react-icons/fa6";
 import { useState } from "react";
 import path from "path-browserify";
 
@@ -24,21 +29,34 @@ export const Sidebar = () => {
     useRequest();
   const [loadingDirs, dirs, errorDirs, requestDirs] = useRequest();
   const [loadingSubDirs, subDirs, errorSubDirs, requestSubDirs] = useRequest();
+  const [loadingFromDir, fromDir, errorFromDir, requestFromDir] = useRequest();
   const [activeDir, setActiveDir] = useState(null);
-  const [activeUrl, setActiveUrl] = useState("");
+  const [activeUrl, setActiveUrl] = useState({ active: "", url: "" });
 
   const handleSetActiveDir = (dir) => {
     if (activeDir) {
       setActiveDir(null);
-      setActiveUrl("");
+      setActiveUrl({ active: "", url: "" });
     } else {
       setActiveDir(dir);
-      setActiveUrl(path.join("/", dir, "/"));
+      setActiveUrl({ ...activeUrl, url: path.join("/", dir, "/") });
     }
   };
 
   const handleSetActiveUrl = (dir) => {
-    setActiveUrl((url) => path.join(url, dir, "/"));
+    // setActiveUrl((url) => console.log(url));
+    console.log(activeUrl, dir);
+    if (dir.isExpandable) {
+      setActiveUrl({
+        ...activeUrl,
+        url: path.join(activeUrl.url, dir.name),
+      });
+    } else {
+      setActiveUrl({
+        ...activeUrl,
+        active: dir.name,
+      });
+    }
   };
 
   useEffect(() => {
@@ -48,9 +66,21 @@ export const Sidebar = () => {
   }, []);
 
   useEffect(() => {
-    requestSubDirs("http://localhost:3000/getDirs", "GET", { url: activeUrl });
-    console.log("WAawdawdadawdawdad", subDirs);
-  }, [activeUrl]);
+    requestSubDirs("http://localhost:3000/getDirs", "GET", {
+      url: path.join(activeUrl.url, "/"),
+    });
+    console.log("dirs", subDirs);
+  }, [activeUrl.url]);
+  useEffect(() => {
+    requestFromDir("http://localhost:3000/getFromDir", "GET", {
+      dir: path.join(activeUrl.url, activeUrl.active, "/"),
+    });
+    console.log(
+      "from dir",
+      fromDir,
+      path.join(activeUrl.url, activeUrl.active, "/"),
+    );
+  }, [activeUrl.active, activeUrl.url]);
   return (
     <Box
       width={"400px"}
@@ -64,28 +94,43 @@ export const Sidebar = () => {
       </Box>
       <Divider />
       <Box my={"24px"}>
-        <Box my={"18px"} height={"300px"}>
+        <Box my={"18px"}>
           <DirNavigator />
-          lala{activeUrl}
-          <Box>
+          lala{activeUrl.url}
+          <Box height={"200px"}>
             {dirs &&
               dirs.map((dir, idx) => (
-                <Box key={idx}>
+                <Box key={idx} height={"100%"}>
                   <Box
                     display={"flex"}
                     alignItems={"center"}
-                    onClick={() => handleSetActiveDir(dir)}
+                    justifyContent={"space-between"}
+                    onClick={() => handleSetActiveDir(dir.name)}
                   >
-                    <Icon as={FaFolder} mr={"6px"} />
-                    <Text>{dir}</Text>
-                  </Box>
-                  {subDirs && (
                     <Box
-                      display={dir == [activeDir] ? "flex" : "none"}
-                      flexDir={"column"}
-                      overflow={"scroll"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      justifyContent={"center"}
                     >
-                      {subDirs.map((item, idx) => (
+                      <Icon as={FaFolder} mr={"6px"} />
+                      <Text>{dir.name}</Text>
+                    </Box>
+                    <Icon
+                      as={dir.name != activeDir ? FaChevronDown : FaChevronUp}
+                      mr={"6px"}
+                    />
+                  </Box>
+                  <Box
+                    display={dir.name == activeDir ? "flex" : "none"}
+                    flexDir={"column"}
+                    height={"100%"}
+                    overflow={"scroll"}
+                    p={"12px"}
+                    bg={"neutral.300"}
+                    borderRadius={"12px"}
+                  >
+                    {subDirs &&
+                      subDirs.map((item, idx) => (
                         <Box
                           key={idx}
                           display={"flex"}
@@ -93,11 +138,10 @@ export const Sidebar = () => {
                           onClick={() => handleSetActiveUrl(item)}
                         >
                           <Icon as={FaFolder} mr={"6px"} />
-                          <Text>{item}</Text>
+                          <Text>{item.name.slice(0, 20)}</Text>
                         </Box>
                       ))}
-                    </Box>
-                  )}
+                  </Box>
                 </Box>
               ))}
           </Box>

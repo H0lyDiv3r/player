@@ -79,7 +79,7 @@ app.get("/getDirs", async (req, res) => {
   let list = [];
   for (const item of Object.keys(directory)) {
     if (typeof directory[item] === "object") {
-      list.push(item);
+      list.push({ name: item, isExpandable: hasDirs(directory[item]) });
     }
   }
   res.send(list);
@@ -261,7 +261,15 @@ const scanDir = async (url, dir) => {
   }
 };
 
-const getDirs = (url, obj) => {};
+const hasDirs = (obj) => {
+  let keys = Object.keys(obj);
+  for (const item of keys) {
+    if (typeof obj[item] === "object") {
+      return true;
+    }
+  }
+  return false;
+};
 
 const getAllAudio = async (dir, store) => {
   let songs = store;
