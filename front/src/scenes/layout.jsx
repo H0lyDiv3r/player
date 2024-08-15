@@ -10,41 +10,35 @@ import { Sidebar } from "../shared/sidebar";
 import { Playlists } from "../shared/sidebar/Playlists";
 
 export const Layout = () => {
-  const { queue, handleSetCurrentTrack } = useContext(GlobalContext);
+  const { queue, activeList, handleSetCurrentTrack } =
+    useContext(GlobalContext);
   useEffect(() => {
-    console.log(queue);
-  }, [queue]);
+    console.log("active list", activeList);
+    console.log("queueueueueq", queue);
+  }, [activeList, queue]);
   return (
     <Box
-      bg={"rgba(0,0,0,0.2)"}
+      bg={"rgba(100,100,100,0.2)"}
       w={"100%"}
       h={"100vh"}
       pos={"absolute"}
       backdropFilter={"auto"}
-      backdropBlur={"8px"}
+      backdropBlur={"6px"}
       display={"flex"}
     >
       <Sidebar />
       <Box width={"100%"} minW={"500px"} overflow={"scroll"}>
-        {queue &&
-          queue.map((item, idx) => (
-            <Box key={idx} onClick={() => handleSetCurrentTrack(item.path)}>
-              <Text>{item.name}</Text>
-            </Box>
-          ))}
+        <Box height={"400px"} overflow={"scroll"}>
+          {activeList &&
+            activeList.map((item, idx) => (
+              <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
+                <Text>{item.name}</Text>
+              </Box>
+            ))}
+        </Box>
         <PlayerContextProvider>
           <Player />
         </PlayerContextProvider>
-      </Box>
-      <Box
-        width={"300px"}
-        minW={"300px"}
-        bg={"rgba(255,255,255,0.6)"}
-        backdropFilter={"auto"}
-        backdropBlur={"6px"}
-        p={"18px"}
-      >
-        <Playlists />
       </Box>
     </Box>
   );

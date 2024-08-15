@@ -18,7 +18,7 @@ export default function Player() {
     handleLoaded,
     loaded,
   } = useContext(PlayerContext);
-  const { currentTrack } = useContext(GlobalContext);
+  const { currentTrack, queue } = useContext(GlobalContext);
   // const {currentEpisode} = useContext(GlobalContext)
 
   const audioRef = useRef(null);
@@ -41,7 +41,6 @@ export default function Player() {
         }
         backdropFilter={"auto"}
         backdropBlur={"10px"}
-        width={"500px"}
         padding={"24px"}
         mx={"24px"}
         borderRadius={"12px"}
@@ -50,13 +49,16 @@ export default function Player() {
         borderWidth={"1px"}
         borderStyle={"solid"}
         boxShadow={"md"}
+        width={"500px"}
       >
         <Box display={"none"}>
           <audio
             controls
             ref={audioRef}
             onPlaying={() => handleTimeline(audioRef)}
-            src={`http://localhost:3000/${currentTrack}`}
+            src={
+              currentTrack ? `http://localhost:3000${currentTrack["path"]}` : ""
+            }
             onLoadedData={() => handleSetPlayerValues(audioRef)}
             onEnded={() => handlePause(audioRef)}
             onEmptied={() => handleLoaded(false)}

@@ -7,8 +7,10 @@ export const GlobalContext = createContext();
 const initialState = {
   url: [],
   filePath: "/",
-  currentTrack: "",
+  currentTrack: null,
+  indexOfCurrentTrack: 0,
   queue: [],
+  activeList: [],
 };
 
 const addPath = "ADD_PATH";
@@ -16,6 +18,8 @@ const popPath = "POP_PAtH";
 const setCurrentTrack = "SET_CURRENT_TRACK";
 const setPath = "SET_PATH";
 const setQueue = "SET_QUEUE";
+const setActiveList = "SET_ACTIVE_LIST";
+const setIndexOfCurrentTrack = "SET_INDEX_OF_CURRENT_TRACK";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -43,6 +47,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         queue: action.payload.queue,
+      };
+    case setActiveList:
+      return {
+        ...state,
+        activeList: action.payload.activeList,
+      };
+    case setIndexOfCurrentTrack:
+      return {
+        ...state,
+        indexOfCurrentTrack: action.payload.index,
       };
     default:
       return state;
@@ -74,13 +88,16 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const handleSetCurrentTrack = (track) => {
+  const handleSetCurrentTrack = (index) => {
+    const track = state.activeList[index];
     dispatch({
       type: setCurrentTrack,
       payload: {
-        currentTrack: path.join(state.filePath, track),
+        currentTrack: track,
       },
     });
+    handleSetQueue(state.activeList);
+    handleSetIndexOfCurrentTrack(index);
   };
   const handleSetPath = (dir) => {
     const newUrl = dir;
@@ -100,7 +117,32 @@ export const GlobalContextProvider = ({ children }) => {
     dispatch({
       type: setQueue,
       payload: {
-        queue,
+        queue: queue && queue,
+      },
+    });
+  };
+  const handleSetActiveList = (list) => {
+    dispatch({
+      type: setActiveList,
+      payload: {
+        activeList: list,
+      },
+    });
+  };
+  const handleNext = () => {
+    dispatch({
+      type: setCurrentTrack,
+      payload: {
+        currentTrack: state.queue[state.indexOfCurrentTrack + 1],
+      },
+    });
+    handleSetIndexOfCurrentTrack(state.indexOfCurrentTrack + 1);
+  };
+  const handleSetIndexOfCurrentTrack = (index) => {
+    dispatch({
+      type: setIndexOfCurrentTrack,
+      payload: {
+        index,
       },
     });
   };
@@ -112,6 +154,9 @@ export const GlobalContextProvider = ({ children }) => {
     handleSetCurrentTrack,
     handleSetPath,
     handleSetQueue,
+    handleNext,
+    handleSetActiveList,
+    handleSetIndexOfCurrentTrack,
   };
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>

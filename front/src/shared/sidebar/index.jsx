@@ -27,6 +27,7 @@ import { useState } from "react";
 import path from "path-browserify";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
+import axios from "axios";
 
 export const Sidebar = () => {
   const [loadingDirs, dirs, errorDirs, requestDirs] = useRequest();
@@ -34,7 +35,7 @@ export const Sidebar = () => {
   const [loadingFromDir, fromDir, errorFromDir, requestFromDir] = useRequest();
   const [activeDir, setActiveDir] = useState(null);
   const [activeUrl, setActiveUrl] = useState({ active: "", url: [] });
-  const { handleSetQueue } = useContext(GlobalContext);
+  const { handleSetQueue, handleSetActiveList } = useContext(GlobalContext);
 
   const handleSetActiveDir = (dir) => {
     if (activeDir) {
@@ -62,13 +63,12 @@ export const Sidebar = () => {
     }
   };
   const handlePopActiveUrl = () => {
-    let arr = activeUrl.url;
     console.log(activeUrl.url);
     if (activeUrl.url.length > 1) {
-      arr.pop();
       setActiveUrl({
         ...activeUrl,
-        url: activeUrl.url.slice(0, activeUrl.url.length),
+        active: "",
+        url: activeUrl.url.slice(0, activeUrl.url.length - 1),
       });
     }
   };
@@ -91,10 +91,19 @@ export const Sidebar = () => {
     let url = "/";
 
     activeUrl.url.map((item) => (url = path.join(url, item)));
-    requestFromDir("http://localhost:3000/getFromDir", "GET", {
-      dir: path.join(url, activeUrl.active, "/"),
-    });
-    handleSetQueue(fromDir);
+    // axios;
+    // requestFromDir("http://localhost:3000/getFromDir", "GET", {
+    //   dir:
+    // });
+    axios
+      .get("http://localhost:3000/getFromDir", {
+        params: {
+          dir: path.join(url, activeUrl.active, "/"),
+        },
+      })
+      .then((res) => {
+        handleSetActiveList(res.data);
+      });
   }, [activeUrl.active, activeUrl.url]);
   return (
     <Box
@@ -103,7 +112,9 @@ export const Sidebar = () => {
       bg={"rgba(255,255,255,0.6)"}
       backdropFilter={"auto"}
       backdropBlur={"6px"}
-      p={"18px"}
+      p={"12px"}
+      height={"100%"}
+      fontSize={"12px"}
     >
       <Box py={"24px"}>
         <Text>Name and logo</Text>
@@ -116,10 +127,8 @@ export const Sidebar = () => {
             display={"flex"}
             width={"100%"}
             flexWrap={"nowrap"}
-            overflow={"scroll"}
             whiteSpace={"nowrap"}
             alignItems={"center"}
-            py={"12px"}
           >
             <Icon
               as={FaArrowLeft}
@@ -127,12 +136,19 @@ export const Sidebar = () => {
               _hover={{ cursor: "pointer" }}
               mr={"8px"}
             />
-            <Text>root:/</Text>
-            {activeUrl.url.map((item, idx) => (
-              <Text key={idx}>{item}/</Text>
-            ))}
+            <Box
+              overflow={"scroll"}
+              display={"flex"}
+              flexWrap={"nowrap"}
+              py={"12px"}
+            >
+              <Text>root:/</Text>
+              {activeUrl.url.map((item, idx) => (
+                <Text key={idx}>{item}/</Text>
+              ))}
+            </Box>
           </Box>
-          <Box height={"200px"}>
+          <Box height={"300px"}>
             {dirs &&
               dirs.map((dir, idx) => (
                 <Box key={idx} height={"100%"}>

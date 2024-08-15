@@ -13,10 +13,12 @@ import { PlayerContext } from "./PlayerContextProvider";
 import VolumeControl from "./VolumeControl";
 import PlaybackRateControl from "./PlaybackRateControl";
 import { IconButton } from "../bottons";
+import { GlobalContext } from "../../store/GlobalContextProvider";
 
 const Controls = forwardRef(function Controls(props, ref) {
-  const { handlePlay, paused, loaded, handleFastForward, handleFastBackward } =
+  const { handlePlay, paused, loaded, handleFastForward } =
     useContext(PlayerContext);
+  const { handleNext } = useContext(GlobalContext);
   return (
     <Box
       width={"100%"}
@@ -56,12 +58,14 @@ const Controls = forwardRef(function Controls(props, ref) {
           isDisabled={!loaded}
           color={"neutral.800"}
           bg={"neutral.300"}
-          borderRadius={"50%"}
+          borderRadius={"32px"}
+          height={"40px"}
+          width={"40px"}
           _hover={{ bg: "trans.200" }}
         />
         <IconButton
           icon={FaForward}
-          action={() => handleFastForward(ref)}
+          action={() => handleNext()}
           color={"neutral.400"}
           bg={"none"}
           _hover={{ bg: "none" }}
