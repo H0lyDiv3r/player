@@ -273,18 +273,21 @@ const hasDirs = (obj) => {
 
 const getAllAudio = async (dir, store) => {
   let songs = store;
-  for (const item of Object.keys(dir)) {
-    if (typeof dir[item] === "string") {
-      songs.push({
-        name: item,
-        path: path.join(dir[item], item),
-        type: "file",
-      });
-    } else {
-      getAllAudio(dir[item], songs);
+  try {
+    for (const item of Object.keys(dir)) {
+      if (typeof dir[item] === "string") {
+        songs.push({
+          name: item,
+          path: path.join(dir[item], item),
+          type: "file",
+        });
+      } else {
+        getAllAudio(dir[item], songs);
+      }
     }
+  } catch (error) {
+    return songs;
   }
-  return songs;
 };
 
 const fileType = {

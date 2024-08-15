@@ -8,12 +8,14 @@ const initialState = {
   url: [],
   filePath: "/",
   currentTrack: "",
+  queue: [],
 };
 
 const addPath = "ADD_PATH";
 const popPath = "POP_PAtH";
 const setCurrentTrack = "SET_CURRENT_TRACK";
 const setPath = "SET_PATH";
+const setQueue = "SET_QUEUE";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -36,6 +38,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         url: action.payload.dir,
         filePath: path.join("/", action.payload.newPath, "/"),
+      };
+    case setQueue:
+      return {
+        ...state,
+        queue: action.payload.queue,
       };
     default:
       return state;
@@ -75,7 +82,6 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-
   const handleSetPath = (dir) => {
     const newUrl = dir;
     let newPath = "";
@@ -90,12 +96,22 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
+  const handleSetQueue = (queue) => {
+    dispatch({
+      type: setQueue,
+      payload: {
+        queue,
+      },
+    });
+  };
+
   const vals = {
     ...state,
     handleAddPath,
     handlePopPath,
     handleSetCurrentTrack,
     handleSetPath,
+    handleSetQueue,
   };
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>

@@ -46,7 +46,6 @@ export const ButtonIcon = ({
         width={"100%"}
         fontSize={"14px"}
         fontWeight={400}
-        size={"sm"}
         {...other}
       >
         {type === "left" && <Icon as={icon} mr={"6px"} boxSize={size} />}

@@ -1,4 +1,5 @@
 import {
+  background,
   Box,
   Divider,
   FormControl,
@@ -12,10 +13,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { DirNavigator } from "../directory/DirNavigator";
-import { DefaultButton } from "../bottons";
+import { DefaultButton, IconButton } from "../bottons";
 import useRequest from "../../hooks/useRequest";
 import { useEffect } from "react";
 import {
+  FaArrowLeft,
   FaChevronDown,
   FaChevronUp,
   FaFolder,
@@ -23,23 +25,24 @@ import {
 } from "react-icons/fa6";
 import { useState } from "react";
 import path from "path-browserify";
+import { useContext } from "react";
+import { GlobalContext } from "../../store/GlobalContextProvider";
 
 export const Sidebar = () => {
-  const [loadingPlaylists, playlists, errorPlaylists, requestPlaylists] =
-    useRequest();
   const [loadingDirs, dirs, errorDirs, requestDirs] = useRequest();
   const [loadingSubDirs, subDirs, errorSubDirs, requestSubDirs] = useRequest();
   const [loadingFromDir, fromDir, errorFromDir, requestFromDir] = useRequest();
   const [activeDir, setActiveDir] = useState(null);
-  const [activeUrl, setActiveUrl] = useState({ active: "", url: "" });
+  const [activeUrl, setActiveUrl] = useState({ active: "", url: [] });
+  const { handleSetQueue } = useContext(GlobalContext);
 
   const handleSetActiveDir = (dir) => {
     if (activeDir) {
       setActiveDir(null);
-      setActiveUrl({ active: "", url: "" });
+      setActiveUrl({ active: "", url: [] });
     } else {
       setActiveDir(dir);
-      setActiveUrl({ ...activeUrl, url: path.join("/", dir, "/") });
+      setActiveUrl({ ...activeUrl, url: [...activeUrl.url, dir] });
     }
   };
 
@@ -49,7 +52,7 @@ export const Sidebar = () => {
     if (dir.isExpandable) {
       setActiveUrl({
         ...activeUrl,
-        url: path.join(activeUrl.url, dir.name),
+        url: [...activeUrl.url, dir.name],
       });
     } else {
       setActiveUrl({
@@ -58,35 +61,48 @@ export const Sidebar = () => {
       });
     }
   };
+  const handlePopActiveUrl = () => {
+    let arr = activeUrl.url;
+    console.log(activeUrl.url);
+    if (activeUrl.url.length > 1) {
+      arr.pop();
+      setActiveUrl({
+        ...activeUrl,
+        url: activeUrl.url.slice(0, activeUrl.url.length),
+      });
+    }
+  };
 
   useEffect(() => {
-    requestPlaylists("http://localhost:3000/getPlaylists", "GET");
     requestDirs("http://localhost:3000/getDirs", "GET", { url: "" });
     console.log("lalallalal", dirs);
   }, []);
 
   useEffect(() => {
+    let url = "/";
+
+    activeUrl.url.map((item) => (url = path.join(url, item)));
     requestSubDirs("http://localhost:3000/getDirs", "GET", {
-      url: path.join(activeUrl.url, "/"),
+      url: path.join(url, "/"),
     });
-    console.log("dirs", subDirs);
+    console.log("dirs", subDirs, url);
   }, [activeUrl.url]);
   useEffect(() => {
+    let url = "/";
+
+    activeUrl.url.map((item) => (url = path.join(url, item)));
     requestFromDir("http://localhost:3000/getFromDir", "GET", {
-      dir: path.join(activeUrl.url, activeUrl.active, "/"),
+      dir: path.join(url, activeUrl.active, "/"),
     });
-    console.log(
-      "from dir",
-      fromDir,
-      path.join(activeUrl.url, activeUrl.active, "/"),
-    );
+    handleSetQueue(fromDir);
   }, [activeUrl.active, activeUrl.url]);
   return (
     <Box
-      width={"400px"}
+      width={"300px"}
+      minW={"300px"}
       bg={"rgba(255,255,255,0.6)"}
       backdropFilter={"auto"}
-      backdropBlur={"3px"}
+      backdropBlur={"6px"}
       p={"18px"}
     >
       <Box py={"24px"}>
@@ -96,7 +112,26 @@ export const Sidebar = () => {
       <Box my={"24px"}>
         <Box my={"18px"}>
           <DirNavigator />
-          lala{activeUrl.url}
+          <Box
+            display={"flex"}
+            width={"100%"}
+            flexWrap={"nowrap"}
+            overflow={"scroll"}
+            whiteSpace={"nowrap"}
+            alignItems={"center"}
+            py={"12px"}
+          >
+            <Icon
+              as={FaArrowLeft}
+              onClick={() => handlePopActiveUrl()}
+              _hover={{ cursor: "pointer" }}
+              mr={"8px"}
+            />
+            <Text>root:/</Text>
+            {activeUrl.url.map((item, idx) => (
+              <Text key={idx}>{item}/</Text>
+            ))}
+          </Box>
           <Box height={"200px"}>
             {dirs &&
               dirs.map((dir, idx) => (
@@ -126,7 +161,6 @@ export const Sidebar = () => {
                     height={"100%"}
                     overflow={"scroll"}
                     p={"12px"}
-                    bg={"neutral.300"}
                     borderRadius={"12px"}
                   >
                     {subDirs &&
@@ -146,58 +180,7 @@ export const Sidebar = () => {
               ))}
           </Box>
         </Box>
-        <Box fontSize={"14px"} fontWeight={400} color={"neutral.800"}>
-          <Text>Your Playlists</Text>
-          <Box borderRadius={"12px"} py={"12px"} bg={"trans.200"}>
-            <CreatePlaylist />
-            <Box mt={"12px"}>
-              {playlists &&
-                Object.keys(playlists).map((playlist) => (
-                  <Box key={playlist} display={"flex"} alignItems={"center"}>
-                    <Icon as={FaRecordVinyl} mr={"6px"} />
-                    <Text>{playlist}</Text>
-                  </Box>
-                ))}
-            </Box>
-          </Box>
-        </Box>
       </Box>
     </Box>
-  );
-};
-
-export const CreatePlaylist = () => {
-  const { onToggle, onClose, isOpen } = useDisclosure();
-  return (
-    <>
-      <Menu placement={"bottom"} matchWidth>
-        <MenuButton
-          minWidth={"100%"}
-          fontSize={"14px"}
-          fontWeight={400}
-          bg={"brand.400"}
-          borderRadius={"6px"}
-          color={"white"}
-          py={"6px"}
-        >
-          Create Playlist
-        </MenuButton>
-        <MenuList
-          width={"100%"}
-          fontSize={"12px"}
-          fontWeight={400}
-          p={"12px"}
-          color={"neutral.800"}
-        >
-          <Box>
-            <FormControl my={"12px"}>
-              <FormLabel fontSize={"12px"}>Playlist Name</FormLabel>
-              <Input size={"sm"} />
-            </FormControl>
-            <DefaultButton size={"sm"}>create</DefaultButton>
-          </Box>
-        </MenuList>
-      </Menu>
-    </>
   );
 };

@@ -17,7 +17,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
-import { FaArrowLeft, FaFolder } from "react-icons/fa6";
+import { FaArrowLeft, FaFolder, FaFolderPlus } from "react-icons/fa6";
 import { BsFileEarmarkMusicFill } from "react-icons/bs";
 import { ButtonIcon } from "../bottons";
 import { FaFolderOpen } from "react-icons/fa";
@@ -47,8 +47,8 @@ export const DirNavigator = () => {
   }, [filePath]);
   return (
     <>
-      <ButtonIcon icon={FaFolderOpen} onClick={onOpen}>
-        Open File
+      <ButtonIcon icon={FaFolderPlus} onClick={onOpen}>
+        Add Directory
       </ButtonIcon>
 
       <Modal isOpen={isOpen} onClose={onClose}>
