@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { createContext } from "react";
 import path from "path-browserify";
+import { shuffle } from "../utils";
 
 export const GlobalContext = createContext();
 
@@ -11,6 +12,7 @@ const initialState = {
   indexOfCurrentTrack: 0,
   queue: [],
   activeList: [],
+  shuffle: false,
 };
 
 const addPath = "ADD_PATH";
@@ -20,6 +22,7 @@ const setPath = "SET_PATH";
 const setQueue = "SET_QUEUE";
 const setActiveList = "SET_ACTIVE_LIST";
 const setIndexOfCurrentTrack = "SET_INDEX_OF_CURRENT_TRACK";
+const toggleShuffle = "TOGGLE_SHUFFLE";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -58,6 +61,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         indexOfCurrentTrack: action.payload.index,
       };
+    case toggleShuffle:
+      return { ...state, shuffle: !state.shuffle };
     default:
       return state;
   }
@@ -96,8 +101,15 @@ export const GlobalContextProvider = ({ children }) => {
         currentTrack: track,
       },
     });
-    handleSetQueue(state.activeList);
-    handleSetIndexOfCurrentTrack(index);
+    if (state.shuffle) {
+      shuffle(state.activeList, index);
+      // handleSetQueue(shuffle(state.activeList, index));
+      handleSetIndexOfCurrentTrack(0);
+    } else {
+      handleSetQueue(state.activeList);
+      handleSetIndexOfCurrentTrack(index);
+    }
+    console.log("activelist", state.activeList);
   };
   const handleSetPath = (dir) => {
     const newUrl = dir;
@@ -129,14 +141,21 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const handleNext = () => {
+  const handleNextPrev = (type) => {
     dispatch({
       type: setCurrentTrack,
       payload: {
-        currentTrack: state.queue[state.indexOfCurrentTrack + 1],
+        currentTrack:
+          type === "next"
+            ? state.queue[state.indexOfCurrentTrack + 1]
+            : state.queue[state.indexOfCurrentTrack - 1],
       },
     });
-    handleSetIndexOfCurrentTrack(state.indexOfCurrentTrack + 1);
+    handleSetIndexOfCurrentTrack(
+      type === "next"
+        ? state.indexOfCurrentTrack + 1
+        : state.indexOfCurrentTrack - 1,
+    );
   };
   const handleSetIndexOfCurrentTrack = (index) => {
     dispatch({
@@ -147,6 +166,11 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
 
+  const handleShuffle = () => {
+    dispatch({
+      type: toggleShuffle,
+    });
+  };
   const vals = {
     ...state,
     handleAddPath,
@@ -154,9 +178,10 @@ export const GlobalContextProvider = ({ children }) => {
     handleSetCurrentTrack,
     handleSetPath,
     handleSetQueue,
-    handleNext,
+    handleNextPrev,
     handleSetActiveList,
     handleSetIndexOfCurrentTrack,
+    handleShuffle,
   };
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>

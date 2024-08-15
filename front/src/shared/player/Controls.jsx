@@ -18,7 +18,7 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 const Controls = forwardRef(function Controls(props, ref) {
   const { handlePlay, paused, loaded, handleFastForward } =
     useContext(PlayerContext);
-  const { handleNext } = useContext(GlobalContext);
+  const { handleNextPrev, handleShuffle, shuffle } = useContext(GlobalContext);
   return (
     <Box
       width={"100%"}
@@ -46,7 +46,7 @@ const Controls = forwardRef(function Controls(props, ref) {
         />
         <IconButton
           icon={FaBackward}
-          action={() => handleFastForward(ref)}
+          action={() => handleNextPrev("prev")}
           color={"neutral.400"}
           bg={"none"}
           _hover={{ bg: "none" }}
@@ -65,15 +65,15 @@ const Controls = forwardRef(function Controls(props, ref) {
         />
         <IconButton
           icon={FaForward}
-          action={() => handleNext()}
+          action={() => handleNextPrev("next")}
           color={"neutral.400"}
           bg={"none"}
           _hover={{ bg: "none" }}
         />
         <IconButton
           icon={FaShuffle}
-          action={() => handleFastForward(ref)}
-          color={"neutral.400"}
+          action={() => handleShuffle()}
+          color={shuffle ? "red" : "neutral.400"}
           bg={"none"}
           _hover={{ bg: "none" }}
         />
