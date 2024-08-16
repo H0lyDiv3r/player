@@ -102,8 +102,7 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
     if (state.shuffle) {
-      shuffle(state.activeList, index);
-      // handleSetQueue(shuffle(state.activeList, index));
+      handleSetQueue(shuffle(state.activeList, index));
       handleSetIndexOfCurrentTrack(0);
     } else {
       handleSetQueue(state.activeList);
