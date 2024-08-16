@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import { createContext } from "react";
 import path from "path-browserify";
 import { shuffle } from "../utils";
+import axios from "axios";
 
 export const GlobalContext = createContext();
 
@@ -10,8 +11,16 @@ const initialState = {
   filePath: "/",
   currentTrack: null,
   indexOfCurrentTrack: 0,
-  queue: [],
-  activeList: [],
+  queue: {
+    list: [],
+    url: [],
+    active: "",
+  },
+  activeList: {
+    list: [],
+    url: [],
+    active: "",
+  },
   shuffle: false,
 };
 
@@ -94,7 +103,7 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleSetCurrentTrack = (index) => {
-    const track = state.activeList[index];
+    const track = state.activeList.list[index];
     dispatch({
       type: setCurrentTrack,
       payload: {
@@ -102,10 +111,15 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
     if (state.shuffle) {
-      handleSetQueue(shuffle(state.activeList, index));
+      handleSetQueue({
+        ...state.activeList,
+        list: shuffle(state.activeList.list, index),
+      });
       handleSetIndexOfCurrentTrack(0);
     } else {
-      handleSetQueue(state.activeList);
+      handleSetQueue({
+        ...state.activeList,
+      });
       handleSetIndexOfCurrentTrack(index);
     }
     console.log("activelist", state.activeList);
@@ -146,8 +160,8 @@ export const GlobalContextProvider = ({ children }) => {
       payload: {
         currentTrack:
           type === "next"
-            ? state.queue[state.indexOfCurrentTrack + 1]
-            : state.queue[state.indexOfCurrentTrack - 1],
+            ? state.queue.list[state.indexOfCurrentTrack + 1]
+            : state.queue.list[state.indexOfCurrentTrack - 1],
       },
     });
     handleSetIndexOfCurrentTrack(
@@ -166,6 +180,38 @@ export const GlobalContextProvider = ({ children }) => {
   };
 
   const handleShuffle = () => {
+    if (state.queue.list.length > 0) {
+      if (!state.shuffle) {
+        handleSetQueue({
+          ...state.activeList,
+          list: shuffle(
+            state.activeList.list,
+            state.queue.list.indexOf(state.currentTrack),
+          ),
+        });
+        handleSetIndexOfCurrentTrack(0);
+        console.log(state.queue.list.indexOf(state.currentTrack));
+      } else {
+        let url = "/";
+        state.queue.url.map((item) => (url = path.join(url, item)));
+        axios
+          .get("http://localhost:3000/getFromDir", {
+            params: {
+              dir: path.join(url, state.queue.active, "/"),
+            },
+          })
+          .then((res) => {
+            handleSetQueue({
+              ...state.activeList,
+              list: res.data,
+            });
+            handleSetIndexOfCurrentTrack(
+              res.data.findIndex((obj) => obj.name === state.currentTrack.name),
+            );
+            console.log("i am un shuffling man", state.currentTrack);
+          });
+      }
+    }
     dispatch({
       type: toggleShuffle,
     });

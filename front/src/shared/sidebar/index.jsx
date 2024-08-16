@@ -75,7 +75,6 @@ export const Sidebar = () => {
 
   useEffect(() => {
     requestDirs("http://localhost:3000/getDirs", "GET", { url: "" });
-    console.log("lalallalal", dirs);
   }, []);
 
   useEffect(() => {
@@ -91,10 +90,7 @@ export const Sidebar = () => {
     let url = "/";
 
     activeUrl.url.map((item) => (url = path.join(url, item)));
-    // axios;
-    // requestFromDir("http://localhost:3000/getFromDir", "GET", {
-    //   dir:
-    // });
+
     axios
       .get("http://localhost:3000/getFromDir", {
         params: {
@@ -102,7 +98,11 @@ export const Sidebar = () => {
         },
       })
       .then((res) => {
-        handleSetActiveList(res.data);
+        handleSetActiveList({
+          list: res.data,
+          url: activeUrl.url,
+          active: activeUrl.active,
+        });
       });
   }, [activeUrl.active, activeUrl.url]);
   return (

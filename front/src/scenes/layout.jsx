@@ -29,8 +29,8 @@ export const Layout = () => {
       <Sidebar />
       <Box width={"100%"} minW={"500px"} overflow={"scroll"}>
         <Box height={"400px"} overflow={"scroll"}>
-          {activeList &&
-            activeList.map((item, idx) => (
+          {activeList.list &&
+            activeList.list.map((item, idx) => (
               <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
                 <Text>{item.name}</Text>
               </Box>
