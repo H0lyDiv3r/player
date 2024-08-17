@@ -1,14 +1,23 @@
 "use client";
 import { Box, Icon, Button, Spinner, Spacer, Text } from "@chakra-ui/react";
-import React, { forwardRef, useContext, useRef } from "react";
+import { forwardRef, useContext, useRef } from "react";
 import {
   FaBackward,
   FaForward,
   FaPause,
   FaPlay,
-  FaRepeat,
   FaShuffle,
 } from "react-icons/fa6";
+import {
+  TbRepeat,
+  TbRepeatOff,
+  TbRepeatOnce,
+  TbPlayerPlayFilled,
+  TbPlayerPauseFilled,
+  TbArrowsShuffle,
+  TbPlayerTrackNextFilled,
+  TbPlayerTrackPrevFilled,
+} from "react-icons/tb";
 import { PlayerContext } from "./PlayerContextProvider";
 import VolumeControl from "./VolumeControl";
 import PlaybackRateControl from "./PlaybackRateControl";
@@ -18,7 +27,9 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 const Controls = forwardRef(function Controls(props, ref) {
   const { handlePlay, paused, loaded, handleFastForward } =
     useContext(PlayerContext);
-  const { handleNextPrev, handleShuffle, shuffle } = useContext(GlobalContext);
+  const { handleNextPrev, handleShuffle, shuffle, handleLoop, loop } =
+    useContext(GlobalContext);
+  const loopVals = [TbRepeatOff, TbRepeat, TbRepeatOnce];
   return (
     <Box
       width={"100%"}
@@ -38,21 +49,22 @@ const Controls = forwardRef(function Controls(props, ref) {
         px={"18px"}
       >
         <IconButton
-          icon={FaRepeat}
-          action={() => handleFastForward(ref)}
+          icon={loopVals[loop]}
+          action={() => handleLoop()}
           color={"neutral.400"}
           bg={"none"}
+          size={5}
           _hover={{ bg: "none" }}
         />
         <IconButton
-          icon={FaBackward}
+          icon={TbPlayerTrackPrevFilled}
           action={() => handleNextPrev("prev")}
           color={"neutral.400"}
           bg={"none"}
           _hover={{ bg: "none" }}
         />
         <IconButton
-          icon={paused ? FaPlay : FaPause}
+          icon={paused ? TbPlayerPlayFilled : TbPlayerPauseFilled}
           action={() => handlePlay(ref)}
           size={5}
           isDisabled={!loaded}
@@ -64,14 +76,14 @@ const Controls = forwardRef(function Controls(props, ref) {
           _hover={{ bg: "trans.200" }}
         />
         <IconButton
-          icon={FaForward}
+          icon={TbPlayerTrackNextFilled}
           action={() => handleNextPrev("next")}
           color={"neutral.400"}
           bg={"none"}
           _hover={{ bg: "none" }}
         />
         <IconButton
-          icon={FaShuffle}
+          icon={TbArrowsShuffle}
           action={() => handleShuffle()}
           color={shuffle ? "red" : "neutral.400"}
           bg={"none"}

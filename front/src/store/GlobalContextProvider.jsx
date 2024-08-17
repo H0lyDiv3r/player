@@ -22,6 +22,8 @@ const initialState = {
     active: "",
   },
   shuffle: false,
+  loop: 0,
+  //noLoop,loop,loopOne
 };
 
 const addPath = "ADD_PATH";
@@ -32,6 +34,7 @@ const setQueue = "SET_QUEUE";
 const setActiveList = "SET_ACTIVE_LIST";
 const setIndexOfCurrentTrack = "SET_INDEX_OF_CURRENT_TRACK";
 const toggleShuffle = "TOGGLE_SHUFFLE";
+const toggleLoop = "TOGGLE_LOOP";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -72,6 +75,8 @@ const reducer = (state = initialState, action) => {
       };
     case toggleShuffle:
       return { ...state, shuffle: !state.shuffle };
+    case toggleLoop:
+      return { ...state, loop: action.payload.loop };
     default:
       return state;
   }
@@ -155,20 +160,62 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleNextPrev = (type) => {
-    dispatch({
-      type: setCurrentTrack,
-      payload: {
-        currentTrack:
+    switch (state.loop) {
+      case 0:
+        dispatch({
+          type: setCurrentTrack,
+          payload: {
+            currentTrack:
+              type === "next"
+                ? state.queue.list[state.indexOfCurrentTrack + 1]
+                : state.queue.list[state.indexOfCurrentTrack - 1],
+          },
+        });
+        handleSetIndexOfCurrentTrack(
           type === "next"
-            ? state.queue.list[state.indexOfCurrentTrack + 1]
-            : state.queue.list[state.indexOfCurrentTrack - 1],
-      },
-    });
-    handleSetIndexOfCurrentTrack(
-      type === "next"
-        ? state.indexOfCurrentTrack + 1
-        : state.indexOfCurrentTrack - 1,
-    );
+            ? state.indexOfCurrentTrack + 1
+            : state.indexOfCurrentTrack - 1,
+        );
+        break;
+      case 1:
+        dispatch({
+          type: setCurrentTrack,
+          payload: {
+            currentTrack:
+              type === "next"
+                ? state.queue.list[
+                    (state.indexOfCurrentTrack + 1) % state.queue.list.length
+                  ]
+                : state.queue.list[
+                    (state.indexOfCurrentTrack - 1) % state.queue.list.length
+                  ],
+          },
+        });
+        handleSetIndexOfCurrentTrack(
+          type === "next"
+            ? (state.indexOfCurrentTrack + 1) % state.queue.list.length
+            : (state.indexOfCurrentTrack - 1) % state.queue.list.length,
+        );
+        break;
+      case 2:
+        dispatch({
+          type: setCurrentTrack,
+          payload: {
+            currentTrack:
+              type === "next"
+                ? state.queue.list[state.indexOfCurrentTrack]
+                : state.queue.list[state.indexOfCurrentTrack],
+          },
+        });
+        handleSetIndexOfCurrentTrack(
+          type === "next"
+            ? state.indexOfCurrentTrack
+            : state.indexOfCurrentTrack,
+        );
+        break;
+      default:
+        return;
+    }
   };
   const handleSetIndexOfCurrentTrack = (index) => {
     dispatch({
@@ -178,7 +225,6 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-
   const handleShuffle = () => {
     if (state.queue.list.length > 0) {
       if (!state.shuffle) {
@@ -216,6 +262,17 @@ export const GlobalContextProvider = ({ children }) => {
       type: toggleShuffle,
     });
   };
+  const handleLoop = () => {
+    let val = state.loop;
+    val = (val + 1) % 3;
+    dispatch({
+      type: toggleLoop,
+      payload: {
+        loop: val,
+      },
+    });
+    console.log(val);
+  };
   const vals = {
     ...state,
     handleAddPath,
@@ -227,6 +284,7 @@ export const GlobalContextProvider = ({ children }) => {
     handleSetActiveList,
     handleSetIndexOfCurrentTrack,
     handleShuffle,
+    handleLoop,
   };
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>
