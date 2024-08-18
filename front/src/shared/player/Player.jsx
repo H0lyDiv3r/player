@@ -18,8 +18,8 @@ export default function Player() {
     handleLoaded,
     loaded,
   } = useContext(PlayerContext);
-  const { currentTrack, queue } = useContext(GlobalContext);
-  // const {currentEpisode} = useContext(GlobalContext)
+  const { currentTrack, queue, handleNextPrev, loop } =
+    useContext(GlobalContext);
 
   const audioRef = useRef(null);
 
@@ -59,8 +59,9 @@ export default function Player() {
             src={
               currentTrack ? `http://localhost:3000${currentTrack["path"]}` : ""
             }
+            loop={loop == 2}
             onLoadedData={() => handleSetPlayerValues(audioRef)}
-            onEnded={() => handlePause(audioRef)}
+            onEnded={() => handleNextPrev("next")}
             onEmptied={() => handleLoaded(false)}
           >
             "your browser doesnt support the element"
