@@ -46,7 +46,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.post("/addDir", async (req, res) => {
+app.get("/addDir", async (req, res) => {
   const dirPath = path.join(root, req.query.dir || "");
   const jsonFilePath = path.join(files, directoryFile);
   let data = await fs.readFile(jsonFilePath, "utf8");
@@ -56,6 +56,7 @@ app.post("/addDir", async (req, res) => {
   let directory = JSON.parse(data);
   await scanDir(dirPath, directory);
   fs.writeFile(jsonFilePath, JSON.stringify(directory)).catch((error) => error);
+  console.log("im here", dirPath);
   res.send(directory);
 });
 

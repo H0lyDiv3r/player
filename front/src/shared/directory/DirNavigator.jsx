@@ -31,7 +31,7 @@ export const DirNavigator = () => {
   const handleScan = () => {
     console.log("scannig", filePath);
     axios
-      .post("http://localhost:3000/addDir", {
+      .get("http://localhost:3000/addDir", {
         params: {
           dir: filePath,
         },
