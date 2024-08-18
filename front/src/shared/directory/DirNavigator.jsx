@@ -19,22 +19,28 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaFolder, FaFolderPlus } from "react-icons/fa6";
 import { BsFileEarmarkMusicFill } from "react-icons/bs";
-import { ButtonIcon } from "../bottons";
+import { ButtonIcon, DefaultButton } from "../bottons";
 import { FaFolderOpen } from "react-icons/fa";
 
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dir, setDir] = useState([{ name: "lala", type: "dir" }]);
-  const {
-    filePath,
-    url,
-    handleAddPath,
-    handlePopPath,
-    handleSetCurrentTrack,
-    handleSetPath,
-  } = useContext(GlobalContext);
+  const { filePath, url, handleAddPath, handlePopPath, handleSetPath } =
+    useContext(GlobalContext);
+
+  const handleScan = () => {
+    console.log("scannig", filePath);
+    axios
+      .post("http://localhost:3000/addDir", {
+        params: {
+          dir: filePath,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  };
   useEffect(() => {
-    console.log("Fetcing");
     axios
       .get("http://localhost:3000", {
         params: {
@@ -57,10 +63,13 @@ export const DirNavigator = () => {
           minWidth={"600px"}
           maxWidth={"700px"}
           height={"95%"}
-          bg={"transparent"}
-          bgImage={
-            "linear-gradient(150deg,rgba(255,255,255,0.2),rgba(0,0,0,0.2))"
-          }
+          // bg={"transparent"}
+          // bgImage={
+          //   "linear-gradient(150deg,rgba(255,255,255,0.2),rgba(0,0,0,0.2))"
+          // }
+
+          fontSize={"14px"}
+          bg={"white"}
           backdropFilter={"auto"}
           backdropBlur={"12px"}
           borderColor={"neutral.700"}
@@ -83,7 +92,6 @@ export const DirNavigator = () => {
             <Box
               width={"100%"}
               px={"12px"}
-              py={"24px"}
               display={"flex"}
               justifyContent={"space-between"}
             >
@@ -104,12 +112,16 @@ export const DirNavigator = () => {
                 <Text>Downloads</Text>
               </Box>
             </Box>
+            <Box>
+              <Text>Directories</Text>
+              <DefaultButton onClick={handleScan}>scan</DefaultButton>
+            </Box>
             <Box
-              my={"12px"}
+              my={"6px"}
               display={"flex"}
               alignItems={"center"}
-              // borderY={`solid 1px white`}
-              py={"6px"}
+              borderY={`solid 1px black`}
+              py={"2px"}
               bg={"trans.100"}
               borderRadius={"4px"}
             >
@@ -133,37 +145,21 @@ export const DirNavigator = () => {
               </Box>
             </Box>
             <Box overflow={"scroll"} height={"100%"}>
-              {dir.map((item, idx) =>
-                item.type === "file" ? (
-                  <Box
-                    key={idx}
-                    p={"6px"}
-                    // bg={"trans.200"}
-                    onClick={() => handleSetCurrentTrack(item.name)}
-                    borderRadius={"4px"}
-                    display={"flex"}
-                    alignItems={"center"}
-                    _hover={{ cursor: "pointer", bg: "brand.500" }}
-                  >
-                    <Icon as={BsFileEarmarkMusicFill} mr={"8px"} />
-                    <Text>{item.name}</Text>
-                  </Box>
-                ) : (
-                  <Box
-                    key={idx}
-                    p={"6px"}
-                    // bg={"trans.200"}
-                    onClick={() => handleAddPath(item.name)}
-                    borderRadius={"4px"}
-                    display={"flex"}
-                    alignItems={"center"}
-                    _hover={{ cursor: "pointer", bg: "trans.100" }}
-                  >
-                    <Icon as={FaFolder} mr={"8px"} />
-                    <Text>{item.name}</Text>
-                  </Box>
-                ),
-              )}
+              {dir.map((item, idx) => (
+                <Box
+                  key={idx}
+                  p={"4px"}
+                  // bg={"trans.200"}
+                  onClick={() => handleAddPath(item.name)}
+                  borderRadius={"4px"}
+                  display={"flex"}
+                  alignItems={"center"}
+                  _hover={{ cursor: "pointer", bg: "trans.600" }}
+                >
+                  <Icon as={FaFolder} mr={"8px"} />
+                  <Text>{item.name}</Text>
+                </Box>
+              ))}
             </Box>
           </ModalBody>
         </ModalContent>

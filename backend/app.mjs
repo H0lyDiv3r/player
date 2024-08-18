@@ -26,20 +26,17 @@ app.get("/", async (req, res) => {
       const files = await fs.readdir(dirPath, { withFileTypes: true });
       for (const file of files) {
         const fullPath = path.join(dirPath + file.name);
+        if (await fileType.isMusicFile(dirPath)) {
+          continue;
+        }
         if (file.isSymbolicLink()) {
           continue;
         }
         if (!(await fileType.checkHealth(fullPath))) {
           continue;
         }
-        if (
-          (await fileType.isMusicFile(fullPath)) ||
-          (await fileType.isDir(fullPath))
-        ) {
-          directory.push({
-            name: file.name,
-            type: (await fileType.isDir(fullPath)) ? "dir" : "file",
-          });
+        if (await fileType.isDir(fullPath)) {
+          directory.push(file);
         }
       }
       res.send(directory);
@@ -227,6 +224,12 @@ app.delete("/deleteFromPlaylist", async (req, res) => {
 const scanDir = async (url, dir) => {
   const files = await fs.readdir(url, { withFileTypes: true });
   let current = dir;
+  // console.log(
+  //   await fileType.containsMusicFileOrDir(
+  //     "/media/yuri/Data/audio/Audio books/",
+  //     false,
+  //   ),
+  // );
   for (const file of files) {
     const fullPath = path.join(url, file.name);
     if (file.isSymbolicLink()) {
@@ -235,7 +238,6 @@ const scanDir = async (url, dir) => {
     if (!(await fileType.checkHealth(fullPath))) {
       continue;
     }
-
     const chain = url.split("/").slice(1).slice(0, -1);
     if (
       (await fileType.isDir(fullPath)) &&
@@ -318,16 +320,22 @@ const fileType = {
   containsMusicFileOrDir: async (dir) => {
     if (await fileType.isDir(dir)) {
       const files = await fs.readdir(dir, { withFileTypes: true });
-      for (const file of files) {
+      const checks = files.map(async (file) => {
         const fullPath = path.join(dir, file.name);
-        if (await fileType.isDir(fullPath)) {
-          fileType.containsMusicFileOrDir(path.join(fullPath, "/"));
-        }
         if (await fileType.isMusicFile(fullPath)) {
           return true;
         }
-      }
-      return false;
+
+        if (await fileType.isDir(file.path)) {
+          return await fileType.containsMusicFileOrDir(
+            path.join(fullPath, "/"),
+          );
+        }
+        return false;
+      });
+
+      const results = await Promise.all(checks);
+      return results.includes(true);
     }
   },
 };
