@@ -15,7 +15,7 @@ export const playlistControllers = {
       res.status(500).json({ message: "failed to read data" });
     }
     let playlists = JSON.parse(data);
-    res.send(playlists);
+    res.send(Object.keys(playlists));
   },
   getPlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
@@ -82,8 +82,8 @@ export const playlistControllers = {
       res.status(500).json({ message: "failed to read data" });
     }
     let playlists = JSON.parse(data);
-    playlists[req.body.name] = playlists[req.body.name].filter(
-      (item) => item.id != req.body.id,
+    playlists[req.query.name] = playlists[req.query.name].filter(
+      (item) => item.id != req.query.id,
     );
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
     res.send();

@@ -13,21 +13,37 @@ import {
 } from "@chakra-ui/react";
 import { FaRecordVinyl } from "react-icons/fa";
 import { DefaultButton } from "../bottons";
+import { useState } from "react";
+import { api } from "../../utils";
 
 export const Playlists = () => {
   const [loadingPlaylists, playlists, errorPlaylists, requestPlaylists] =
     useRequest();
+  const [playlistName, handleSetPlaylistName] = useState("");
+  const handleCreatePlaylist = () => {
+    api
+      .post("/playlist/createPlaylist", { name: playlistName })
+      .then((res) => console.log(res));
+    console.log("hanele", playlistName);
+  };
+  const handleChange = (e) => {
+    handleSetPlaylistName(e.target.value);
+  };
   useEffect(() => {
-    requestPlaylists("http://localhost:3000/getPlaylists", "GET");
+    requestPlaylists("/playlist/getPlaylists", "GET");
   }, []);
   return (
-    <Box fontSize={"14px"} fontWeight={400} color={"neutral.800"}>
+    <Box fontSize={"14px"} fontWeight={400} color={"neutral.light.800"}>
       <Text>Your Playlists</Text>
       <Box borderRadius={"12px"} py={"12px"} bg={"trans.200"}>
-        <CreatePlaylist />
+        <CreatePlaylist
+          playlistName={playlistName}
+          handleChange={handleChange}
+          handleCreatePlaylist={handleCreatePlaylist}
+        />
         <Box mt={"12px"}>
           {playlists &&
-            Object.keys(playlists).map((playlist) => (
+            playlists.map((playlist) => (
               <Box key={playlist} display={"flex"} alignItems={"center"}>
                 <Icon as={FaRecordVinyl} mr={"6px"} />
                 <Text>{playlist}</Text>
@@ -38,7 +54,11 @@ export const Playlists = () => {
     </Box>
   );
 };
-export const CreatePlaylist = () => {
+export const CreatePlaylist = ({
+  playlistName,
+  handleChange,
+  handleCreatePlaylist,
+}) => {
   return (
     <>
       <Menu placement={"bottom"} matchWidth>
@@ -46,7 +66,7 @@ export const CreatePlaylist = () => {
           minWidth={"100%"}
           fontSize={"14px"}
           fontWeight={400}
-          bg={"brand.400"}
+          bg={"brand.500"}
           borderRadius={"6px"}
           color={"white"}
           py={"6px"}
@@ -63,9 +83,15 @@ export const CreatePlaylist = () => {
           <Box>
             <FormControl my={"12px"}>
               <FormLabel fontSize={"12px"}>Playlist Name</FormLabel>
-              <Input size={"sm"} />
+              <Input
+                size={"sm"}
+                value={playlistName}
+                onChange={(e) => handleChange(e)}
+              />
             </FormControl>
-            <DefaultButton size={"sm"}>create</DefaultButton>
+            <DefaultButton size={"sm"} action={handleCreatePlaylist} disabled>
+              create
+            </DefaultButton>
           </Box>
         </MenuList>
       </Menu>

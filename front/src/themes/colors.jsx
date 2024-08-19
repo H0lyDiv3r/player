@@ -10,6 +10,7 @@ const colors = {
     800: "#409a9c",
     900: "#358183",
   },
+  //2baf90
   neutral: {
     light: {
       100: "#fdf6ef",
