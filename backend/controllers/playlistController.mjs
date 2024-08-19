@@ -2,6 +2,8 @@ import { files, playlistFile } from "../utils/globalVars.mjs";
 import * as fs from "fs/promises";
 import * as path from "node:path";
 
+import { fileType } from "../utils/file.mjs";
+
 export const playlistControllers = {
   getPlaylists: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);

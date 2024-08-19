@@ -1,6 +1,7 @@
 import { directoryFile, root, files } from "../utils/globalVars.mjs";
 import * as fs from "fs/promises";
 import * as path from "node:path";
+import { fileType, hasDirs, scanDir, getAllAudio } from "../utils/file.mjs";
 
 export const dirControllers = {
   dir: async (req, res) => {
