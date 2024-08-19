@@ -28,6 +28,7 @@ import path from "path-browserify";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import axios from "axios";
+import { api } from "../../utils";
 
 export const Sidebar = () => {
   const [loadingDirs, dirs, errorDirs, requestDirs] = useRequest();
@@ -63,7 +64,6 @@ export const Sidebar = () => {
     }
   };
   const handlePopActiveUrl = () => {
-    console.log(activeUrl.url);
     if (activeUrl.url.length > 1) {
       setActiveUrl({
         ...activeUrl,
@@ -74,25 +74,24 @@ export const Sidebar = () => {
   };
 
   useEffect(() => {
-    requestDirs("http://localhost:3000/getDirs", "GET", { url: "" });
+    requestDirs("/dir/getDirs", "GET", { url: "" });
   }, []);
 
   useEffect(() => {
     let url = "/";
 
     activeUrl.url.map((item) => (url = path.join(url, item)));
-    requestSubDirs("http://localhost:3000/getDirs", "GET", {
+    requestSubDirs("/dir/getDirs", "GET", {
       url: path.join(url, "/"),
     });
-    console.log("dirs", subDirs, url);
   }, [activeUrl.url]);
   useEffect(() => {
     let url = "/";
 
     activeUrl.url.map((item) => (url = path.join(url, item)));
 
-    axios
-      .get("http://localhost:3000/getFromDir", {
+    api
+      .get("/dir/getFromDir", {
         params: {
           dir: path.join(url, activeUrl.active, "/"),
         },

@@ -1,14 +1,10 @@
 import {
   Box,
-  Button,
-  Divider,
   Icon,
   Image,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
-  ModalHeader,
   ModalOverlay,
   Text,
   useDisclosure,
@@ -18,9 +14,9 @@ import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaFolder, FaFolderPlus } from "react-icons/fa6";
-import { BsFileEarmarkMusicFill } from "react-icons/bs";
 import { ButtonIcon, DefaultButton } from "../bottons";
-import { FaFolderOpen } from "react-icons/fa";
+import process from "process";
+import { api } from "../../utils";
 
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,8 +26,8 @@ export const DirNavigator = () => {
 
   const handleScan = () => {
     console.log("scannig", filePath);
-    axios
-      .get("http://localhost:3000/addDir", {
+    api
+      .get(`dir/addDir`, {
         params: {
           dir: filePath,
         },
@@ -41,13 +37,14 @@ export const DirNavigator = () => {
       });
   };
   useEffect(() => {
-    axios
-      .get("http://localhost:3000", {
+    api
+      .get(`/dir`, {
         params: {
           dir: filePath,
         },
       })
       .then((res) => {
+        console.log(res, import.meta.env);
         setDir(res.data);
       });
   }, [filePath]);

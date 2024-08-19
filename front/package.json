@@ -14,6 +14,7 @@
     "@fontsource/rubik": "^5.0.20",
     "axios": "^1.7.3",
     "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1"

@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { createContext } from "react";
 import path from "path-browserify";
-import { shuffle } from "../utils";
+import { api, shuffle } from "../utils";
 import axios from "axios";
 
 export const GlobalContext = createContext();
@@ -240,8 +240,8 @@ export const GlobalContextProvider = ({ children }) => {
       } else {
         let url = "/";
         state.queue.url.map((item) => (url = path.join(url, item)));
-        axios
-          .get("http://localhost:3000/getFromDir", {
+        api
+          .get("/div/getFromDir", {
             params: {
               dir: path.join(url, state.queue.active, "/"),
             },

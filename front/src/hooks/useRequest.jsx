@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useReducer } from "react";
+import { api } from "../utils";
 
 const initialState = {
   loading: false,
@@ -43,7 +44,7 @@ const useRequest = () => {
     if (method === "POST") {
       return new Promise((resolve, reject) => {
         dispatch({ type: LOADING });
-        axios
+        api
           .post(url, data)
           .then((res) => {
             dispatch({
@@ -68,7 +69,7 @@ const useRequest = () => {
     if (method === "PUT") {
       return new Promise((resolve, reject) => {
         dispatch({ type: LOADING });
-        axios
+        api
           .put(url, data)
           .then((res) => {
             dispatch({
@@ -93,7 +94,7 @@ const useRequest = () => {
     if (method === "GET") {
       return new Promise((resolve, reject) => {
         dispatch({ type: LOADING });
-        axios
+        api
           .get(url, {
             params: data,
           })
@@ -120,7 +121,7 @@ const useRequest = () => {
     if (method === "PATCH") {
       return new Promise((resolve, reject) => {
         dispatch({ type: LOADING });
-        axios
+        api
           .patch(url, data)
           .then((res) => {
             dispatch({
@@ -145,7 +146,7 @@ const useRequest = () => {
     if (method === "DELETE") {
       return new Promise((resolve, reject) => {
         dispatch({ type: LOADING });
-        axios
+        api
           .delete(url, {
             params: data,
           })
