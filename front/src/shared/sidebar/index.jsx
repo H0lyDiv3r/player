@@ -108,7 +108,7 @@ export const Sidebar = () => {
     <Box
       width={"300px"}
       minW={"300px"}
-      bg={"rgba(255,255,255,0.6)"}
+      bg={"rgba(255,255,255,1)"}
       backdropFilter={"auto"}
       backdropBlur={"6px"}
       p={"12px"}
