@@ -1,8 +1,13 @@
-import { Box, Divider, Icon, Text } from "@chakra-ui/react";
+import { Box, Button, Divider, Icon, Text } from "@chakra-ui/react";
 import { Directories } from "./Directories";
 import { Playlists } from "./Playlists";
+import { useState } from "react";
 
 export const Sidebar = () => {
+  const [tab, setTab] = useState("playlist");
+  const handleSetTab = (active) => {
+    setTab(active);
+  };
   return (
     <Box
       width={"300px"}
@@ -19,7 +24,11 @@ export const Sidebar = () => {
       </Box>
       <Divider />
       <Box my={"24px"}>
-        <Playlists />
+        <Box>
+          <Button onClick={() => handleSetTab("directory")}>dir</Button>
+          <Button onClick={() => handleSetTab("playlist")}>pl</Button>
+        </Box>
+        {tab === "directory" ? <Directories /> : <Playlists />}
       </Box>
     </Box>
   );

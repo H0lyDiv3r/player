@@ -10,8 +10,13 @@ import { Sidebar } from "../shared/sidebar";
 import { Playlists } from "../shared/sidebar/Playlists";
 
 export const Layout = () => {
-  const { queue, activeList, handleSetCurrentTrack } =
-    useContext(GlobalContext);
+  const {
+    queue,
+    activeList,
+    activePlaylist,
+    handleSetCurrentTrack,
+    currentTab,
+  } = useContext(GlobalContext);
   useEffect(() => {
     console.log("active list", activeList);
     console.log("queueueueueq", queue);
@@ -28,13 +33,27 @@ export const Layout = () => {
     >
       <Sidebar />
       <Box width={"100%"} minW={"500px"} overflow={"scroll"}>
+        <Box color={"white"}>{currentTab}</Box>
         <Box height={"400px"} overflow={"scroll"}>
-          {activeList.list &&
-            activeList.list.map((item, idx) => (
-              <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
-                <Text>{item.name}</Text>
-              </Box>
-            ))}
+          {currentTab === "directory" ? (
+            <>
+              {activeList.list &&
+                activeList.list.map((item, idx) => (
+                  <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
+                    <Text>{item.name}</Text>
+                  </Box>
+                ))}
+            </>
+          ) : (
+            <>
+              {activePlaylist.list &&
+                activePlaylist.list.map((item, idx) => (
+                  <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
+                    <Text>{item.name}</Text>
+                  </Box>
+                ))}
+            </>
+          )}
         </Box>
         <PlayerContextProvider>
           <Player />

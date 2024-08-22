@@ -3,6 +3,7 @@ import { createContext } from "react";
 import path from "path-browserify";
 import { api, shuffle } from "../utils";
 import axios from "axios";
+import useRequest from "../hooks/useRequest";
 
 export const GlobalContext = createContext();
 
@@ -15,11 +16,21 @@ const initialState = {
     list: [],
     url: [],
     active: "",
+    type: "directory",
+  },
+  activeDir: null,
+  currentTab: "directory",
+  activePlaylist: {
+    list: [],
+    url: [],
+    active: "",
+    type: "playlist",
   },
   activeList: {
     list: [],
     url: [],
     active: "",
+    type: "directory",
   },
   shuffle: false,
   loop: 0,
@@ -35,6 +46,9 @@ const setActiveList = "SET_ACTIVE_LIST";
 const setIndexOfCurrentTrack = "SET_INDEX_OF_CURRENT_TRACK";
 const toggleShuffle = "TOGGLE_SHUFFLE";
 const toggleLoop = "TOGGLE_LOOP";
+const setActiveDir = "SET_ACTIVE_DIR";
+const setActivePlaylist = "SET_ACTIVE_PLAYLIST";
+const setCurrentTab = "SET_CURRENT_TAB";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -68,6 +82,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         activeList: action.payload.activeList,
       };
+    case setActiveDir:
+      return { ...state, activeDir: action.payload.activeDir };
     case setIndexOfCurrentTrack:
       return {
         ...state,
@@ -77,6 +93,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, shuffle: !state.shuffle };
     case toggleLoop:
       return { ...state, loop: action.payload.loop };
+    case setCurrentTab:
+      return { ...state, currentTab: action.payload.currentTab };
+    case setActivePlaylist:
+      return { ...state, activePlaylist: action.payload.activePlaylist };
     default:
       return state;
   }
@@ -84,6 +104,7 @@ const reducer = (state = initialState, action) => {
 
 export const GlobalContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [playlist] = useRequest();
   const handleAddPath = (dir) => {
     const newUrl = [...state.url, dir];
     let newPath = "";
@@ -108,7 +129,11 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleSetCurrentTrack = (index) => {
-    const track = state.activeList.list[index];
+    const active =
+      state.currentTab === "directory"
+        ? state.activeList
+        : state.activePlaylist;
+    const track = active.list[index];
     dispatch({
       type: setCurrentTrack,
       payload: {
@@ -117,17 +142,17 @@ export const GlobalContextProvider = ({ children }) => {
     });
     if (state.shuffle) {
       handleSetQueue({
-        ...state.activeList,
-        list: shuffle(state.activeList.list, index),
+        ...active,
+        list: shuffle(active.list, index),
       });
       handleSetIndexOfCurrentTrack(0);
     } else {
       handleSetQueue({
-        ...state.activeList,
+        ...active,
       });
       handleSetIndexOfCurrentTrack(index);
     }
-    console.log("activelist", state.activeList);
+    // console.log("activelist", state.activeList);
   };
   const handleSetPath = (dir) => {
     const newUrl = dir;
@@ -158,6 +183,32 @@ export const GlobalContextProvider = ({ children }) => {
         activeList: list,
       },
     });
+    dispatch({
+      type: setCurrentTab,
+      payload: {
+        currentTab: "directory",
+      },
+    });
+  };
+  const handleSetActivePlaylist = (name) => {
+    playlist
+      .request("/playlist/getPlaylist", "GET", {
+        name: name,
+      })
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: setActivePlaylist,
+          payload: {
+            activePlaylist: {
+              ...state.activePlaylist,
+              list: res.data,
+              active: name,
+            },
+          },
+        });
+        handleSetCurrentTab("playlist");
+      });
   };
   const handleNextPrev = (type) => {
     switch (state.loop) {
@@ -226,41 +277,74 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleShuffle = () => {
+    const active =
+      state.queue.type === "directory"
+        ? state.activeList
+        : state.activePlaylist;
     if (state.queue.list.length > 0) {
       if (!state.shuffle) {
         handleSetQueue({
-          ...state.activeList,
+          ...active,
           list: shuffle(
-            state.activeList.list,
-            state.queue.list.indexOf(state.currentTrack),
+            active.list,
+            state.queue.list.findIndex(
+              (obj) => obj.name === state.currentTrack.name,
+            ),
           ),
         });
         handleSetIndexOfCurrentTrack(0);
-        console.log(state.queue.list.indexOf(state.currentTrack));
+        console.log(state.queue.list.indexOf(state.currentTrack), active.list);
       } else {
-        let url = "/";
-        state.queue.url.map((item) => (url = path.join(url, item)));
-        api
-          .get("/div/getFromDir", {
-            params: {
-              dir: path.join(url, state.queue.active, "/"),
-            },
-          })
-          .then((res) => {
-            handleSetQueue({
-              ...state.activeList,
-              list: res.data,
-            });
-            handleSetIndexOfCurrentTrack(
-              res.data.findIndex((obj) => obj.name === state.currentTrack.name),
-            );
-            console.log("i am un shuffling man", state.currentTrack);
-          });
+        if (state.queue.type === "directory") {
+          handleShuffleDir();
+        } else {
+          handleShufflePlaylist();
+        }
       }
     }
     dispatch({
       type: toggleShuffle,
     });
+  };
+
+  const handleShuffleDir = () => {
+    let url = "/";
+    state.queue.url.map((item) => (url = path.join(url, item)));
+    api
+      .get("/dir/getFromDir", {
+        params: {
+          dir: path.join(url, state.queue.active, "/"),
+        },
+      })
+      .then((res) => {
+        handleSetQueue({
+          ...state.activeList,
+          list: res.data,
+        });
+        handleSetIndexOfCurrentTrack(
+          res.data.findIndex((obj) => obj.name === state.currentTrack.name),
+        );
+        console.log("i am un shuffling man", state.currentTrack);
+      });
+  };
+  const handleShufflePlaylist = () => {
+    api
+      .get("/playlist/getPlaylist", {
+        params: {
+          name: state.queue.active,
+        },
+      })
+      .then((res) => {
+        handleSetQueue({
+          ...state.activePlaylist,
+          list: res.data,
+        });
+        console.log(res.data);
+        handleSetIndexOfCurrentTrack(
+          res.data.findIndex((obj) => obj.name === state.currentTrack.name),
+        );
+        console.log("i am un shuffling man", state.currentTrack);
+      });
   };
   const handleLoop = () => {
     let val = state.loop;
@@ -272,6 +356,14 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
     console.log(val);
+  };
+  const handleSetCurrentTab = (currentTab) => {
+    dispatch({
+      type: setCurrentTab,
+      payload: {
+        currentTab: currentTab,
+      },
+    });
   };
   const vals = {
     ...state,
@@ -285,6 +377,8 @@ export const GlobalContextProvider = ({ children }) => {
     handleSetIndexOfCurrentTrack,
     handleShuffle,
     handleLoop,
+    handleSetCurrentTab,
+    handleSetActivePlaylist,
   };
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>

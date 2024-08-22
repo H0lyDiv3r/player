@@ -26,7 +26,7 @@ export const playlistControllers = {
     if (!data) {
       res.status(500).json({ message: "failed to read data" });
     }
-    let playlist = JSON.parse(data)[req.body.name];
+    let playlist = JSON.parse(data)[req.query.name];
     res.send(playlist);
   },
   createPlaylist: async (req, res) => {
@@ -64,7 +64,6 @@ export const playlistControllers = {
     }
     let target = playlists[req.body.playlist];
     target.push({
-      id: new Date().valueOf(),
       name: req.body.name,
       path: req.body.path,
       type: req.body.type,
@@ -83,7 +82,7 @@ export const playlistControllers = {
     }
     let playlists = JSON.parse(data);
     playlists[req.query.name] = playlists[req.query.name].filter(
-      (item) => item.id != req.query.id,
+      (item) => item.path != req.query.path,
     );
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
     res.send();

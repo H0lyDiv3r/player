@@ -15,11 +15,13 @@ import { FaRecordVinyl } from "react-icons/fa";
 import { DefaultButton } from "../bottons";
 import { useState } from "react";
 import { api } from "../../utils";
+import { useContext } from "react";
+import { GlobalContext } from "../../store/GlobalContextProvider";
 
 export const Playlists = () => {
-  const [loadingPlaylists, playlists, errorPlaylists, requestPlaylists] =
-    useRequest();
+  const [playlists] = useRequest();
   const [playlistName, handleSetPlaylistName] = useState("");
+  const { handleSetActivePlaylist, activePlaylist } = useContext(GlobalContext);
   const handleCreatePlaylist = () => {
     api
       .post("/playlist/createPlaylist", { name: playlistName })
@@ -30,10 +32,23 @@ export const Playlists = () => {
     handleSetPlaylistName(e.target.value);
   };
   useEffect(() => {
-    requestPlaylists("/playlist/getPlaylists", "GET");
+    playlists.request("/playlist/getPlaylists", "GET");
   }, []);
+  useEffect(() => {
+    if (!activePlaylist.name === "") {
+      api
+        .get("/playlist/getPlaylist", {
+          params: {
+            name: activePlaylist.name,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    }
+  }, [activePlaylist]);
   return (
-    <Box fontSize={"14px"} fontWeight={400} color={"neutral.light.800"}>
+    <Box fontSize={"14px"} fontWeight={400} color={"neutral.dark.100"}>
       <Text>Your Playlists</Text>
       <Box borderRadius={"12px"} py={"12px"} bg={"trans.200"}>
         <CreatePlaylist
@@ -42,9 +57,14 @@ export const Playlists = () => {
           handleCreatePlaylist={handleCreatePlaylist}
         />
         <Box mt={"12px"}>
-          {playlists &&
-            playlists.map((playlist) => (
-              <Box key={playlist} display={"flex"} alignItems={"center"}>
+          {playlists.response &&
+            playlists.response.map((playlist) => (
+              <Box
+                key={playlist}
+                display={"flex"}
+                alignItems={"center"}
+                onClick={() => handleSetActivePlaylist(playlist)}
+              >
                 <Icon as={FaRecordVinyl} mr={"6px"} />
                 <Text>{playlist}</Text>
               </Box>

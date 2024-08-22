@@ -173,7 +173,15 @@ const useRequest = () => {
       dispatch({ type: LOADING });
     }
   };
-  return [state.loading, state.response, state.error, action];
+  return [
+    {
+      loading: state.loading,
+      response: state.response,
+      error: state.error,
+      request: action,
+    },
+  ];
+  // return [state.loading, state.response, state.error, action];
 };
 
 export default useRequest;

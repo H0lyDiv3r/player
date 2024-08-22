@@ -15,9 +15,8 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 import { api } from "../../utils";
 
 export const Directories = () => {
-  const [loadingDirs, dirs, errorDirs, requestDirs] = useRequest();
-  const [loadingSubDirs, subDirs, errorSubDirs, requestSubDirs] = useRequest();
-  const [loadingFromDir, fromDir, errorFromDir, requestFromDir] = useRequest();
+  const [dirs] = useRequest();
+  const [subDirs] = useRequest();
   const [activeDir, setActiveDir] = useState(null);
   const [activeUrl, setActiveUrl] = useState({ active: "", url: [] });
   const { handleSetQueue, handleSetActiveList } = useContext(GlobalContext);
@@ -58,14 +57,14 @@ export const Directories = () => {
   };
 
   useEffect(() => {
-    requestDirs("/dir/getDirs", "GET", { url: "" });
+    dirs.request("/dir/getDirs", "GET", { url: "" });
   }, []);
 
   useEffect(() => {
     let url = "/";
 
     activeUrl.url.map((item) => (url = path.join(url, item)));
-    requestSubDirs("/dir/getDirs", "GET", {
+    subDirs.request("/dir/getDirs", "GET", {
       url: path.join(url, "/"),
     });
   }, [activeUrl.url]);
@@ -85,6 +84,7 @@ export const Directories = () => {
           list: res.data,
           url: activeUrl.url,
           active: activeUrl.active,
+          type: "directory",
         });
       });
   }, [activeUrl.active, activeUrl.url]);
@@ -117,8 +117,8 @@ export const Directories = () => {
         </Box>
       </Box>
       <Box height={"300px"}>
-        {dirs &&
-          dirs.map((dir, idx) => (
+        {dirs.response &&
+          dirs.response.map((dir, idx) => (
             <Box key={idx} height={"100%"}>
               <Box
                 display={"flex"}
@@ -147,8 +147,8 @@ export const Directories = () => {
                 p={"12px"}
                 borderRadius={"12px"}
               >
-                {subDirs &&
-                  subDirs.map((item, idx) => (
+                {subDirs.response &&
+                  subDirs.response.map((item, idx) => (
                     <Box
                       key={idx}
                       display={"flex"}
