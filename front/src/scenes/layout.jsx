@@ -1,14 +1,14 @@
 import { Box, Button, Text } from "@chakra-ui/react";
 import Player from "../shared/player/Player";
 import PlayerContextProvider from "../shared/player/PlayerContextProvider";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { GlobalContext } from "../store/GlobalContextProvider";
 import { useContext } from "react";
-import { DirNavigator } from "../shared/directory/DirNavigator";
 import { Sidebar } from "../shared/sidebar";
 import { Playlists } from "../shared/sidebar/Playlists";
 import { MusicDropdown } from "../shared/dropdowns/MusicDropdown";
+import { FixedSizeList as List } from "react-window";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export const Layout = () => {
   const {
@@ -38,30 +38,71 @@ export const Layout = () => {
         <Box color={"white"}>{currentTab}</Box>
         <Box height={"400px"} overflow={"scroll"}>
           {currentTab === "directory" ? (
-            <>
-              {activeList.list &&
-                activeList.list.slice(0, 10).map((item, idx) => (
+            <List
+              itemCount={activeList.list.length}
+              itemSize={25}
+              height={500}
+              width={"100%"}
+            >
+              {({ index, style }) => {
+                return (
                   <Box
-                    key={idx}
-                    onClick={() => handleSetCurrentTrack(idx)}
+                    style={style}
+                    key={index}
                     display={"flex"}
-                    justifyContent={"space-between"}
                     _hover={{ bg: "trans.200" }}
-                    onMouseOverCapture={() => setSelected(idx)}
                   >
-                    <Text>{item.name}</Text>
+                    <Text
+                      onClick={() => handleSetCurrentTrack(index)}
+                      width={"full"}
+                    >
+                      {activeList.list[index].name}
+                    </Text>
+                    <MusicDropdown />
                   </Box>
-                ))}
-            </>
+                );
+              }}
+            </List>
           ) : (
-            <>
-              {activePlaylist.list &&
-                activePlaylist.list.map((item, idx) => (
-                  <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
-                    <Text>{item.name}</Text>
+            // <>
+            //   {activeList.list &&
+            //     activeList.list.slice(0, 10).map((item, idx) => (
+
+            //     ))}
+            // </>
+            <List
+              itemCount={activePlaylist.list.length}
+              itemSize={25}
+              height={500}
+              width={"100%"}
+            >
+              {({ index, style }) => {
+                return (
+                  <Box
+                    style={style}
+                    key={index}
+                    display={"flex"}
+                    _hover={{ bg: "trans.200" }}
+                  >
+                    <Text
+                      onClick={() => handleSetCurrentTrack(index)}
+                      width={"full"}
+                    >
+                      {activePlaylist.list[index].name}
+                    </Text>
+                    <MusicDropdown />
                   </Box>
-                ))}
-            </>
+                );
+              }}
+            </List>
+            // <>
+            //   {activePlaylist.list &&
+            //     activePlaylist.list.map((item, idx) => (
+            //       <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
+            //         <Text>{item.name}</Text>
+            //       </Box>
+            //     ))}
+            // </>
           )}
         </Box>
         <PlayerContextProvider>
