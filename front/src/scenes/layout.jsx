@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { DirNavigator } from "../shared/directory/DirNavigator";
 import { Sidebar } from "../shared/sidebar";
 import { Playlists } from "../shared/sidebar/Playlists";
+import { MusicDropdown } from "../shared/dropdowns/MusicDropdown";
 
 export const Layout = () => {
   const {
@@ -17,6 +18,7 @@ export const Layout = () => {
     handleSetCurrentTrack,
     currentTab,
   } = useContext(GlobalContext);
+  const [selected, setSelected] = useState("");
   useEffect(() => {
     console.log("active list", activeList);
     console.log("queueueueueq", queue);
@@ -32,14 +34,21 @@ export const Layout = () => {
       display={"flex"}
     >
       <Sidebar />
-      <Box width={"100%"} minW={"500px"} overflow={"scroll"}>
+      <Box width={"100%"} minW={"500px"} overflow={"scroll"} color={"white"}>
         <Box color={"white"}>{currentTab}</Box>
         <Box height={"400px"} overflow={"scroll"}>
           {currentTab === "directory" ? (
             <>
               {activeList.list &&
-                activeList.list.map((item, idx) => (
-                  <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
+                activeList.list.slice(0, 10).map((item, idx) => (
+                  <Box
+                    key={idx}
+                    onClick={() => handleSetCurrentTrack(idx)}
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    _hover={{ bg: "trans.200" }}
+                    onMouseOverCapture={() => setSelected(idx)}
+                  >
                     <Text>{item.name}</Text>
                   </Box>
                 ))}

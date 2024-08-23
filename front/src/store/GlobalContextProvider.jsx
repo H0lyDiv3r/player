@@ -4,6 +4,7 @@ import path from "path-browserify";
 import { api, shuffle } from "../utils";
 import axios from "axios";
 import useRequest from "../hooks/useRequest";
+import { useMemo } from "react";
 
 export const GlobalContext = createContext();
 
@@ -365,21 +366,24 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const vals = {
-    ...state,
-    handleAddPath,
-    handlePopPath,
-    handleSetCurrentTrack,
-    handleSetPath,
-    handleSetQueue,
-    handleNextPrev,
-    handleSetActiveList,
-    handleSetIndexOfCurrentTrack,
-    handleShuffle,
-    handleLoop,
-    handleSetCurrentTab,
-    handleSetActivePlaylist,
-  };
+  const vals = useMemo(
+    () => ({
+      ...state,
+      handleAddPath,
+      handlePopPath,
+      handleSetCurrentTrack,
+      handleSetPath,
+      handleSetQueue,
+      handleNextPrev,
+      handleSetActiveList,
+      handleSetIndexOfCurrentTrack,
+      handleShuffle,
+      handleLoop,
+      handleSetCurrentTab,
+      handleSetActivePlaylist,
+    }),
+    [state],
+  );
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>
   );
