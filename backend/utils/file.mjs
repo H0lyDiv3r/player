@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
 import * as path from "node:path";
+import { files } from "./globalVars.mjs";
 
 export const scanDir = async (url, dir) => {
   const files = await fs.readdir(url, { withFileTypes: true });
@@ -112,4 +113,11 @@ export const fileType = {
       return results.includes(true);
     }
   },
+};
+
+export const createFile = async (name, content, extension = ".json") => {
+  const shortcutFile = path.join(files, `${name}${extension}`);
+  if (!(await fileType.checkFileHealth(shortcutFile))) {
+    fs.writeFile(shortcutFile, content);
+  }
 };
