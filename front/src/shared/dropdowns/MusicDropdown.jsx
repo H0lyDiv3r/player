@@ -1,11 +1,71 @@
-import { Menu, MenuButton, MenuList } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { api } from "../../utils";
+import useRequest from "../../hooks/useRequest";
+import { useContext } from "react";
+import { GlobalContext } from "../../store/GlobalContextProvider";
 
-export const MusicDropdown = () => {
+export const MusicDropdown = ({ audio }) => {
+  const { activePlaylist } = useContext(GlobalContext);
+  const handleAddtoPlaylist = (playlist) => {
+    api.post("/playlist/addToPlaylist", { ...audio, playlist }).then((res) => {
+      console.log(res.data);
+    });
+  };
+  const handleRemoveFromPlaylist = (track) => {
+    api
+      .delete("/playlist/deleteFromPlaylist", {
+        params: {
+          name: activePlaylist.active,
+          path: track.path,
+        },
+      })
+      .then((res) => {
+        console.log("removed", res.data);
+      });
+  };
   return (
     <>
       <Menu>
         <MenuButton>button</MenuButton>
-        <MenuList>waaw</MenuList>
+        <MenuList color={"black"}>
+          <MenuItem>add to queue</MenuItem>
+          <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
+          <MenuItem onClick={() => handleRemoveFromPlaylist(audio)}>
+            remove from playlist
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </>
+  );
+};
+
+const PlaylistMenu = ({ handleAddToPlaylist }) => {
+  const [playlists] = useRequest();
+
+  const { onOpen } = useDisclosure();
+
+  const handleOpen = () => {
+    playlists.request("/playlist/getPlaylists", "GET");
+    onOpen();
+  };
+  return (
+    <>
+      <Menu>
+        <MenuButton onClick={handleOpen}>add to playlist</MenuButton>
+        <MenuList>
+          {playlists.response &&
+            playlists.response.map((item) => (
+              <MenuItem key={item} onClick={() => handleAddToPlaylist(item)}>
+                {item}
+              </MenuItem>
+            ))}
+        </MenuList>
       </Menu>
     </>
   );

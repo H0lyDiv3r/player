@@ -22,6 +22,7 @@ export const Layout = () => {
   useEffect(() => {
     console.log("active list", activeList);
     console.log("queueueueueq", queue);
+    console.log("plaplaplaplaplaplap", activePlaylist);
   }, [activeList, queue]);
   return (
     <Box
@@ -35,7 +36,7 @@ export const Layout = () => {
     >
       <Sidebar />
       <Box width={"100%"} minW={"500px"} overflow={"scroll"} color={"white"}>
-        <Box color={"white"}>{currentTab}</Box>
+        <Box color={"white"}>{activePlaylist.active}</Box>
         <Box height={"400px"} overflow={"scroll"}>
           {currentTab === "directory" ? (
             <List
@@ -58,7 +59,7 @@ export const Layout = () => {
                     >
                       {activeList.list[index].name}
                     </Text>
-                    <MusicDropdown />
+                    <MusicDropdown audio={activeList.list[index]} />
                   </Box>
                 );
               }}
@@ -90,7 +91,7 @@ export const Layout = () => {
                     >
                       {activePlaylist.list[index].name}
                     </Text>
-                    <MusicDropdown />
+                    <MusicDropdown audio={activePlaylist.list[index]} />
                   </Box>
                 );
               }}
