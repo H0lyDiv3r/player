@@ -1,4 +1,5 @@
 import {
+  Box,
   Menu,
   MenuButton,
   MenuItem,
@@ -9,6 +10,7 @@ import { api } from "../../utils";
 import useRequest from "../../hooks/useRequest";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
+import { CreatePlaylist } from "./CreatePlaylist";
 
 export const MusicDropdown = ({ audio }) => {
   const { activePlaylist } = useContext(GlobalContext);
@@ -32,14 +34,16 @@ export const MusicDropdown = ({ audio }) => {
   return (
     <>
       <Menu>
-        <MenuButton>button</MenuButton>
-        <MenuList color={"black"}>
-          <MenuItem>add to queue</MenuItem>
-          <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
-          <MenuItem onClick={() => handleRemoveFromPlaylist(audio)}>
-            remove from playlist
-          </MenuItem>
-        </MenuList>
+        <Box>
+          <MenuButton>button</MenuButton>
+          <MenuList color={"black"}>
+            <MenuItem>add to queue</MenuItem>
+            <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
+            <MenuItem onClick={() => handleRemoveFromPlaylist(audio)}>
+              remove from playlist
+            </MenuItem>
+          </MenuList>
+        </Box>
       </Menu>
     </>
   );
@@ -59,6 +63,7 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
       <Menu>
         <MenuButton onClick={handleOpen}>add to playlist</MenuButton>
         <MenuList>
+          <CreatePlaylist />
           {playlists.response &&
             playlists.response.map((item) => (
               <MenuItem key={item} onClick={() => handleAddToPlaylist(item)}>

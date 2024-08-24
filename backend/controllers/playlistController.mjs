@@ -47,7 +47,7 @@ export const playlistControllers = {
     let playlists = JSON.parse(data);
     playlists[req.body.name] = [];
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
-    res.send();
+    res.send(playlists);
   },
   addToPlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
@@ -69,7 +69,7 @@ export const playlistControllers = {
       type: req.body.type,
     });
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
-    res.send();
+    res.send(target);
   },
   deleteFromPlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
@@ -85,7 +85,7 @@ export const playlistControllers = {
       (item) => item.path != req.query.path,
     );
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
-    res.send();
+    res.send(playlists);
   },
   deletePlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
@@ -103,6 +103,6 @@ export const playlistControllers = {
     let playlists = JSON.parse(data);
     delete playlists[req.query.name];
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
-    res.send();
+    res.send(playlists);
   },
 };
