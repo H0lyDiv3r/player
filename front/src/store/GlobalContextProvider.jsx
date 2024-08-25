@@ -84,7 +84,7 @@ const reducer = (state = initialState, action) => {
         activeList: action.payload.activeList,
       };
     case setActiveDir:
-      return { ...state, activeDir: action.payload.activeDir };
+      return { ...state, activeDir: action.payload.dir };
     case setIndexOfCurrentTrack:
       return {
         ...state,
@@ -197,7 +197,6 @@ export const GlobalContextProvider = ({ children }) => {
         name: name,
       })
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: setActivePlaylist,
           payload: {
@@ -307,7 +306,31 @@ export const GlobalContextProvider = ({ children }) => {
       type: toggleShuffle,
     });
   };
-
+  const handleSetActiveDir = (dir = null) => {
+    if (state.activeDir) {
+      dispatch({
+        type: setActiveDir,
+        payload: {
+          dir: null,
+        },
+      });
+      handleSetActiveList({ ...state.activeList, url: [], active: "" });
+    } else {
+      dispatch({
+        type: setActiveDir,
+        payload: {
+          dir,
+        },
+      });
+      handleSetActiveList({
+        ...state.activeList,
+        url:
+          state.activeList.url.length < 1
+            ? [...state.activeList.url, dir]
+            : state.activeList.url,
+      });
+    }
+  };
   const handleShuffleDir = () => {
     let url = "/";
     state.queue.url.map((item) => (url = path.join(url, item)));
@@ -371,16 +394,17 @@ export const GlobalContextProvider = ({ children }) => {
       ...state,
       handleAddPath,
       handlePopPath,
-      handleSetCurrentTrack,
       handleSetPath,
+      handleSetCurrentTrack,
       handleSetQueue,
-      handleNextPrev,
       handleSetActiveList,
-      handleSetIndexOfCurrentTrack,
+      handleSetActiveDir,
       handleShuffle,
-      handleLoop,
-      handleSetCurrentTab,
       handleSetActivePlaylist,
+      handleLoop,
+      handleNextPrev,
+      handleSetIndexOfCurrentTrack,
+      handleSetCurrentTab,
     }),
     [state],
   );

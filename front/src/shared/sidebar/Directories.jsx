@@ -13,45 +13,35 @@ import path from "path-browserify";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { api } from "../../utils";
+import { Shortcuts } from "./Shortcuts";
+import { AddShortcut } from "../dropdowns/AddShortcut";
 
 export const Directories = () => {
   const [dirs] = useRequest();
   const [subDirs] = useRequest();
-  const [activeDir, setActiveDir] = useState(null);
-  const [activeUrl, setActiveUrl] = useState({ active: "", url: [] });
-  const { handleSetQueue, handleSetActiveList } = useContext(GlobalContext);
-
-  const handleSetActiveDir = (dir) => {
-    if (activeDir) {
-      setActiveDir(null);
-      setActiveUrl({ active: "", url: [] });
-    } else {
-      setActiveDir(dir);
-      setActiveUrl({ ...activeUrl, url: [...activeUrl.url, dir] });
-    }
-  };
+  const { handleSetActiveList, handleSetActiveDir, activeDir, activeList } =
+    useContext(GlobalContext);
 
   const handleSetActiveUrl = (dir) => {
-    // setActiveUrl((url) => console.log(url));
-    console.log(activeUrl, dir);
     if (dir.isExpandable) {
-      setActiveUrl({
-        ...activeUrl,
-        url: [...activeUrl.url, dir.name],
+      handleSetActiveList({
+        ...activeList,
+        url: [...activeList.url, dir.name],
+        active: "",
       });
     } else {
-      setActiveUrl({
-        ...activeUrl,
+      handleSetActiveList({
+        ...activeList,
         active: dir.name,
       });
     }
   };
   const handlePopActiveUrl = () => {
-    if (activeUrl.url.length > 1) {
-      setActiveUrl({
-        ...activeUrl,
+    if (activeList.url.length > 1) {
+      handleSetActiveList({
+        ...activeList,
         active: "",
-        url: activeUrl.url.slice(0, activeUrl.url.length - 1),
+        url: activeList.url.slice(0, activeList.url.length - 1),
       });
     }
   };
@@ -63,31 +53,30 @@ export const Directories = () => {
   useEffect(() => {
     let url = "/";
 
-    activeUrl.url.map((item) => (url = path.join(url, item)));
+    activeList.url.map((item) => (url = path.join(url, item)));
     subDirs.request("/dir/getDirs", "GET", {
       url: path.join(url, "/"),
     });
-  }, [activeUrl.url]);
+  }, [activeList.url]);
   useEffect(() => {
     let url = "/";
 
-    activeUrl.url.map((item) => (url = path.join(url, item)));
+    activeList.url.map((item) => (url = path.join(url, item)));
 
     api
       .get("/dir/getFromDir", {
         params: {
-          dir: path.join(url, activeUrl.active, "/"),
+          dir: path.join(url, activeList.active, "/"),
         },
       })
       .then((res) => {
         handleSetActiveList({
+          ...activeList,
           list: res.data,
-          url: activeUrl.url,
-          active: activeUrl.active,
-          type: "directory",
         });
       });
-  }, [activeUrl.active, activeUrl.url]);
+    console.log("fetching fetingingingi");
+  }, [activeList.active, activeList.url]);
   return (
     <Box my={"18px"}>
       <DirNavigator />
@@ -111,12 +100,12 @@ export const Directories = () => {
           py={"12px"}
         >
           <Text>root:/</Text>
-          {activeUrl.url.map((item, idx) => (
+          {activeList.url.map((item, idx) => (
             <Text key={idx}>{item}/</Text>
           ))}
         </Box>
       </Box>
-      <Box height={"300px"}>
+      <Box height={"200px"}>
         {dirs.response &&
           dirs.response.map((dir, idx) => (
             <Box key={idx} height={"100%"}>
@@ -153,15 +142,24 @@ export const Directories = () => {
                       key={idx}
                       display={"flex"}
                       alignItems={"center"}
-                      onClick={() => handleSetActiveUrl(item)}
+                      justifyContent={"space-between"}
                     >
-                      <Icon as={FaFolder} mr={"6px"} />
-                      <Text>{item.name.slice(0, 20)}</Text>
+                      <Box
+                        onClick={() => handleSetActiveUrl(item)}
+                        display={"flex"}
+                      >
+                        <Icon as={FaFolder} mr={"6px"} />
+                        <Text>{item.name.slice(0, 20)}</Text>
+                      </Box>
+                      <AddShortcut vals={item} />
                     </Box>
                   ))}
               </Box>
             </Box>
           ))}
+      </Box>
+      <Box>
+        <Shortcuts />
       </Box>
     </Box>
   );

@@ -18,6 +18,7 @@ export const Sidebar = () => {
       p={"12px"}
       height={"100%"}
       fontSize={"12px"}
+      zIndex={99}
     >
       <Box py={"24px"}>
         <Text>Name and logo</Text>

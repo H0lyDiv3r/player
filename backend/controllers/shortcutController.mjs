@@ -33,6 +33,7 @@ export const shortcutController = {
     shortcuts.push({
       name: req.body.name,
       path: req.body.path,
+      active: req.body.active,
     });
     await fs.writeFile(shortcutPath, JSON.stringify({ shortcuts }));
     res.send(shortcuts);
