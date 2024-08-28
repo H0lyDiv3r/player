@@ -19,6 +19,7 @@ import { AddShortcut } from "../dropdowns/AddShortcut";
 export const Directories = () => {
   const [dirs] = useRequest();
   const [subDirs] = useRequest();
+  const [selected, setSelected] = useState();
   const { handleSetActiveList, handleSetActiveDir, activeDir, activeList } =
     useContext(GlobalContext);
 
@@ -143,6 +144,8 @@ export const Directories = () => {
                       display={"flex"}
                       alignItems={"center"}
                       justifyContent={"space-between"}
+                      onMouseOver={() => setSelected(idx)}
+                      onMouseLeave={() => setSelected(null)}
                     >
                       <Box
                         onClick={() => handleSetActiveUrl(item)}
@@ -151,7 +154,7 @@ export const Directories = () => {
                         <Icon as={FaFolder} mr={"6px"} />
                         <Text>{item.name.slice(0, 20)}</Text>
                       </Box>
-                      <AddShortcut vals={item} />
+                      {selected === idx && <AddShortcut vals={item} />}
                     </Box>
                   ))}
               </Box>

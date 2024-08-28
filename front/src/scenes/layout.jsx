@@ -52,6 +52,8 @@ export const Layout = () => {
                     key={index}
                     display={"flex"}
                     _hover={{ bg: "trans.200" }}
+                    onMouseOver={() => setSelected(index)}
+                    onMouseLeave={() => setSelected(null)}
                   >
                     <Text
                       onClick={() => handleSetCurrentTrack(index)}
@@ -59,7 +61,9 @@ export const Layout = () => {
                     >
                       {activeList.list[index].name}
                     </Text>
-                    <MusicDropdown audio={activeList.list[index]} />
+                    {selected === index && (
+                      <MusicDropdown audio={activeList.list[index]} />
+                    )}
                   </Box>
                 );
               }}
@@ -84,6 +88,8 @@ export const Layout = () => {
                     key={index}
                     display={"flex"}
                     _hover={{ bg: "trans.200" }}
+                    onMouseOver={() => setSelected(index)}
+                    onMouseLeave={() => setSelected(null)}
                   >
                     <Text
                       onClick={() => handleSetCurrentTrack(index)}
@@ -91,7 +97,9 @@ export const Layout = () => {
                     >
                       {activePlaylist.list[index].name}
                     </Text>
-                    <MusicDropdown audio={activePlaylist.list[index]} />
+                    {selected === index && (
+                      <MusicDropdown audio={activePlaylist.list[index]} />
+                    )}
                   </Box>
                 );
               }}

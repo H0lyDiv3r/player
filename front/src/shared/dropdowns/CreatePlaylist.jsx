@@ -24,7 +24,7 @@ export const CreatePlaylist = () => {
   };
   return (
     <>
-      <Menu placement={"bottom"} matchWidth>
+      <Menu placement="auto">
         <MenuButton
           minWidth={"100%"}
           fontSize={"14px"}
@@ -37,7 +37,6 @@ export const CreatePlaylist = () => {
           Create Playlist
         </MenuButton>
         <MenuList
-          width={"100%"}
           fontSize={"12px"}
           fontWeight={400}
           p={"12px"}

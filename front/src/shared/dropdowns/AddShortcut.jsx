@@ -1,11 +1,16 @@
 import {
   Box,
+  Button,
   FormControl,
   FormLabel,
   Input,
   Menu,
   MenuButton,
   MenuList,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { DefaultButton } from "../bottons";
 import { api } from "../../utils";
@@ -17,6 +22,8 @@ import path from "path-browserify";
 export const AddShortcut = ({ vals }) => {
   const [shortcutName, handleSetShortcutName] = useState("");
   const { activeList } = useContext(GlobalContext);
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const handleChange = (e) => {
     handleSetShortcutName(e.target.value);
   };
@@ -45,34 +52,43 @@ export const AddShortcut = ({ vals }) => {
   };
   return (
     <>
-      <Menu placement={"bottom"}>
-        <MenuButton>Create Playlist</MenuButton>
-        <MenuList
-          width={"100%"}
-          fontSize={"12px"}
-          fontWeight={400}
-          p={"12px"}
-          color={"neutral.800"}
-        >
-          <Box>
-            <FormControl my={"12px"}>
-              <FormLabel fontSize={"12px"}>Shortcut Name</FormLabel>
-              <Input
+      <Button
+        onClick={(e) => {
+          setModalPosition({ x: e.pageX, y: e.pageY });
+          onOpen();
+        }}
+      >
+        lala
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay>
+          <ModalContent
+            pos={"absolute"}
+            top={modalPosition.y}
+            left={modalPosition.x}
+            m={0}
+            width={"250px"}
+          >
+            <Box p={"12px"}>
+              <FormControl my={"12px"}>
+                <FormLabel fontSize={"12px"}>Shortcut Name</FormLabel>
+                <Input
+                  size={"sm"}
+                  value={shortcutName}
+                  onChange={(e) => handleChange(e)}
+                />
+              </FormControl>
+              <DefaultButton
                 size={"sm"}
-                value={shortcutName}
-                onChange={(e) => handleChange(e)}
-              />
-            </FormControl>
-            <DefaultButton
-              size={"sm"}
-              action={() => handleCreateShortcut(vals)}
-              disabled
-            >
-              create
-            </DefaultButton>
-          </Box>
-        </MenuList>
-      </Menu>
+                action={() => handleCreateShortcut(vals)}
+                disabled
+              >
+                create
+              </DefaultButton>
+            </Box>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
     </>
   );
 };
