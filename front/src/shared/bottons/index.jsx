@@ -1,5 +1,5 @@
 import { Button, Icon } from "@chakra-ui/react";
-import { FaRepeat } from "react-icons/fa6";
+import { Button3D } from "./Button3D";
 
 export const IconButton = ({ action, icon, size = 4, ...other }) => {
   return (
@@ -55,3 +55,5 @@ export const ButtonIcon = ({
     </>
   );
 };
+
+export const WalkmanButton = Button3D;

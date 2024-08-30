@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { createContext } from "react";
 import path from "path-browserify";
-import { api, shuffle } from "../utils";
+import { api, next, prev, shuffle } from "../utils";
 import axios from "axios";
 import useRequest from "../hooks/useRequest";
 import { useMemo } from "react";
@@ -235,17 +235,17 @@ export const GlobalContextProvider = ({ children }) => {
             currentTrack:
               type === "next"
                 ? state.queue.list[
-                    (state.indexOfCurrentTrack + 1) % state.queue.list.length
+                    next(state.queue.list.length, state.indexOfCurrentTrack)
                   ]
                 : state.queue.list[
-                    (state.indexOfCurrentTrack - 1) % state.queue.list.length
+                    prev(state.queue.list.length, state.indexOfCurrentTrack)
                   ],
           },
         });
         handleSetIndexOfCurrentTrack(
           type === "next"
-            ? (state.indexOfCurrentTrack + 1) % state.queue.list.length
-            : (state.indexOfCurrentTrack - 1) % state.queue.list.length,
+            ? next(state.queue.list.length, state.indexOfCurrentTrack)
+            : prev(state.queue.list.length, state.indexOfCurrentTrack),
         );
         break;
       case 2:

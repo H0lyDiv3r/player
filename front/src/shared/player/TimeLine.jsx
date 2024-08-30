@@ -1,7 +1,6 @@
 import { Box, Text, Input } from "@chakra-ui/react";
 import { forwardRef, useContext } from "react";
 import { PlayerContext } from "./PlayerContextProvider";
-// import { GlobalContext } from '@/app/providers/GlobalProvider'
 
 const TimeLine = forwardRef(function TimeLine(props, ref) {
   const { position, handlePosition, length, loaded } =
@@ -13,10 +12,9 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
       display={"flex"}
       justifyContent={"center"}
       alignItems={"center"}
-      my={"12px"}
       color={"neutral.200"}
     >
-      <Box display={"flex"} fontSize={"12px"} fontWeight={300} minW={"50px"}>
+      <Box display={"flex"} fontSize={"10px"} fontWeight={300} minW={"40px"}>
         {Math.floor(position) / 3600 < 10 && <Text>0</Text>}
         <Text>{Math.floor(position / 3600)}</Text>
         <Text>:</Text>
@@ -27,7 +25,7 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
         <Text>{Math.floor(position % 60)}</Text>
       </Box>
       <Box
-        // bg={"neutral.400"}
+        bg={"rgba(50,250,150,0.3)"}
         height={"4px"}
         mx={"4px"}
         display={"flex"}
@@ -48,7 +46,7 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
           position={"absolute"}
         />
       </Box>
-      <Box display={"flex"} fontSize={"12px"} fontWeight={300} minW={"50px"}>
+      <Box display={"flex"} fontSize={"10px"} fontWeight={300} minW={"40px"}>
         {Math.floor(length) / 3600 < 10 && <Text>0</Text>}
         <Text>{Math.floor(length / 3600)}</Text>
         <Text>:</Text>
