@@ -1,6 +1,6 @@
 import React, { useRef, useContext } from "react";
 import "./player.css";
-import { Box, Button, Icon, Image, Input, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Controls from "./Controls";
 import TimeLine from "./TimeLine";
 
@@ -8,14 +8,15 @@ import { PlayerContext } from "./PlayerContextProvider";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect } from "react";
 import colors from "../../themes/colors";
-import { FaPlay } from "react-icons/fa6";
-import { WalkmanButton } from "../bottons";
 import PlaybackRateControl from "./PlaybackRateControl";
 import VolumeControl from "./VolumeControl";
 // import { GlobalContext } from '@/app/providers/GlobalProvider'
+import { motion } from "framer-motion";
+import { Cassette } from "../other/cassette";
 
 export default function Player() {
   const {
+    paused,
     handleTimeline,
     handleSetPlayerValues,
     handlePosition,
@@ -32,6 +33,8 @@ export default function Player() {
     handleSetPlayerValues(ref);
     handlePosition(0, ref);
   };
+
+  const MotionBox = motion(Box);
   useEffect(() => {
     console.log("loding loading loadlong", audioRef.current);
   }, [loaded]);
@@ -99,13 +102,18 @@ export default function Player() {
               <Box fontSize={"12px"} fontWeight={300}>
                 {currentTrack && currentTrack.name}
               </Box>
-              <Box bg={"white"} height={"60%"} mx={"auto"} my={"6px"}>
+              <Box height={"60%"} mx={"auto"} my={"6px"}>
                 <Box
-                  bg={"black"}
+                  bg={"white"}
                   width={"60%"}
                   height={"100%"}
                   margin={"auto"}
-                ></Box>
+                  pos={"relative"}
+                  overflow={"hidden"}
+                  borderRadius={"6px"}
+                >
+                  <Cassette paused={paused} />
+                </Box>
               </Box>
 
               <Box width={"60%"} mx={"auto"}>

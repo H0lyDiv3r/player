@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useReducer, useState } from "react";
+import { useMemo } from "react";
 
 export const PlayerContext = createContext();
 
@@ -210,21 +211,24 @@ const PlayerContextProvider = ({ children }) => {
     });
   };
 
-  const vals = {
-    ...state,
-    handleLoaded,
-    handlePause,
-    handleMute,
-    handlePlay,
-    handlePlaybackRate,
-    handlePosition,
-    handleTimeline,
-    handleVolume,
-    handleSetCurrentTrack,
-    handleSetPlayerValues,
-    handleFastForward,
-    handleFastBackward,
-  };
+  const vals = useMemo(
+    () => ({
+      ...state,
+      handleLoaded,
+      handlePause,
+      handleMute,
+      handlePlay,
+      handlePlaybackRate,
+      handlePosition,
+      handleTimeline,
+      handleVolume,
+      handleSetCurrentTrack,
+      handleSetPlayerValues,
+      handleFastForward,
+      handleFastBackward,
+    }),
+    [state],
+  );
 
   useEffect(() => {
     localStorage.setItem(
