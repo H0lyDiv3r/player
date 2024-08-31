@@ -31,6 +31,7 @@ const Controls = forwardRef(function Controls(props, ref) {
       justifyContent={"center"}
       color={"neutral.400"}
     >
+      {/* main */}
       <Box
         display={"flex"}
         justifyContent={"center"}
@@ -77,9 +78,6 @@ const Controls = forwardRef(function Controls(props, ref) {
         >
           <Icon as={TbArrowsShuffle} boxSize={3} />
         </WalkmanButton>
-      </Box>
-      <Box>
-        <VolumeControl ref={ref} />
       </Box>
     </Box>
   );

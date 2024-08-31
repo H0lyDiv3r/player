@@ -1,4 +1,4 @@
-input[type="range"] {
+.timeline input[type="range"] {
     /* removing default appearance */
     -webkit-appearance: none;
     appearance: none;
@@ -13,7 +13,7 @@ input[type="range"] {
     padding: 0;
 }
 
-input[type="range"] {
+.timeline input[type="range"] {
     /* ... */
 
     /*  styling the track  */
@@ -21,18 +21,18 @@ input[type="range"] {
     background: rgba(0, 0, 0, 0);
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
+.timeline input[type="range"]::-webkit-slider-runnable-track {
     height: 15px;
     background: rgba(0, 0, 0, 0);
 }
 
 /* Track: Mozilla Firefox */
-input[type="range"]::-moz-range-track {
+.timeline input[type="range"]::-moz-range-track {
     height: 15px;
     background: rgba(0, 0, 0, 0);
 }
 
-input[type="range"]::-webkit-slider-thumb {
+.timeline input[type="range"]::-webkit-slider-thumb {
     /* removing default appearance */
     -webkit-appearance: none;
     appearance: none;
@@ -44,7 +44,7 @@ input[type="range"]::-webkit-slider-thumb {
     border: 0px solid rgba(244, 63, 94, 1);
 }
 
-input[type="range"]::-moz-range-thumb {
+.timeline input[type="range"]::-moz-range-thumb {
     height: 15px;
     width: 5px;
     background-color: #22dd82;
@@ -52,7 +52,7 @@ input[type="range"]::-moz-range-thumb {
     border: 0px solid rgba(244, 63, 94, 1);
 }
 
-input[type="range"]::-webkit-slider-thumb {
+.timeline input[type="range"]::-webkit-slider-thumb {
     /*  ...  */
     /*  slider progress trick  */
     box-shadow: -4000px 0 0 4000px #22dd82;
@@ -60,18 +60,18 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Thumb: Firefox */
-input[type="range"]::-moz-range-thumb {
+.timeline input[type="range"]::-moz-range-thumb {
     /*  ...  */
     /*  slider progress trick  */
     box-shadow: -4000px 0 0 4000px #22dd82;
     border-radius: 0%;
 }
-progress::-webkit-progress-bar {
+.timeline eprogress::-webkit-progress-bar {
     background: none;
     padding: none;
     margin: none;
     border: none;
 }
-progress::-webkit-progress-value {
+.timeline progress::-webkit-progress-value {
     background: red;
 }

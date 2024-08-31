@@ -1,15 +1,16 @@
-input[type="range"]::-webkit-slider-runnable-track {
+.volume input[type="range"]::-webkit-slider-runnable-track {
     height: 15px;
     background: rgba(0, 0, 0, 0);
 }
 
 /* Track: Mozilla Firefox */
-input[type="range"]::-moz-range-track {
+.volume input[type="range"]::-moz-range-track {
     height: 15px;
     background: rgba(0, 0, 0, 0);
+    border: none;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+.volume input[type="range"]::-webkit-slider-thumb {
     /* removing default appearance */
     -webkit-appearance: none;
     appearance: none;

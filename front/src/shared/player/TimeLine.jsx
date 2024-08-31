@@ -26,6 +26,7 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
       </Box>
       <Box
         bg={"rgba(50,250,150,0.3)"}
+        className="timeline"
         height={"4px"}
         mx={"4px"}
         display={"flex"}
