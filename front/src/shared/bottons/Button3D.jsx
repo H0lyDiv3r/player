@@ -8,6 +8,7 @@ export const Button3D = ({
   width = 50,
   depth = "4px",
   direction,
+  disabled,
   action,
 }) => {
   const styles = (dxn) => {
@@ -66,6 +67,14 @@ export const Button3D = ({
             inset -2px -2px 3px 2px ${colors.brand[700]},
             inset 3px 3px 2px ${colors.brand[100]}`,
           }}
+          _disabled={{
+            bgImage: `linear-gradient(145deg,brand.500,brand.600)`,
+            boxShadow: `inset 0px 0px 1px 2px ${colors.brand[700]},
+            inset -1px -1px 3px 2px ${colors.brand[600]},
+            inset 1px 1px 2px ${colors.brand[300]}`,
+            color: "brand.800",
+          }}
+          isDisabled={disabled}
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}

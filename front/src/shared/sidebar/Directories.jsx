@@ -71,6 +71,7 @@ export const Directories = () => {
         },
       })
       .then((res) => {
+        console.log(res);
         handleSetActiveList({
           ...activeList,
           list: res.data,

@@ -74,7 +74,12 @@ export default function Player() {
         </Box>
 
         {/* Left */}
-        <Box width={"15%"}>
+        <Box
+          width={"15%"}
+          height={"100%"}
+          display={"flex"}
+          alignItems={"center"}
+        >
           <PlaybackRateControl ref={audioRef} />
         </Box>
 
@@ -129,7 +134,12 @@ export default function Player() {
         </Box>
 
         {/* right */}
-        <Box width={"15%"} display={"flex"} alignItems={"center"}>
+        <Box
+          width={"15%"}
+          height={"100%"}
+          display={"flex"}
+          alignItems={"center"}
+        >
           <VolumeControl ref={audioRef} />
         </Box>
       </Box>

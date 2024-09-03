@@ -1,10 +1,11 @@
 import * as fs from "fs/promises";
 import * as path from "node:path";
-import { files } from "./globalVars.mjs";
+import { files, extensions, fileArrayNameInDir } from "./globalVars.mjs";
 
 export const scanDir = async (url, dir) => {
   const files = await fs.readdir(url, { withFileTypes: true });
   let current = dir;
+
   for (const file of files) {
     const fullPath = path.join(url, file.name);
     if (file.isSymbolicLink()) {
@@ -14,6 +15,7 @@ export const scanDir = async (url, dir) => {
       continue;
     }
     const chain = url.split("/").slice(1).slice(0, -1);
+
     if (
       (await fileType.isDir(fullPath)) &&
       (await fileType.containsMusicFileOrDir(fullPath))
@@ -33,15 +35,23 @@ export const scanDir = async (url, dir) => {
         tempCurrent[chain[i]] = tempCurrent[chain[i]] || {};
         tempCurrent = tempCurrent[chain[i]];
       }
-      tempCurrent[file.name] = file.path;
+
+      tempCurrent[fileArrayNameInDir] = tempCurrent[fileArrayNameInDir]
+        ? [
+            ...tempCurrent[fileArrayNameInDir],
+            { name: file.name, path: path.join(file.path, file.name) },
+          ]
+        : [];
     }
   }
 };
 
+/////////////////////
 export const hasDirs = (obj) => {
   let keys = Object.keys(obj);
   for (const item of keys) {
-    if (typeof obj[item] === "object") {
+    console.log(item);
+    if (item !== fileArrayNameInDir) {
       return true;
     }
   }
@@ -50,16 +60,14 @@ export const hasDirs = (obj) => {
 
 export const getAllAudio = async (dir, store) => {
   let songs = store;
+  // console.log("working here", dir, store);
   try {
     for (const item of Object.keys(dir)) {
-      if (typeof dir[item] === "string") {
-        songs.push({
-          name: item,
-          path: path.join(dir[item], item),
-          type: "file",
-        });
+      if (item === fileArrayNameInDir || dir[item] instanceof Array) {
+        console.log([...dir[item]], dir[item] instanceof Array);
+        songs.push(...dir[item]);
       } else {
-        getAllAudio(dir[item], songs);
+        await getAllAudio(dir[item], songs);
       }
     }
   } catch (error) {
@@ -116,8 +124,8 @@ export const fileType = {
 };
 
 export const createFile = async (name, content, extension = ".json") => {
-  const shortcutFile = path.join(files, `${name}${extension}`);
-  if (!(await fileType.checkFileHealth(shortcutFile))) {
-    fs.writeFile(shortcutFile, content);
+  const file = path.join(files, `${name}${extension}`);
+  if (!(await fileType.checkFileHealth(file))) {
+    fs.writeFile(file, content);
   }
 };

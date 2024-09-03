@@ -19,7 +19,7 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 const Controls = forwardRef(function Controls(props, ref) {
   const { handlePlay, paused, loaded, handleFastForward } =
     useContext(PlayerContext);
-  const { handleNextPrev, handleShuffle, shuffle, handleLoop, loop } =
+  const { handleNextPrev, handleShuffle, shuffle, handleLoop, loop, queue } =
     useContext(GlobalContext);
   const loopVals = [TbRepeatOff, TbRepeat, TbRepeatOnce];
   return (
@@ -52,10 +52,16 @@ const Controls = forwardRef(function Controls(props, ref) {
           height={20}
           width={30}
           depth={"2px"}
+          disabled={queue.list.length < 1}
         >
           <Icon as={TbPlayerTrackPrevFilled} boxSize={3} />
         </WalkmanButton>
-        <WalkmanButton action={() => handlePlay(ref)} height={30} width={30}>
+        <WalkmanButton
+          action={() => handlePlay(ref)}
+          height={30}
+          width={30}
+          disabled={!loaded}
+        >
           <Icon
             as={paused ? TbPlayerPlayFilled : TbPlayerPauseFilled}
             boxSize={3}
@@ -67,6 +73,7 @@ const Controls = forwardRef(function Controls(props, ref) {
           height={20}
           width={30}
           depth={"2px"}
+          disabled={queue.list.length < 1}
         >
           <Icon as={TbPlayerTrackNextFilled} boxSize={3} />
         </WalkmanButton>
