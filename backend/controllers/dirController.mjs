@@ -56,12 +56,15 @@ export const dirControllers = {
       res.status(500).json({ message: "failed to read data" });
     }
     let directory = JSON.parse(data);
-    await scanDir(dirPath, directory);
-    await fs
-      .writeFile(jsonFilePath, JSON.stringify(directory))
-      .catch((error) => error);
-    // console.log("im here", JSON.stringify(directory));
-    res.send(directory);
+
+    scanDir(dirPath, directory)
+      .then(async () => {
+        await createFile("dir", JSON.stringify(directory));
+        res.send(directory);
+      })
+      .catch((error) => {
+        res.status(500).json({ message: "failed to scan directory" });
+      });
   },
   getDirs: async (req, res) => {
     const chain = req.query.url

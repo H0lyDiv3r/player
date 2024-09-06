@@ -8,7 +8,7 @@ export const shortcutController = {
   getShortcuts: async (req, res) => {
     const shortcutPath = path.join(files, shortcutsFile);
     if (!(await fileType.checkFileHealth(shortcutsFile))) {
-      await createFile("shortcuts", JSON.stringify({ shortcuts: [] }));
+      // await createFile("shortcuts", JSON.stringify({ shortcuts: [] }));
     }
     const data = await fs.readFile(shortcutPath);
     if (!data) {

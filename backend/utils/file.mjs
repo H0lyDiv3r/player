@@ -2,6 +2,8 @@ import * as fs from "fs/promises";
 import * as path from "node:path";
 import { files, extensions, fileArrayNameInDir } from "./globalVars.mjs";
 
+import * as jsMediaTags from "jsmediatags";
+
 export const scanDir = async (url, dir) => {
   const files = await fs.readdir(url, { withFileTypes: true });
   let current = dir;
@@ -36,12 +38,26 @@ export const scanDir = async (url, dir) => {
         tempCurrent = tempCurrent[chain[i]];
       }
 
-      tempCurrent[fileArrayNameInDir] = tempCurrent[fileArrayNameInDir]
-        ? [
-            ...tempCurrent[fileArrayNameInDir],
-            { name: file.name, path: path.join(file.path, file.name) },
-          ]
-        : [];
+      // const metadata = await parseFile(path.join(file.path, file.name));
+      jsMediaTags.read(path.join(file.path, file.name), {
+        onSuccess: (tags) => {
+          tempCurrent[fileArrayNameInDir] = tempCurrent[fileArrayNameInDir]
+            ? [
+                ...tempCurrent[fileArrayNameInDir],
+                {
+                  name: file.name,
+                  path: path.join(file.path, file.name),
+                  title: tags.tags.title || null,
+                  album: tags.tags.album || null,
+                  artist: tags.tags.artist || null,
+                  genre: tags.tags.genre || null,
+                  year: tags.tags.year || null,
+                },
+              ]
+            : [];
+        },
+        onError: (error) => {},
+      });
     }
   }
 };
@@ -50,7 +66,6 @@ export const scanDir = async (url, dir) => {
 export const hasDirs = (obj) => {
   let keys = Object.keys(obj);
   for (const item of keys) {
-    console.log(item);
     if (item !== fileArrayNameInDir) {
       return true;
     }
@@ -123,9 +138,31 @@ export const fileType = {
   },
 };
 
-export const createFile = async (name, content, extension = ".json") => {
-  const file = path.join(files, `${name}${extension}`);
-  if (!(await fileType.checkFileHealth(file))) {
-    fs.writeFile(file, content);
+export const createFile = async (
+  name,
+  content,
+  extension = ".json",
+  url = files,
+) => {
+  let title = `${name}${new Date().valueOf()}${extension}`;
+  const file = path.join(url, title);
+  try {
+    await fs.writeFile(file, content);
+    await fs.rename(file, path.join(files, `${name}${extension}`));
+  } catch (error) {
+    res.status(500).json({ message: "failed to write file" });
   }
+};
+
+export const parseFile = (url) => {
+  return new Promise((resolve, reject) => {
+    jsMediaTags.read(url, {
+      onSuccess: (tag) => {
+        resolve({ data: { title: tag.tags.title || null }, error: null });
+      },
+      onError: (error) => {
+        reject({ data: null, error: { type: error.type, info: error.info } });
+      },
+    });
+  });
 };

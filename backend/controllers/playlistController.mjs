@@ -2,7 +2,8 @@ import { files, playlistFile } from "../utils/globalVars.mjs";
 import * as fs from "fs/promises";
 import * as path from "node:path";
 
-import { fileType } from "../utils/file.mjs";
+import { fileType, parseFile } from "../utils/file.mjs";
+import * as jsMediaTags from "jsmediatags";
 
 export const playlistControllers = {
   getPlaylists: async (req, res) => {
@@ -50,6 +51,25 @@ export const playlistControllers = {
     res.send(playlists);
   },
   addToPlaylist: async (req, res) => {
+    // console.log(req.body.path);
+    // try {
+    //   // const metadata = await parseFile(req.body.path);
+    //   const metadata = await parseFile(req.body.path);
+    //   console.log(metadata);
+    //   res.send(metadata);
+    //   // jsMediaTags.read(req.body.path, {
+    //   //   onSuccess: (tag) => {
+    //   //     console.log("working", tag.tags);
+    //   //     res.send(tag);
+    //   //   },
+    //   //   onError: (error) => {
+    //   //     console.log("there has been and error", error);
+    //   //   },
+    //   // });
+    // } catch (error) {
+    //   console.log(error);
+    //   res.status(500).json({ message: "cant get metadata" });
+    // }
     const playlistPath = path.join(files, playlistFile);
     if (!(await fileType.checkFileHealth(playlistPath))) {
       res.status(500).json({ message: "cant write" });
