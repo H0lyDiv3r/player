@@ -153,16 +153,3 @@ export const createFile = async (
     res.status(500).json({ message: "failed to write file" });
   }
 };
-
-export const parseFile = (url) => {
-  return new Promise((resolve, reject) => {
-    jsMediaTags.read(url, {
-      onSuccess: (tag) => {
-        resolve({ data: { title: tag.tags.title || null }, error: null });
-      },
-      onError: (error) => {
-        reject({ data: null, error: { type: error.type, info: error.info } });
-      },
-    });
-  });
-};

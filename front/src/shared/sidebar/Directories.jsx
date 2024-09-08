@@ -133,7 +133,7 @@ export const Directories = () => {
               <Box
                 display={dir.name == activeDir ? "flex" : "none"}
                 flexDir={"column"}
-                height={"100%"}
+                height={"60%"}
                 overflow={"scroll"}
                 p={"12px"}
                 borderRadius={"12px"}
@@ -153,7 +153,7 @@ export const Directories = () => {
                         display={"flex"}
                       >
                         <Icon as={FaFolder} mr={"6px"} />
-                        <Text>{item.name.slice(0, 20)}</Text>
+                        <Text>{item.name.slice(0, 30)}</Text>
                       </Box>
                       {selected === idx && <AddShortcut vals={item} />}
                     </Box>

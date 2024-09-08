@@ -69,66 +69,6 @@ export const Playlists = () => {
             ))}
         </Box>
       </Box>
-      <Box
-        bg={"transparent"}
-        bgImage={"linear-gradient(145deg,brand.600,brand.300)"}
-        // boxShadow={`inset 4px 4px 2px black`}
-        width={"fit-content"}
-        p={"8px"}
-        borderRadius={"40px"}
-      >
-        <Button
-          className={"3d"}
-          height={"50px"}
-          width={"50px"}
-          bg={"transparent"}
-          borderRadius={"40px"}
-          // border={"2px #090909 solid"}
-          bgImage={`linear-gradient(180deg,brand.500,brand.500)`}
-          boxShadow={`inset 0px 0px 0px 1px ${colors.brand[900]},
-            inset -2px -2px 3px 2px ${colors.brand[700]},
-            inset 3px 3px 3px ${colors.brand[100]}`}
-          _hover={{
-            bgImage: `linear-gradient(180deg,brand.500 30%,brand.500)`,
-            boxShadow: `inset 0px 0px 2px 1px ${colors.brand[900]},
-            inset -2px -2px 3px 2px ${colors.brand[700]},
-            inset 3px 3px 2px ${colors.brand[100]}`,
-          }}
-          _active={{
-            bgImage: `linear-gradient(180deg,brand.500 30%,brand.500)`,
-            boxShadow: `inset 0px 0px 1px 2px ${colors.brand[800]},
-            inset -2px -2px 3px 2px ${colors.brand[700]},
-            inset 3px 3px 2px ${colors.brand[100]}`,
-          }}
-        >
-          <Icon as={FaPlay} color={"neutral.dark.500"} />
-        </Button>
-      </Box>
     </Box>
   );
 };
-
-// <Button
-//   className={"3d"}
-//   height={"80px"}
-//   width={"80px"}
-//   bg={"transparent"}
-//   borderRadius={"40px"}
-//   // border={"2px #090909 solid"}
-//   bgImage={`linear-gradient(145deg,brand.500 1%,brand.500 99%)`}
-//   boxShadow={`inset 0px 0px 1px 1px ${colors.brand[900]},
-//     inset -2px -2px 3px 3px ${colors.brand[700]},
-//     inset 5px 4px 3px ${colors.brand[100]}`}
-//   _hover={{
-//     bgImage: `linear-gradient(145deg,brand.500 30%,brand.600)`,
-//     boxShadow: `inset 0px 0px 2px 1px ${colors.brand[900]},
-//     inset -2px -2px 3px 2px ${colors.brand[700]},
-//     inset 3px 3px 2px ${colors.brand[100]}`,
-//   }}
-//   _active={{
-//     bgImage: `linear-gradient(145deg,brand.500 30%,brand.600)`,
-//     boxShadow: `inset 0px 0px 1px 2px ${colors.brand[800]},
-//     inset -2px -2px 3px 2px ${colors.brand[700]},
-//     inset 3px 3px 2px ${colors.brand[100]}`,
-//   }}
-// ></Button>

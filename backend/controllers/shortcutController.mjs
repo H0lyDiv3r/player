@@ -7,8 +7,8 @@ import * as fs from "fs/promises";
 export const shortcutController = {
   getShortcuts: async (req, res) => {
     const shortcutPath = path.join(files, shortcutsFile);
-    if (!(await fileType.checkFileHealth(shortcutsFile))) {
-      // await createFile("shortcuts", JSON.stringify({ shortcuts: [] }));
+    if (!(await fileType.checkFileHealth(shortcutPath))) {
+      await createFile("shortcuts", JSON.stringify({ shortcuts: [] }));
     }
     const data = await fs.readFile(shortcutPath);
     if (!data) {
@@ -35,7 +35,8 @@ export const shortcutController = {
       path: req.body.path,
       active: req.body.active,
     });
-    await fs.writeFile(shortcutPath, JSON.stringify({ shortcuts }));
+
+    await createFile("shortcuts", JSON.stringify({ shortcuts }));
     res.send(shortcuts);
   },
   deleteShortcut: async (req, res) => {
@@ -49,10 +50,12 @@ export const shortcutController = {
     }
     let shortcuts = JSON.parse(data)["shortcuts"];
     let newShortcuts = shortcuts.filter((item) => item.name != req.query.name);
-    await fs.writeFile(
-      shortcutPath,
-      JSON.stringify({ shortcuts: newShortcuts }),
-    );
+
+    await createFile("shortcuts", JSON.stringify({ shortcuts: newShortcuts }));
+    // await fs.writeFile(
+    //   shortcutPath,
+    //   JSON.stringify({ shortcuts: newShortcuts }),
+    // );
     res.send(newShortcuts);
   },
 };

@@ -2,7 +2,7 @@ import { files, playlistFile } from "../utils/globalVars.mjs";
 import * as fs from "fs/promises";
 import * as path from "node:path";
 
-import { fileType, parseFile } from "../utils/file.mjs";
+import { createFile, fileType } from "../utils/file.mjs";
 import * as jsMediaTags from "jsmediatags";
 
 export const playlistControllers = {
@@ -33,9 +33,11 @@ export const playlistControllers = {
   createPlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
     if (!(await fileType.checkFileHealth(playlistPath))) {
-      await fs
-        .writeFile(playlistPath, JSON.stringify({}))
-        .catch(() => res.status(500).json({ message: "failed to write" }));
+      //fix
+      await createFile("playlists", JSON.stringify({}));
+      //   await fs
+      //     .writeFile(playlistPath, JSON.stringify({}))
+      //     .catch(() => res.status(500).json({ message: "failed to write" }));
     }
     let data = await fs.readFile(playlistPath, "utf8");
     if (!data) {
@@ -47,29 +49,12 @@ export const playlistControllers = {
     }
     let playlists = JSON.parse(data);
     playlists[req.body.name] = [];
-    await fs.writeFile(playlistPath, JSON.stringify(playlists));
+
+    await createFile("playlists", JSON.stringify(playlists));
+    // await fs.writeFile(playlistPath, JSON.stringify(playlists));
     res.send(playlists);
   },
   addToPlaylist: async (req, res) => {
-    // console.log(req.body.path);
-    // try {
-    //   // const metadata = await parseFile(req.body.path);
-    //   const metadata = await parseFile(req.body.path);
-    //   console.log(metadata);
-    //   res.send(metadata);
-    //   // jsMediaTags.read(req.body.path, {
-    //   //   onSuccess: (tag) => {
-    //   //     console.log("working", tag.tags);
-    //   //     res.send(tag);
-    //   //   },
-    //   //   onError: (error) => {
-    //   //     console.log("there has been and error", error);
-    //   //   },
-    //   // });
-    // } catch (error) {
-    //   console.log(error);
-    //   res.status(500).json({ message: "cant get metadata" });
-    // }
     const playlistPath = path.join(files, playlistFile);
     if (!(await fileType.checkFileHealth(playlistPath))) {
       res.status(500).json({ message: "cant write" });
@@ -83,12 +68,10 @@ export const playlistControllers = {
       res.status(500).json({ message: "Playlist doenst exist" });
     }
     let target = playlists[req.body.playlist];
-    target.push({
-      name: req.body.name,
-      path: req.body.path,
-      type: req.body.type,
-    });
-    await fs.writeFile(playlistPath, JSON.stringify(playlists));
+    delete req.body.playlist;
+    target.push(req.body);
+
+    await createFile("playlists", JSON.stringify(playlists));
     res.send(target);
   },
   deleteFromPlaylist: async (req, res) => {
@@ -105,6 +88,8 @@ export const playlistControllers = {
       (item) => item.path != req.query.path,
     );
     await fs.writeFile(playlistPath, JSON.stringify(playlists));
+
+    await createFile("playlists", JSON.stringify(playlists));
     res.send(playlists);
   },
   deletePlaylist: async (req, res) => {
@@ -122,7 +107,9 @@ export const playlistControllers = {
     }
     let playlists = JSON.parse(data);
     delete playlists[req.query.name];
-    await fs.writeFile(playlistPath, JSON.stringify(playlists));
+
+    await createFile("playlists", JSON.stringify(playlists));
+    // await fs.writeFile(playlistPath, JSON.stringify(playlists));
     res.send(playlists);
   },
 };

@@ -1,10 +1,9 @@
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import Player from "../shared/player/Player";
 import PlayerContextProvider from "../shared/player/PlayerContextProvider";
 import { GlobalContext } from "../store/GlobalContextProvider";
 import { useContext } from "react";
 import { Sidebar } from "../shared/sidebar";
-import { Playlists } from "../shared/sidebar/Playlists";
 import { MusicDropdown } from "../shared/dropdowns/MusicDropdown";
 import { FixedSizeList as List } from "react-window";
 import { useState } from "react";
@@ -33,6 +32,7 @@ export const Layout = () => {
       backdropFilter={"auto"}
       backdropBlur={"6px"}
       display={"flex"}
+      fontSize={"14px"}
     >
       <Sidebar />
       <Box width={"100%"} minW={"500px"} overflow={"scroll"} color={"white"}>
@@ -59,7 +59,8 @@ export const Layout = () => {
                       onClick={() => handleSetCurrentTrack(index)}
                       width={"full"}
                     >
-                      {activeList.list[index].name}
+                      {activeList.list[index].title ||
+                        activeList.list[index].name}
                     </Text>
                     {selected === index && (
                       <MusicDropdown audio={activeList.list[index]} />
@@ -95,7 +96,8 @@ export const Layout = () => {
                       onClick={() => handleSetCurrentTrack(index)}
                       width={"full"}
                     >
-                      {activePlaylist.list[index].name}
+                      {activePlaylist.list[index].title ||
+                        activePlaylist.list[index].name}
                     </Text>
                     {selected === index && (
                       <MusicDropdown audio={activePlaylist.list[index]} />

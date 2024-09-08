@@ -1,6 +1,6 @@
 import React, { useRef, useContext } from "react";
 import "./player.css";
-import { Box } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import Controls from "./Controls";
 import TimeLine from "./TimeLine";
 
@@ -10,9 +10,9 @@ import { useEffect } from "react";
 import colors from "../../themes/colors";
 import PlaybackRateControl from "./PlaybackRateControl";
 import VolumeControl from "./VolumeControl";
-// import { GlobalContext } from '@/app/providers/GlobalProvider'
 import { motion } from "framer-motion";
 import { Cassette } from "../other/cassette";
+import { useState } from "react";
 
 export default function Player() {
   const {
@@ -24,9 +24,14 @@ export default function Player() {
     handleLoaded,
     loaded,
   } = useContext(PlayerContext);
-  const { currentTrack, queue, handleNextPrev, loop } =
-    useContext(GlobalContext);
-
+  const {
+    currentTrack,
+    currentTrackImage,
+    handleNextPrev,
+    loop,
+    handleSetCurrentTrackImage,
+  } = useContext(GlobalContext);
+  const [image, setImage] = useState(null);
   const audioRef = useRef(null);
 
   const handleLoad = (ref) => {
@@ -36,7 +41,26 @@ export default function Player() {
 
   const MotionBox = motion(Box);
   useEffect(() => {
-    console.log("loding loading loadlong", audioRef.current);
+    if (currentTrack) {
+      jsmediatags.read(
+        `${import.meta.env.VITE_BASE_URL}/${currentTrack.path}`,
+        {
+          onSuccess: (tags) => {
+            if (tags.tags.picture) {
+              let byteCode = tags.tags.picture.data;
+              let base64String = btoa(String.fromCharCode(...byteCode));
+              handleSetCurrentTrackImage(base64String);
+            } else {
+              handleSetCurrentTrackImage(null);
+            }
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        },
+      );
+    }
+    console.log("loding loading loadlong", currentTrack);
   }, [loaded]);
 
   return (
@@ -62,7 +86,9 @@ export default function Player() {
             ref={audioRef}
             onPlaying={() => handleTimeline(audioRef)}
             src={
-              currentTrack ? `http://localhost:3000${currentTrack["path"]}` : ""
+              currentTrack
+                ? `http://localhost:3000/${currentTrack["path"]}`
+                : ""
             }
             loop={loop == 2}
             onLoadedData={() => handleSetPlayerValues(audioRef)}
@@ -104,24 +130,37 @@ export default function Player() {
               p={"6px"}
               borderBottomRadius={"12px"}
             >
-              <Box fontSize={"12px"} fontWeight={300}>
-                {currentTrack && currentTrack.name}
+              <Box
+                fontSize={"12px"}
+                fontWeight={300}
+                height={"16px"}
+                whiteSpace={"nowrap"}
+                overflow={"hidden"}
+              >
+                <Text>{currentTrack ? currentTrack.name : " "}</Text>
               </Box>
-              <Box height={"60%"} mx={"auto"} my={"6px"}>
+              <Box height={"60%"} margin={"auto"} my={"6px"} display={"flex"}>
+                <Box bg={"white"} width={"25%"} overflow={"hidden"}>
+                  <Image
+                    src={`data:image/jpeg;base64,${currentTrackImage}`}
+                    width={"100%"}
+                    fit={"cover"}
+                  />
+                </Box>
                 <Box
                   bg={"white"}
-                  width={"60%"}
+                  width={"50%"}
                   height={"100%"}
-                  margin={"auto"}
                   pos={"relative"}
                   overflow={"hidden"}
                   borderRadius={"6px"}
                 >
                   <Cassette paused={paused} />
                 </Box>
+                <Box width={"25%"}></Box>
               </Box>
 
-              <Box width={"60%"} mx={"auto"}>
+              <Box width={"100%"} mx={"auto"}>
                 <TimeLine ref={audioRef} />
               </Box>
             </Box>
@@ -146,41 +185,3 @@ export default function Player() {
     </>
   );
 }
-// <Box width={"100%"}></Box>
-
-// <Controls ref={audioRef} />
-// <Box
-//   bg={"transparent"}
-//   bgImage={"linear-gradient(145deg,brand.700,brand.500)"}
-//   boxShadow={`inset -1px -1px 5px ${colors.brand[400]},inset 1px 1px 5px ${colors.brand[900]}`}
-//   width={"fit-content"}
-//   height={"fit-content"}
-//   p={"6px"}
-//   borderRadius={"40px"}
-// >
-//   <Button
-//     className={"3d"}
-//     height={"50px"}
-//     width={"50px"}
-//     bg={"transparent"}
-//     borderRadius={"40px"}
-//     bgImage={`linear-gradient(180deg,brand.500,brand.500)`}
-//     boxShadow={`inset 0px 0px 1px 1px ${colors.brand[900]},
-//         inset -2px -2px 3px 2px ${colors.brand[700]},
-//         inset 3px 3px 2px ${colors.brand[100]}`}
-//     _hover={{
-//       bgImage: `linear-gradient(180deg,brand.500,brand.500)`,
-//       boxShadow: `inset 0px 0px 1px 1px ${colors.brand[800]},
-//         inset -2px -2px 3px 2px ${colors.brand[700]},
-//         inset 3px 3px 2px ${colors.brand[100]}`,
-//     }}
-//     _active={{
-//       bgImage: `linear-gradient(180deg,brand.500,brand.500)`,
-//       boxShadow: `inset 0px 0px 1px 2px ${colors.brand[900]},
-//         inset -2px -2px 3px 2px ${colors.brand[700]},
-//         inset 3px 3px 2px ${colors.brand[100]}`,
-//     }}
-//   >
-//     <Icon as={FaPlay} color={"neutral.dark.500"} />
-//   </Button>
-// </Box>

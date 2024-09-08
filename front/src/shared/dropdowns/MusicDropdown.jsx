@@ -101,15 +101,3 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
     </>
   );
 };
-// <Menu>
-//   <Box>
-//     <MenuButton>button</MenuButton>
-//     <MenuList color={"black"}>
-//       <MenuItem>add to queue</MenuItem>
-//       <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
-//       <MenuItem onClick={() => handleRemoveFromPlaylist(audio)}>
-//         remove from playlist
-//       </MenuItem>
-//     </MenuList>
-//   </Box>
-// </Menu>

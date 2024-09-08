@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import { createContext } from "react";
 import path from "path-browserify";
 import { api, next, prev, shuffle } from "../utils";
-import axios from "axios";
 import useRequest from "../hooks/useRequest";
 import { useMemo } from "react";
 
@@ -12,6 +11,7 @@ const initialState = {
   url: [],
   filePath: "/",
   currentTrack: null,
+  currentTrackImage: null,
   indexOfCurrentTrack: 0,
   queue: {
     list: [],
@@ -50,6 +50,7 @@ const toggleLoop = "TOGGLE_LOOP";
 const setActiveDir = "SET_ACTIVE_DIR";
 const setActivePlaylist = "SET_ACTIVE_PLAYLIST";
 const setCurrentTab = "SET_CURRENT_TAB";
+const setCurrentTrackImage = "SET_CURRENT_TRACK_IMAGE";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -98,6 +99,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, currentTab: action.payload.currentTab };
     case setActivePlaylist:
       return { ...state, activePlaylist: action.payload.activePlaylist };
+    case setCurrentTrackImage:
+      return { ...state, currentTrackImage: action.payload.currentTrackImage };
     default:
       return state;
   }
@@ -389,6 +392,14 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
+  const handleSetCurrentTrackImage = (currentTrackImage) => {
+    dispatch({
+      type: setCurrentTrackImage,
+      payload: {
+        currentTrackImage: currentTrackImage,
+      },
+    });
+  };
   const vals = useMemo(
     () => ({
       ...state,
@@ -396,6 +407,7 @@ export const GlobalContextProvider = ({ children }) => {
       handlePopPath,
       handleSetPath,
       handleSetCurrentTrack,
+      handleSetCurrentTrackImage,
       handleSetQueue,
       handleSetActiveList,
       handleSetActiveDir,

@@ -9,8 +9,8 @@ import shortcutRoutes from "./routers/shourtcuts.mjs";
 
 const app = express();
 
-app.use(express.static("/"));
 app.use(cors());
+app.use("/", express.static("/"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

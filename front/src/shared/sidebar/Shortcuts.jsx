@@ -32,6 +32,7 @@ export const Shortcuts = () => {
   return (
     <>
       <Box>
+        <Text>Shortcuts</Text>
         {shortcuts.response &&
           shortcuts.response.map((item) => (
             <Box fontSize={"14px"} key={item.name}>
