@@ -67,15 +67,8 @@ export default function Player() {
     <>
       <Box
         bg={"brand.600"}
-        boxShadow={`
-          inset -2px -2px 5px 2px ${colors.brand[900]},
-          inset 3px 3px 5px ${colors.brand[100]}`}
-        backdropFilter={"auto"}
-        backdropBlur={"10px"}
-        mx={"12px"}
-        borderRadius={"12px"}
-        width={"600px"}
-        height={"fit-content"}
+        width={"100%"}
+        height={"100%"}
         overflow={"hidden"}
         display={"flex"}
       >
@@ -100,100 +93,63 @@ export default function Player() {
 
         {/* Left */}
         <Box
-          width={"15%"}
+          maxWidth={"30%"}
+          minW={"30%"}
           height={"100%"}
           display={"flex"}
           alignItems={"center"}
-          justifyContent={"center"}
-          mx={"12px"}
-          my={"12px"}
         >
-          <PlaybackRateControl ref={audioRef} />
+          <Box
+            minWidth={"60px"}
+            maxW={"60px"}
+            height={"60px"}
+            bg={"white"}
+            mx={"6px"}
+          >
+            <Image
+              src={`data:image/jpeg;base64,${currentTrackImage}`}
+              width={"100%"}
+              height={"100%"}
+              fit={"cover"}
+            />
+          </Box>
+          <Box
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"space-between"}
+            overflow={"hidden"}
+            mr={"6px"}
+          >
+            <Text fontSize={"12px"} whiteSpace={"nowrap"}>
+              {currentTrack ? currentTrack.title || currentTrack.name : ""}
+            </Text>
+            <Text fontSize={"10px"}>
+              {currentTrack ? currentTrack.artist || "unknown" : ""}
+            </Text>
+          </Box>
         </Box>
 
         {/* center   */}
-        <Box width={"70%"}>
-          {/* screen */}
-          <Box
-            bg={"transparent"}
-            bgImg={"linear-gradient(145deg,brand.700,brand.500)"}
-            boxShadow={`inset -2px -2px 5px  ${colors.brand[200]},inset 1px 1px 5px ${colors.brand[900]}`}
-            width={"100%"}
-            height={"fit-content"}
-            mx={"auto"}
-            px={"6px"}
-            paddingBottom={"6px"}
-            borderBottomRadius={"12px"}
-          >
-            <Box
-              bg={"neutral.dark.600"}
-              height={"130px"}
-              mx={"auto"}
-              p={"6px"}
-              borderBottomRadius={"12px"}
-            >
-              <Box
-                fontSize={"12px"}
-                fontWeight={300}
-                height={"16px"}
-                whiteSpace={"nowrap"}
-                overflow={"hidden"}
-              >
-                <Text>{currentTrack ? currentTrack.name : " "}</Text>
-              </Box>
-              <Box height={"60%"} margin={"auto"} my={"6px"} display={"flex"}>
-                <Box
-                  width={"25%"}
-                  overflow={"hidden"}
-                  display={"flex"}
-                  flexDir={"column"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                >
-                  <Image
-                    src={`data:image/jpeg;base64,${currentTrackImage}`}
-                    width={"60%"}
-                    fit={"cover"}
-                  />
-                  <Text fontSize={"10px"} whiteSpace={"nowrap"}>
-                    {currentTrack && currentTrack.artist.split(";")[0]}
-                  </Text>
-                </Box>
-                <Box
-                  bg={"white"}
-                  width={"45%"}
-                  height={"100%"}
-                  pos={"relative"}
-                  overflow={"hidden"}
-                  borderRadius={"6px"}
-                >
-                  <Cassette paused={paused} />
-                </Box>
-                <Box width={"25%"}></Box>
-              </Box>
-
-              <Box width={"100%"} mx={"auto"}>
-                <TimeLine ref={audioRef} />
-              </Box>
-            </Box>
-          </Box>
-
-          {/* controls  */}
-          <Box>
-            <Controls ref={audioRef} />
-          </Box>
+        <Box
+          width={"40%"}
+          display={"flex"}
+          flexDir={"column"}
+          justifyContent={"center"}
+        >
+          <Controls ref={audioRef} />
+          <TimeLine ref={audioRef} />
         </Box>
 
         {/* right */}
         <Box
-          width={"15%"}
+          width={"30%"}
           height={"100%"}
           display={"flex"}
           alignItems={"center"}
-          justifyContent={"center"}
-          mx={"12px"}
-          my={"12px"}
+          justifyContent={"flex-end"}
+          px={"6px"}
         >
+          <PlaybackRateControl ref={audioRef} />
           <VolumeControl ref={audioRef} />
         </Box>
       </Box>

@@ -162,9 +162,9 @@ export const Directories = () => {
             </Box>
           ))}
       </Box>
-      <Box>
-        <Shortcuts />
-      </Box>
     </Box>
   );
 };
+// <Box>
+//   <Shortcuts />
+// </Box>

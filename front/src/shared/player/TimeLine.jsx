@@ -43,7 +43,7 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
           // max={currentEpisode.audioLength}
           max={length}
           min={0}
-          // disabled={!loaded}
+          isDisabled={!loaded}
           position={"absolute"}
         />
       </Box>
