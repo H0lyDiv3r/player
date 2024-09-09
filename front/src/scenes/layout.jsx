@@ -35,14 +35,20 @@ export const Layout = () => {
       fontSize={"14px"}
     >
       <Sidebar />
-      <Box width={"100%"} minW={"500px"} overflow={"scroll"} color={"white"}>
+      <Box
+        width={"100%"}
+        minW={"500px"}
+        color={"white"}
+        display={"grid"}
+        gridTemplateRows={"30px 1fr 200px"}
+      >
         <Box color={"white"}>{activePlaylist.active}</Box>
-        <Box height={"400px"} overflow={"scroll"}>
+        <Box overflow={"scroll"} my={"12px"}>
           {currentTab === "directory" ? (
             <List
               itemCount={activeList.list.length}
-              itemSize={25}
-              height={500}
+              itemSize={40}
+              height={400}
               width={"100%"}
             >
               {({ index, style }) => {
@@ -51,17 +57,23 @@ export const Layout = () => {
                     style={style}
                     key={index}
                     display={"flex"}
+                    alignItems={"center"}
                     _hover={{ bg: "trans.200" }}
                     onMouseOver={() => setSelected(index)}
                     onMouseLeave={() => setSelected(null)}
                   >
-                    <Text
-                      onClick={() => handleSetCurrentTrack(index)}
+                    <Box
                       width={"full"}
+                      onClick={() => handleSetCurrentTrack(index)}
                     >
-                      {activeList.list[index].title ||
-                        activeList.list[index].name}
-                    </Text>
+                      <Text fontSize={"12px"} my={0}>
+                        {activeList.list[index].title ||
+                          activeList.list[index].name}
+                      </Text>
+                      <Text fontSize={"11px"}>
+                        {activeList.list[index].artist || "unknown"}
+                      </Text>
+                    </Box>
                     {selected === index && (
                       <MusicDropdown audio={activeList.list[index]} />
                     )}
@@ -70,12 +82,6 @@ export const Layout = () => {
               }}
             </List>
           ) : (
-            // <>
-            //   {activeList.list &&
-            //     activeList.list.slice(0, 10).map((item, idx) => (
-
-            //     ))}
-            // </>
             <List
               itemCount={activePlaylist.list.length}
               itemSize={25}
@@ -106,19 +112,13 @@ export const Layout = () => {
                 );
               }}
             </List>
-            // <>
-            //   {activePlaylist.list &&
-            //     activePlaylist.list.map((item, idx) => (
-            //       <Box key={idx} onClick={() => handleSetCurrentTrack(idx)}>
-            //         <Text>{item.name}</Text>
-            //       </Box>
-            //     ))}
-            // </>
           )}
         </Box>
-        <PlayerContextProvider>
-          <Player />
-        </PlayerContextProvider>
+        <Box height={"200px"}>
+          <PlayerContextProvider>
+            <Player />
+          </PlayerContextProvider>
+        </Box>
       </Box>
     </Box>
   );

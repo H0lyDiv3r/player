@@ -26,7 +26,7 @@ const Controls = forwardRef(function Controls(props, ref) {
     <Box
       width={"100%"}
       display={"flex"}
-      my={"12px"}
+      my={"8px"}
       alignItems={"center"}
       justifyContent={"center"}
       color={"neutral.400"}

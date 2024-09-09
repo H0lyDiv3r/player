@@ -72,11 +72,10 @@ export default function Player() {
           inset 3px 3px 5px ${colors.brand[100]}`}
         backdropFilter={"auto"}
         backdropBlur={"10px"}
-        px={"24px"}
-        mx={"24px"}
+        mx={"12px"}
         borderRadius={"12px"}
         width={"600px"}
-        height={"200px"}
+        height={"fit-content"}
         overflow={"hidden"}
         display={"flex"}
       >
@@ -105,12 +104,15 @@ export default function Player() {
           height={"100%"}
           display={"flex"}
           alignItems={"center"}
+          justifyContent={"center"}
+          mx={"12px"}
+          my={"12px"}
         >
           <PlaybackRateControl ref={audioRef} />
         </Box>
 
         {/* center   */}
-        <Box width={"70%"} mx={"5%"}>
+        <Box width={"70%"}>
           {/* screen */}
           <Box
             bg={"transparent"}
@@ -140,16 +142,26 @@ export default function Player() {
                 <Text>{currentTrack ? currentTrack.name : " "}</Text>
               </Box>
               <Box height={"60%"} margin={"auto"} my={"6px"} display={"flex"}>
-                <Box bg={"white"} width={"25%"} overflow={"hidden"}>
+                <Box
+                  width={"25%"}
+                  overflow={"hidden"}
+                  display={"flex"}
+                  flexDir={"column"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                >
                   <Image
                     src={`data:image/jpeg;base64,${currentTrackImage}`}
-                    width={"100%"}
+                    width={"60%"}
                     fit={"cover"}
                   />
+                  <Text fontSize={"10px"} whiteSpace={"nowrap"}>
+                    {currentTrack && currentTrack.artist.split(";")[0]}
+                  </Text>
                 </Box>
                 <Box
                   bg={"white"}
-                  width={"50%"}
+                  width={"45%"}
                   height={"100%"}
                   pos={"relative"}
                   overflow={"hidden"}
@@ -178,6 +190,9 @@ export default function Player() {
           height={"100%"}
           display={"flex"}
           alignItems={"center"}
+          justifyContent={"center"}
+          mx={"12px"}
+          my={"12px"}
         >
           <VolumeControl ref={audioRef} />
         </Box>
