@@ -24,10 +24,16 @@ const VolumeControl = forwardRef(function VolumeControl(props, ref) {
         width={"100px"}
         borderRadius={"4px"}
         bg={"white"}
-        onChange={(e) => handleVolume(e, ref)}
         pos={"relative"}
       >
-        <Input type="range" min={0} max={100} value={volume} top={0} />
+        <Input
+          type="range"
+          min={0}
+          max={100}
+          value={volume}
+          onChange={(e) => handleVolume(e, ref)}
+          top={0}
+        />
       </Box>
     </Box>
   );

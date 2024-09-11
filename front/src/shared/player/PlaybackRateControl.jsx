@@ -48,7 +48,7 @@ const PlaybackRateControl = forwardRef(
           display={"flex"}
           flexDir={"column"}
           alignItems={"center"}
-          my={"6px"}
+          mx={"12px"}
         >
           <Menu closeOnSelect={true}>
             {speed.map((val) => (

@@ -1,6 +1,6 @@
 import {
-  Box,
   Button,
+  Icon,
   Menu,
   MenuButton,
   MenuItem,
@@ -17,6 +17,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { CreatePlaylist } from "./CreatePlaylist";
 import { useState } from "react";
+import { TbDots } from "react-icons/tb";
 
 export const MusicDropdown = ({ audio }) => {
   const { activePlaylist, currentTab } = useContext(GlobalContext);
@@ -42,13 +43,16 @@ export const MusicDropdown = ({ audio }) => {
   return (
     <>
       <Button
+        bg={"none"}
+        _hover={{ bg: "none" }}
+        color={"white"}
         onClick={(e) => {
           console.log(e);
           setModalPosition({ x: e.pageX, y: e.pageY });
           onOpen();
         }}
       >
-        open
+        <Icon as={TbDots} />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} isCentered={false}>
         <ModalOverlay bg={"none"} p={0} m={0}>
