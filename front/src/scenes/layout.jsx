@@ -27,18 +27,29 @@ export const Layout = () => {
       w={"100%"}
       height={"100vh"}
       fontSize={"14px"}
-      display={"flex"}
-      flexDirection={"column"}
+      // display={"grid"}
+      // gridTemplateRows={"85% 1fr"}
     >
       <Box
         display={"grid"}
         gridTemplateColumns={"300px 1fr"}
         w={"100%"}
+        bg={"black"}
         height={"85%"}
+        ref={listContainerRef}
       >
-        <Sidebar />
-        <Box width={"100%"} minW={"500px"} color={"white"} display={"grid"}>
-          <Box overflow={"scroll"} my={"12px"} ref={listContainerRef}>
+        <Box
+          height={
+            listContainerRef.current
+              ? listContainerRef.current.offsetHeight
+              : "100%"
+          }
+          bg={"white"}
+        >
+          <Sidebar />
+        </Box>
+        <Box minW={"500px"} color={"white"} display={"grid"}>
+          <Box>
             {currentTab === "directory" ? (
               <MusicFromDirectoryList
                 list={activeList.list}

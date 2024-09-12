@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useRequest from "../../hooks/useRequest";
-import { Box, Button, Icon, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { FaPlay, FaRecordVinyl } from "react-icons/fa";
 import { api } from "../../utils";
 import { useContext } from "react";
@@ -41,10 +41,16 @@ export const Playlists = () => {
     }
   }, [activePlaylist]);
   return (
-    <Box fontSize={"14px"} fontWeight={400} color={"neutral.dark.100"}>
-      <Text>Your Playlists</Text>
-      <Box borderRadius={"12px"} py={"12px"} bg={"trans.200"}>
+    <Grid
+      templateRows={"repeat(12,1fr)"}
+      fontSize={"14px"}
+      fontWeight={400}
+      color={"neutral.dark.100"}
+    >
+      <GridItem rowSpan={2}>
         <CreatePlaylist />
+      </GridItem>
+      <GridItem rowSpan={10}>
         <Box mt={"12px"}>
           {playlists.response &&
             playlists.response.map((playlist) => (
@@ -68,7 +74,7 @@ export const Playlists = () => {
               </Box>
             ))}
         </Box>
-      </Box>
-    </Box>
+      </GridItem>
+    </Grid>
   );
 };

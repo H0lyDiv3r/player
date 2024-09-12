@@ -1,4 +1,4 @@
-import { Box, Divider, Icon, Text } from "@chakra-ui/react";
+import { Box, Divider, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { DirNavigator } from "../directory/DirNavigator";
 import useRequest from "../../hooks/useRequest";
 import { useEffect } from "react";
@@ -15,6 +15,8 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 import { api } from "../../utils";
 import { Shortcuts } from "./Shortcuts";
 import { AddShortcut } from "../dropdowns/AddShortcut";
+
+import "./scroll.css";
 
 export const Directories = () => {
   const [dirs] = useRequest();
@@ -80,89 +82,93 @@ export const Directories = () => {
     console.log("fetching fetingingingi");
   }, [activeList.active, activeList.url]);
   return (
-    <Box my={"18px"}>
-      <DirNavigator />
-      <Box
-        display={"flex"}
-        width={"100%"}
-        flexWrap={"nowrap"}
-        whiteSpace={"nowrap"}
-        alignItems={"center"}
-      >
-        <Icon
-          as={FaArrowLeft}
-          onClick={() => handlePopActiveUrl()}
-          _hover={{ cursor: "pointer" }}
-          mr={"8px"}
-        />
+    <Grid height={"100%"} templateRows={"repeat(12,1fr)"}>
+      <GridItem rowSpan={2}>
+        <DirNavigator />
+      </GridItem>
+      <GridItem rowSpan={1} overflow={"hidden"}>
         <Box
-          overflow={"scroll"}
           display={"flex"}
-          flexWrap={"nowrap"}
-          py={"12px"}
+          width={"100%"}
+          overflow={"hidden"}
+          alignItems={"center"}
+          whiteSpace={"nowrap"}
+          p={"4px"}
         >
-          <Text>root:/</Text>
-          {activeList.url.map((item, idx) => (
-            <Text key={idx}>{item}/</Text>
-          ))}
+          <Icon
+            as={FaArrowLeft}
+            onClick={() => handlePopActiveUrl()}
+            _hover={{ cursor: "pointer" }}
+            mr={"8px"}
+          />
+          <Box display={"flex"}>
+            <Text>root:/</Text>
+            {activeList.url.map((item, idx) => (
+              <Text key={idx}>{item}/</Text>
+            ))}
+          </Box>
         </Box>
-      </Box>
-      <Box height={"200px"}>
-        {dirs.response &&
-          dirs.response.map((dir, idx) => (
-            <Box key={idx} height={"100%"}>
-              <Box
-                display={"flex"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-                onClick={() => handleSetActiveDir(dir.name)}
-              >
+      </GridItem>
+      <GridItem rowSpan={9}>
+        <Box height={"100%"} overflow={"hidden"}>
+          {dirs.response &&
+            dirs.response.map((dir, idx) => (
+              <Box key={idx} height={"100%"}>
                 <Box
                   display={"flex"}
                   alignItems={"center"}
-                  justifyContent={"center"}
+                  justifyContent={"space-between"}
+                  height={"10%"}
+                  onClick={() => handleSetActiveDir(dir.name)}
                 >
-                  <Icon as={FaFolder} mr={"6px"} />
-                  <Text>{dir.name}</Text>
+                  <Box
+                    display={"flex"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <Icon as={FaFolder} mr={"6px"} />
+                    <Text>{dir.name}</Text>
+                  </Box>
+                  <Icon
+                    as={dir.name != activeDir ? FaChevronDown : FaChevronUp}
+                    mr={"6px"}
+                  />
                 </Box>
-                <Icon
-                  as={dir.name != activeDir ? FaChevronDown : FaChevronUp}
-                  mr={"6px"}
-                />
-              </Box>
-              <Box
-                display={dir.name == activeDir ? "flex" : "none"}
-                flexDir={"column"}
-                height={"60%"}
-                overflow={"scroll"}
-                p={"12px"}
-                borderRadius={"12px"}
-              >
-                {subDirs.response &&
-                  subDirs.response.map((item, idx) => (
-                    <Box
-                      key={idx}
-                      display={"flex"}
-                      alignItems={"center"}
-                      justifyContent={"space-between"}
-                      onMouseOver={() => setSelected(idx)}
-                      onMouseLeave={() => setSelected(null)}
-                    >
+                <Box
+                  display={dir.name == activeDir ? "flex" : "none"}
+                  flexDir={"column"}
+                  height={"90%"}
+                  className="scroll"
+                  overflow={"scroll"}
+                  p={"12px"}
+                  borderRadius={"12px"}
+                >
+                  {subDirs.response &&
+                    subDirs.response.map((item, idx) => (
                       <Box
-                        onClick={() => handleSetActiveUrl(item)}
+                        key={idx}
                         display={"flex"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        onMouseOver={() => setSelected(idx)}
+                        onMouseLeave={() => setSelected(null)}
                       >
-                        <Icon as={FaFolder} mr={"6px"} />
-                        <Text>{item.name.slice(0, 30)}</Text>
+                        <Box
+                          onClick={() => handleSetActiveUrl(item)}
+                          display={"flex"}
+                        >
+                          <Icon as={FaFolder} mr={"6px"} />
+                          <Text>{item.name.slice(0, 30)}</Text>
+                        </Box>
+                        {selected === idx && <AddShortcut vals={item} />}
                       </Box>
-                      {selected === idx && <AddShortcut vals={item} />}
-                    </Box>
-                  ))}
+                    ))}
+                </Box>
               </Box>
-            </Box>
-          ))}
-      </Box>
-    </Box>
+            ))}
+        </Box>
+      </GridItem>
+    </Grid>
   );
 };
 // <Box>

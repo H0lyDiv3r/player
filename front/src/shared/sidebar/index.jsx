@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Icon, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  GridItem,
+  Icon,
+  Text,
+} from "@chakra-ui/react";
 import { Directories } from "./Directories";
 import { Playlists } from "./Playlists";
 import { useState } from "react";
@@ -9,28 +17,28 @@ export const Sidebar = () => {
     setTab(active);
   };
   return (
-    <Box
+    <Grid
       width={"300px"}
       minW={"300px"}
-      bg={"rgba(255,255,255,1)"}
-      backdropFilter={"auto"}
-      backdropBlur={"6px"}
-      p={"12px"}
       height={"100%"}
+      templateRows={"repeat(12,1fr)"}
       fontSize={"12px"}
-      zIndex={9}
     >
-      <Box py={"24px"}>
-        <Text>Name and logo</Text>
-      </Box>
-      <Divider />
-      <Box my={"24px"}>
+      <GridItem rowSpan={3}>
+        <Box py={"6px"}>
+          <Text>Name and logo</Text>
+        </Box>
+
         <Box>
           <Button onClick={() => handleSetTab("directory")}>dir</Button>
           <Button onClick={() => handleSetTab("playlist")}>pl</Button>
         </Box>
-        {tab === "directory" ? <Directories /> : <Playlists />}
-      </Box>
-    </Box>
+      </GridItem>
+      <GridItem rowSpan={9}>
+        <Box height={"100%"}>
+          {tab === "directory" ? <Directories /> : <Playlists />}
+        </Box>
+      </GridItem>
+    </Grid>
   );
 };

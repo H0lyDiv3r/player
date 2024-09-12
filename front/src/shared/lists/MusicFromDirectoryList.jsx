@@ -16,6 +16,7 @@ export const MusicFromDirectoryList = forwardRef(
       if (ref.current.offsetHeight) {
         setHeight(() => ref.current.offsetHeight);
       }
+      console.log(ref.current.offsetHeight);
     }, []);
     return (
       <>

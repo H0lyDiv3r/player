@@ -4,3 +4,29 @@ html {
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+/* body::-webkit-scrollbar {
+    width: 3px;
+    background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+    background: green;
+    height: 50px;
+    border-radius: 25px;
+} */
+
+::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: green;
+    height: 50px;
+    border-radius: 25px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
