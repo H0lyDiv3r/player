@@ -21,10 +21,23 @@ export const MusicFromPlaylist = forwardRef(function MusicFromPlaylist(
   }, []);
   return (
     <>
+      <Box
+        display={"grid"}
+        gridTemplateColumns={"10fr 2fr"}
+        alignItems={"center"}
+        height={"32px"}
+        fontSize={"14px"}
+      >
+        <Box display={"grid"} gridTemplateColumns={"40px 6fr 5fr"} gap={"24px"}>
+          <Text>#</Text>
+          <Text>Title</Text>
+          <Text>Album</Text>
+        </Box>
+      </Box>
       <List
         itemCount={list.length}
         itemSize={42}
-        height={height}
+        height={height - 20}
         width={"100%"}
       >
         {({ index, style }) => {
@@ -41,6 +54,7 @@ export const MusicFromPlaylist = forwardRef(function MusicFromPlaylist(
               <Box
                 width={"full"}
                 display={"grid"}
+                gap={"24px"}
                 alignItems={"center"}
                 gridTemplateColumns={"40px 6fr 5fr"}
                 onClick={() => handleSetCurrentTrack(index)}

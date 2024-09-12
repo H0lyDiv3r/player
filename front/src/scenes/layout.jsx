@@ -45,6 +45,7 @@ export const Layout = () => {
               : "100%"
           }
           bg={"white"}
+          p={"12px"}
         >
           <Sidebar />
         </Box>

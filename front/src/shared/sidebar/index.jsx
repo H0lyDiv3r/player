@@ -17,13 +17,7 @@ export const Sidebar = () => {
     setTab(active);
   };
   return (
-    <Grid
-      width={"300px"}
-      minW={"300px"}
-      height={"100%"}
-      templateRows={"repeat(12,1fr)"}
-      fontSize={"12px"}
-    >
+    <Grid height={"100%"} templateRows={"repeat(12,1fr)"} fontSize={"12px"}>
       <GridItem rowSpan={3}>
         <Box py={"6px"}>
           <Text>Name and logo</Text>

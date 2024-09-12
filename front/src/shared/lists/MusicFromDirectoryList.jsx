@@ -20,10 +20,27 @@ export const MusicFromDirectoryList = forwardRef(
     }, []);
     return (
       <>
+        <Box
+          display={"grid"}
+          alignItems={"center"}
+          gridTemplateColumns={"10fr 2fr"}
+          height={"32px"}
+          fontSize={"14px"}
+        >
+          <Box
+            display={"grid"}
+            gridTemplateColumns={"40px 6fr 5fr"}
+            gap={"24px"}
+          >
+            <Text>#</Text>
+            <Text>Title</Text>
+            <Text>Album</Text>
+          </Box>
+        </Box>
         <List
           itemCount={list.length}
           itemSize={42}
-          height={height}
+          height={height - 32}
           width={"100%"}
         >
           {({ index, style }) => {
