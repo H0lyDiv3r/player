@@ -3,6 +3,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Icon,
   Input,
   Menu,
   MenuButton,
@@ -18,6 +19,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import path from "path-browserify";
+import { TbDots } from "react-icons/tb";
 
 export const AddShortcut = ({ vals }) => {
   const [shortcutName, handleSetShortcutName] = useState("");
@@ -52,14 +54,14 @@ export const AddShortcut = ({ vals }) => {
   };
   return (
     <>
-      <Button
+      <Icon
+        as={TbDots}
+        boxSize={4}
         onClick={(e) => {
           setModalPosition({ x: e.pageX, y: e.pageY });
           onOpen();
         }}
-      >
-        lala
-      </Button>
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay>
           <ModalContent

@@ -5,17 +5,10 @@ import {
   MenuItem,
   MenuList,
   Box,
-  Text,
   Icon,
-  useDisclosure,
-  Button,
 } from "@chakra-ui/react";
 import { PlayerContext } from "./PlayerContextProvider";
-import { FaCaretDown, FaTimes } from "react-icons/fa";
-import { WalkmanButton } from "../bottons";
-import { FaCaretUp, FaChevronDown } from "react-icons/fa6";
-import colors from "../../themes/colors";
-
+import { IoSpeedometer } from "react-icons/io5";
 const speed = [
   {
     id: 0,
@@ -54,18 +47,23 @@ const PlaybackRateControl = forwardRef(
             {speed.map((val) => (
               <Box key={val.id}>
                 {playbackRate == val.value && (
-                  <MenuButton
-                    minWidth={"70px"}
-                    fontSize={"12px"}
-                    fontWeight={400}
-                    bg={"brand.500"}
-                    bgImage={"linear-gradient(120deg,brand.500,brand.600)"}
-                    borderRadius={"6px"}
-                    color={"white"}
+                  <Box
+                    display={"flex"}
+                    alignItems={"center"}
+                    minW={"50px"}
                     py={"6px"}
                   >
-                    {val.name}
-                  </MenuButton>
+                    <Icon as={IoSpeedometer} boxSize={4} />
+                    <MenuButton
+                      minW={"50px"}
+                      fontSize={"12px"}
+                      fontWeight={400}
+                      color={"white"}
+                      display={"flex"}
+                    >
+                      {val.name}
+                    </MenuButton>
+                  </Box>
                 )}
               </Box>
             ))}

@@ -9,6 +9,7 @@ import {
   TbArrowsShuffle,
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,
+  TbArrowsRight,
 } from "react-icons/tb";
 import { PlayerContext } from "./PlayerContextProvider";
 import VolumeControl from "./VolumeControl";
@@ -83,7 +84,7 @@ const Controls = forwardRef(function Controls(props, ref) {
           width={30}
           depth={"2px"}
         >
-          <Icon as={TbArrowsShuffle} boxSize={3} />
+          <Icon as={shuffle ? TbArrowsShuffle : TbArrowsRight} Size={3} />
         </WalkmanButton>
       </Box>
     </Box>

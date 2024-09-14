@@ -152,10 +152,15 @@ export const Directories = () => {
                         justifyContent={"space-between"}
                         onMouseOver={() => setSelected(idx)}
                         onMouseLeave={() => setSelected(null)}
+                        p={"6px"}
+                        borderRadius={"4px"}
+                        _hover={{ bg: "red" }}
                       >
                         <Box
                           onClick={() => handleSetActiveUrl(item)}
                           display={"flex"}
+                          alignItems={"center"}
+                          width={"full"}
                         >
                           <Icon as={FaFolder} mr={"6px"} />
                           <Text>{item.name.slice(0, 30)}</Text>
