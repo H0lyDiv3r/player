@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Icon,
   Menu,
@@ -9,6 +10,7 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { api } from "../../utils";
@@ -59,17 +61,23 @@ export const MusicDropdown = ({ audio }) => {
           <ModalContent
             pos={"absolute"}
             top={modalPosition.y}
-            left={modalPosition.x - 300}
+            left={modalPosition.x - 200}
             m={0}
-            width={"250px"}
+            width={"200px"}
           >
-            <ModalBody p={0} m={0}>
-              <Button>add to queue</Button>
-              <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
+            <ModalBody p={"12px"} fontSize={"14px"}>
+              <Box p={"6px"}>
+                <Text>add to queue</Text>
+              </Box>
+              <Box p={"6px"}>
+                <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
+              </Box>
               {currentTab === "playlist" && (
-                <Button onClick={() => handleRemoveFromPlaylist(audio)}>
-                  remove from this playlist
-                </Button>
+                <Box p={"6px"}>
+                  <Text onClick={() => handleRemoveFromPlaylist(audio)}>
+                    remove from this playlist
+                  </Text>
+                </Box>
               )}
             </ModalBody>
           </ModalContent>

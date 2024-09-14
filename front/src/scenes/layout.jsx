@@ -23,7 +23,7 @@ export const Layout = () => {
   }, [activeList, queue]);
   return (
     <Box
-      bg={"rgba(0,0,0,1)"}
+      bg={"neutral.dark.900"}
       w={"100%"}
       height={"100vh"}
       fontSize={"14px"}
@@ -34,7 +34,6 @@ export const Layout = () => {
         display={"grid"}
         gridTemplateColumns={"300px 1fr"}
         w={"100%"}
-        bg={"black"}
         height={"85%"}
         ref={listContainerRef}
       >
@@ -44,7 +43,6 @@ export const Layout = () => {
               ? listContainerRef.current.offsetHeight
               : "100%"
           }
-          bg={"white"}
           p={"12px"}
         >
           <Sidebar />

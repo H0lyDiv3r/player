@@ -19,8 +19,13 @@ export const Sidebar = () => {
     setTab(active);
   };
   return (
-    <Grid height={"100%"} templateRows={"repeat(12,1fr)"} fontSize={"12px"}>
-      <GridItem rowSpan={3}>
+    <Grid
+      height={"100%"}
+      templateRows={"repeat(12,1fr)"}
+      gap={"12px"}
+      fontSize={"12px"}
+    >
+      <GridItem rowSpan={3} bg={"white"}>
         <Box py={"6px"}>
           <Text>Name and logo</Text>
         </Box>
@@ -68,7 +73,7 @@ export const Sidebar = () => {
           </Box>
         </Box>
       </GridItem>
-      <GridItem rowSpan={9}>
+      <GridItem rowSpan={9} bg={"white"}>
         <Box height={"100%"}>
           {tab === "directory" ? <Directories /> : <Playlists />}
         </Box>
