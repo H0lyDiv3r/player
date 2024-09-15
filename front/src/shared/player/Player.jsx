@@ -66,7 +66,7 @@ export default function Player() {
   return (
     <>
       <Box
-        bg={"brand.600"}
+        bg={"neutral.dark.600"}
         width={"100%"}
         height={"100%"}
         overflow={"hidden"}

@@ -32,8 +32,8 @@ export const Button3D = ({
         bg={"transparent"}
         display={"flex"}
         alignItems={"center"}
-        bgImage={"linear-gradient(145deg,brand.800,brand.500)"}
-        boxShadow={`inset -1px -1px 5px ${colors.brand[300]},inset 1px 1px 5px ${colors.brand[900]}`}
+        bgImage={"linear-gradient(145deg,neutral.dark.900,neutral.dark.600)"}
+        boxShadow={`inset -1px -1px 5px ${colors.neutral.dark[400]},inset 1px 1px 5px ${colors.neutral.dark[900]}`}
         width={"fit-content"}
         height={"fit-content"}
         minH={"0px"}
@@ -51,33 +51,34 @@ export const Button3D = ({
           m={"0px"}
           bg={"transparent"}
           // borderRadius={`${width / 2}px`}
-          bgImage={`linear-gradient(145deg,brand.500,brand.600)`}
-          boxShadow={`inset 0px 0px 1px 1px ${colors.brand[900]},
-            inset -2px -2px 3px 2px ${colors.brand[700]},
-            inset 3px 3px 2px ${colors.brand[100]}`}
+          bgImage={`linear-gradient(145deg,neutral.dark.600,neutral.dark.700)`}
+          boxShadow={`inset 0px 0px 1px 1px ${colors.neutral.dark[900]},
+            inset -2px -2px 3px 2px ${colors.neutral.dark[700]},
+            inset 3px 3px 2px ${colors.neutral.dark[200]}`}
           _hover={{
-            bgImage: `linear-gradient(145deg,brand.500,brand.600)`,
-            boxShadow: `inset 0px 0px 1px 1px ${colors.brand[800]},
-            inset -2px -2px 3px 2px ${colors.brand[700]},
-            inset 3px 3px 2px ${colors.brand[100]}`,
+            bgImage: `linear-gradient(145deg,neutral.dark.500,neutral.dark.600)`,
+            boxShadow: `inset 0px 0px 1px 1px ${colors.neutral.dark[800]},
+            inset -2px -2px 3px 2px ${colors.neutral.dark[700]},
+            inset 3px 3px 2px ${colors.neutral.dark[200]}`,
           }}
           _active={{
-            bgImage: `linear-gradient(145deg,brand.500,brand.600)`,
-            boxShadow: `inset 0px 0px 1px 2px ${colors.brand[900]},
-            inset -2px -2px 3px 2px ${colors.brand[700]},
-            inset 3px 3px 2px ${colors.brand[100]}`,
+            bgImage: `linear-gradient(145deg,neutral.dark.500,neutral.dark.600)`,
+            boxShadow: `inset 0px 0px 1px 2px ${colors.neutral.dark[900]},
+            inset -2px -2px 3px 2px ${colors.neutral.dark[700]},
+            inset 3px 3px 2px ${colors.neutral.dark[200]}`,
           }}
           _disabled={{
-            bgImage: `linear-gradient(145deg,brand.500,brand.600)`,
-            boxShadow: `inset 0px 0px 1px 2px ${colors.brand[700]},
-            inset -1px -1px 3px 2px ${colors.brand[600]},
-            inset 1px 1px 2px ${colors.brand[300]}`,
-            color: "brand.800",
+            bgImage: `linear-gradient(145deg,neutral.dark.500,neutral.dark.600)`,
+            boxShadow: `inset 0px 0px 1px 2px ${colors.neutral.dark[700]},
+            inset -1px -1px 3px 2px ${colors.neutral.dark[600]},
+            inset 1px 1px 2px ${colors.neutral.dark[300]}`,
+            color: "neutral.dark.800",
           }}
           isDisabled={disabled}
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
+          color={"white"}
           {...styles(direction)}
         >
           {children}
