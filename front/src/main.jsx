@@ -14,12 +14,15 @@ import "@fontsource/rubik/300.css";
 
 import { theme } from "./themes/theme.js";
 import { GlobalContextProvider } from "./store/GlobalContextProvider.jsx";
+import { ToastProvider } from "./shared/toast/ToastProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <GlobalContextProvider>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </GlobalContextProvider>
     </ChakraProvider>
   </React.StrictMode>,

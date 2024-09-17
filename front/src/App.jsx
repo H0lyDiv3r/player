@@ -1,9 +1,10 @@
-import { Box, Text } from "@chakra-ui/react";
-import Player from "./shared/player/Player";
-import PlayerContextProvider from "./shared/player/PlayerContextProvider";
+import { Button } from "@chakra-ui/react";
 import { Layout } from "./scenes/layout";
+import { ToastContext, ToastProvider } from "./shared/toast/ToastProvider";
+import { useContext } from "react";
 
 function App() {
+  const { handleAddToast } = useContext(ToastContext);
   return (
     // <Box
     //   bg={"rgba(0,0,0,0.5)"}
@@ -25,7 +26,16 @@ function App() {
     //     </PlayerContextProvider>
     //   </Box>
     // </Box>
-    <Layout />
+    <>
+      <Layout />
+      <Button
+        onClick={() =>
+          handleAddToast({ status: "error", message: "wwwwww", delay: 5000 })
+        }
+      >
+        Add toast
+      </Button>
+    </>
   );
 }
 
