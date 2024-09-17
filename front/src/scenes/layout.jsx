@@ -16,6 +16,7 @@ export const Layout = () => {
   const { queue, activeList, activePlaylist, currentTab } =
     useContext(GlobalContext);
   const listContainerRef = useRef(null);
+  const containerRef = useRef(null);
   useEffect(() => {
     // console.log("active list", activeList);
     // console.log("queueueueueq", queue);
@@ -35,32 +36,40 @@ export const Layout = () => {
         gridTemplateColumns={"300px 1fr"}
         w={"100%"}
         height={"85%"}
-        ref={listContainerRef}
+        ref={containerRef}
       >
         <Box
           height={
-            listContainerRef.current
-              ? listContainerRef.current.offsetHeight
-              : "100%"
+            containerRef.current ? containerRef.current.offsetHeight : "100%"
           }
-          p={"12px"}
+          px={"12px"}
+          pt={"12px"}
         >
           <Sidebar />
         </Box>
-        <Box minW={"500px"} color={"white"} display={"grid"}>
-          <Box>
-            {currentTab === "directory" ? (
-              <MusicFromDirectoryList
-                list={activeList.list}
-                ref={listContainerRef}
-              />
-            ) : (
-              <MusicFromPlaylist
-                list={activePlaylist.list}
-                ref={listContainerRef}
-              />
-            )}
+        <Box
+          minW={"500px"}
+          color={"white"}
+          display={"grid"}
+          gridTemplateColumns={"1fr 300px"}
+        >
+          <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
+            <Box></Box>
+            <Box ref={listContainerRef} px={"12px"}>
+              {currentTab === "directory" ? (
+                <MusicFromDirectoryList
+                  list={activeList.list}
+                  ref={listContainerRef}
+                />
+              ) : (
+                <MusicFromPlaylist
+                  list={activePlaylist.list}
+                  ref={listContainerRef}
+                />
+              )}
+            </Box>
           </Box>
+          <Box></Box>
         </Box>
       </Box>
 

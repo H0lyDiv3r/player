@@ -57,6 +57,7 @@ export const AddShortcut = ({ vals }) => {
       <Icon
         as={TbDots}
         boxSize={4}
+        _hover={{ cursor: "pointer" }}
         onClick={(e) => {
           setModalPosition({ x: e.pageX, y: e.pageY });
           onOpen();

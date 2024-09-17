@@ -8,7 +8,7 @@ import colors from "../../themes/colors";
 const VolumeControl = forwardRef(function VolumeControl(props, ref) {
   const { handleVolume, volume, muted, handleMute } = useContext(PlayerContext);
   return (
-    <Box display={"flex"} alignItems={"center"}>
+    <Box display={"flex"} alignItems={"center"} color={"neutral.dark.200"}>
       <Icon
         as={muted ? FaVolumeXmark : FaVolumeLow}
         onClick={() => handleMute(ref)}
@@ -17,13 +17,13 @@ const VolumeControl = forwardRef(function VolumeControl(props, ref) {
       />
       <Box
         className="volume"
-        height={"4px"}
+        height={"3px"}
         mx={"2px"}
         display={"flex"}
         overflow={"hidden"}
         width={"100px"}
         borderRadius={"4px"}
-        bg={"white"}
+        bg={"neutral.dark.800"}
         pos={"relative"}
       >
         <Input

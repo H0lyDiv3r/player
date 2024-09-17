@@ -12,7 +12,8 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
       display={"flex"}
       justifyContent={"center"}
       alignItems={"center"}
-      color={"neutral.200"}
+      color={"neutral.dark.200"}
+      my={"4px"}
     >
       <Box display={"flex"} fontSize={"10px"} fontWeight={300} minW={"40px"}>
         {Math.floor(position) / 3600 < 10 && <Text>0</Text>}
@@ -25,9 +26,10 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
         <Text>{Math.floor(position % 60)}</Text>
       </Box>
       <Box
-        bg={"rgba(50,250,150,0.3)"}
+        bg={"neutral.dark.800"}
         className="timeline"
-        height={"4px"}
+        height={"2px"}
+        _hover={{ height: "4px" }}
         mx={"4px"}
         display={"flex"}
         overflow={"hidden"}

@@ -1,13 +1,40 @@
-import { Button, Icon } from "@chakra-ui/react";
+import { Box, Button, Icon } from "@chakra-ui/react";
 import { Button3D } from "./Button3D";
 
-export const IconButton = ({ action, icon, size = 4, ...other }) => {
+export const IconButton = ({ action, children, ...other }) => {
   return (
     <>
       <Button onClick={action} {...other}>
-        <Icon as={icon} boxSize={size} />
+        {children}
       </Button>
     </>
+  );
+};
+
+export const PlayerButton = ({
+  children,
+  action,
+  primary = false,
+  color = "white",
+  bg = "white",
+  ...other
+}) => {
+  return (
+    <Button
+      onClick={action}
+      color={color}
+      bg={"none"}
+      width={primary ? "40px" : "30px"}
+      height={primary ? "40px" : "30px"}
+      borderRadius={"40px"}
+      display={"flex"}
+      m={0}
+      justifyContent={"center"}
+      alignItems={"center"}
+      {...other}
+    >
+      {children}
+    </Button>
   );
 };
 

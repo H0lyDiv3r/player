@@ -66,7 +66,7 @@ export default function Player() {
   return (
     <>
       <Box
-        bg={"neutral.dark.600"}
+        bg={"none"}
         width={"100%"}
         height={"100%"}
         overflow={"hidden"}
@@ -98,6 +98,7 @@ export default function Player() {
           height={"100%"}
           display={"flex"}
           alignItems={"center"}
+          color={"neutral.dark.100"}
         >
           <Box
             minWidth={"60px"}
@@ -123,7 +124,7 @@ export default function Player() {
             <Text fontSize={"12px"} whiteSpace={"nowrap"}>
               {currentTrack ? currentTrack.title || currentTrack.name : ""}
             </Text>
-            <Text fontSize={"10px"}>
+            <Text fontSize={"10px"} color={"neutral.dark.300"}>
               {currentTrack ? currentTrack.artist || "unknown" : ""}
             </Text>
           </Box>

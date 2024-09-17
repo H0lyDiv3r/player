@@ -82,7 +82,11 @@ export const Directories = () => {
     console.log("fetching fetingingingi");
   }, [activeList.active, activeList.url]);
   return (
-    <Grid height={"100%"} templateRows={"repeat(12,1fr)"}>
+    <Grid
+      height={"100%"}
+      templateRows={"repeat(12,1fr)"}
+      color={"neutral.dark.200"}
+    >
       <GridItem rowSpan={2}>
         <DirNavigator />
       </GridItem>
@@ -154,7 +158,7 @@ export const Directories = () => {
                         onMouseLeave={() => setSelected(null)}
                         p={"6px"}
                         borderRadius={"4px"}
-                        _hover={{ bg: "red" }}
+                        _hover={{ bg: "neutral.dark.700" }}
                       >
                         <Box
                           onClick={() => handleSetActiveUrl(item)}
@@ -163,7 +167,9 @@ export const Directories = () => {
                           width={"full"}
                         >
                           <Icon as={FaFolder} mr={"6px"} />
-                          <Text>{item.name.slice(0, 30)}</Text>
+                          <Text whiteSpace={"nowrap"}>
+                            {item.name.slice(0, 25)}
+                          </Text>
                         </Box>
                         {selected === idx && <AddShortcut vals={item} />}
                       </Box>

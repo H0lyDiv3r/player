@@ -8,7 +8,8 @@ import { forwardRef } from "react";
 
 export const MusicFromDirectoryList = forwardRef(
   function MusicFromDirectoryList({ list = [] }, ref) {
-    const { handleSetCurrentTrack } = useContext(GlobalContext);
+    const { handleSetCurrentTrack, indexOfCurrentTrack } =
+      useContext(GlobalContext);
     const [selected, setSelected] = useState(null);
     const [height, setHeight] = useState(0);
 
@@ -50,9 +51,10 @@ export const MusicFromDirectoryList = forwardRef(
                 key={index}
                 display={"grid"}
                 gridTemplateColumns={"10fr 2fr"}
-                _hover={{ bg: "trans.200" }}
+                _hover={{ bg: "neutral.dark.800" }}
                 onMouseOver={() => setSelected(index)}
                 onMouseLeave={() => setSelected(null)}
+                borderRadius={"6px"}
               >
                 <Box
                   width={"full"}
@@ -62,6 +64,11 @@ export const MusicFromDirectoryList = forwardRef(
                   alignItems={"center"}
                   onClick={() => handleSetCurrentTrack(index)}
                   fontSize={"12px"}
+                  color={
+                    index === indexOfCurrentTrack
+                      ? "brand.500"
+                      : "neutral.dark.100"
+                  }
                 >
                   <Box>
                     <Text>{index + 1}</Text>
