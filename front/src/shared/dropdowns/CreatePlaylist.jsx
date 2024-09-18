@@ -37,21 +37,32 @@ export const CreatePlaylist = () => {
           Create Playlist
         </MenuButton>
         <MenuList
+          bg={"neutral.dark.800"}
+          border={"none"}
           fontSize={"12px"}
           fontWeight={400}
           p={"12px"}
-          color={"neutral.800"}
+          color={"neutral.dark.200"}
         >
           <Box>
             <FormControl my={"12px"}>
               <FormLabel fontSize={"12px"}>Playlist Name</FormLabel>
               <Input
                 size={"sm"}
+                borderRadius={"6px"}
+                border={"none"}
+                bg={"neutral.dark.700"}
+                placeholder="playlist name"
+                _placeholder={{ color: "neutral.dark.200" }}
                 value={playlistName}
                 onChange={(e) => handleChange(e)}
               />
             </FormControl>
-            <DefaultButton size={"sm"} action={handleCreatePlaylist} disabled>
+            <DefaultButton
+              size={"sm"}
+              action={handleCreatePlaylist}
+              isDisabled={playlistName < 2}
+            >
               create
             </DefaultButton>
           </Box>

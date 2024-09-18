@@ -23,7 +23,7 @@ import { CreatePlaylist } from "../dropdowns/CreatePlaylist";
 import colors from "../../themes/colors";
 import { DefaultButton } from "../bottons";
 import { useState } from "react";
-import { TbDots } from "react-icons/tb";
+import { TbDots, TbTrashFilled } from "react-icons/tb";
 import { BsCassetteFill } from "react-icons/bs";
 
 export const Playlists = () => {
@@ -77,9 +77,14 @@ export const Playlists = () => {
                 display={"flex"}
                 alignItems={"center"}
                 width={"100%"}
+                borderRadius={"4px"}
                 justifyContent={"space-between"}
+                _hover={{ bg: "neutral.dark.700" }}
+                p={"6px"}
               >
                 <Box
+                  width={"100%"}
+                  height={"100%"}
                   onClick={() => handleSetActivePlaylist(playlist)}
                   display={"flex"}
                   alignItems={"center"}
@@ -104,7 +109,7 @@ const ConfirmationMoadal = ({ action }) => {
   return (
     <>
       <Icon
-        as={TbDots}
+        as={TbTrashFilled}
         boxSize={4}
         onClick={(e) => {
           setModalPosition({ x: e.pageX, y: e.pageY });
@@ -112,12 +117,14 @@ const ConfirmationMoadal = ({ action }) => {
         }}
       />
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay>
+        <ModalOverlay bg={"none"}>
           <ModalContent
             pos={"absolute"}
             top={modalPosition.y}
             left={modalPosition.x}
             m={0}
+            bg={"neutral.dark.700"}
+            color={"neutral.dark.200"}
             fontSize={"14px"}
             width={"350px"}
           >

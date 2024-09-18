@@ -64,12 +64,21 @@ export const MusicDropdown = ({ audio }) => {
             left={modalPosition.x - 200}
             m={0}
             width={"200px"}
+            bg={"neutral.dark.800"}
+            color={"neutral.dark.200"}
           >
-            <ModalBody p={"12px"} fontSize={"14px"}>
-              <Box p={"6px"}>
+            <ModalBody px={"6px"} fontSize={"14px"}>
+              <Box
+                p={"8px"}
+                _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
+                borderRadius={"6px"}
+              >
                 <Text>add to queue</Text>
               </Box>
-              <Box p={"6px"}>
+              <Box
+                _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
+                borderRadius={"6px"}
+              >
                 <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
               </Box>
               {currentTab === "playlist" && (
@@ -99,15 +108,32 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
   return (
     <>
       <Menu>
-        <MenuButton onClick={handleOpen}>add to playlist</MenuButton>
-        <MenuList>
+        <MenuButton
+          onClick={handleOpen}
+          p={"8px"}
+          height={"100%"}
+          width={"full"}
+          textAlign={"left"}
+        >
+          add to playlist
+        </MenuButton>
+        <MenuList bg={"neutral.dark.800"} border={"none"} p={"6px"}>
           <CreatePlaylist />
-          {playlists.response &&
-            playlists.response.map((item) => (
-              <MenuItem key={item} onClick={() => handleAddToPlaylist(item)}>
-                {item}
-              </MenuItem>
-            ))}
+          <Box mt={"8px"}>
+            {playlists.response &&
+              playlists.response.map((item) => (
+                <MenuItem
+                  px={"8px"}
+                  borderRadius={"6px"}
+                  key={item}
+                  onClick={() => handleAddToPlaylist(item)}
+                  bg={"none"}
+                  _hover={{ bg: "neutral.dark.700" }}
+                >
+                  {item}
+                </MenuItem>
+              ))}
+          </Box>
         </MenuList>
       </Menu>
     </>

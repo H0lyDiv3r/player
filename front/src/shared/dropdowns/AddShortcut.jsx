@@ -19,7 +19,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import path from "path-browserify";
-import { TbDots } from "react-icons/tb";
+import { TbDots, TbFolderPlus } from "react-icons/tb";
 
 export const AddShortcut = ({ vals }) => {
   const [shortcutName, handleSetShortcutName] = useState("");
@@ -55,7 +55,7 @@ export const AddShortcut = ({ vals }) => {
   return (
     <>
       <Icon
-        as={TbDots}
+        as={TbFolderPlus}
         boxSize={4}
         _hover={{ cursor: "pointer" }}
         onClick={(e) => {
@@ -64,19 +64,27 @@ export const AddShortcut = ({ vals }) => {
         }}
       />
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay>
+        <ModalOverlay bg={"none"}>
           <ModalContent
             pos={"absolute"}
             top={modalPosition.y}
             left={modalPosition.x}
+            bg={"neutral.dark.700"}
             m={0}
             width={"250px"}
+            color={"neutral.dark.100"}
           >
             <Box p={"12px"}>
               <FormControl my={"12px"}>
                 <FormLabel fontSize={"12px"}>Shortcut Name</FormLabel>
                 <Input
                   size={"sm"}
+                  bg={"neutral.dark.600"}
+                  border={"none"}
+                  borderRadius={"4px"}
+                  color={"neutral.dark.100"}
+                  _placeholder={{ color: "neutral.dark.200" }}
+                  placeholder="shortcut name"
                   value={shortcutName}
                   onChange={(e) => handleChange(e)}
                 />
@@ -84,7 +92,7 @@ export const AddShortcut = ({ vals }) => {
               <DefaultButton
                 size={"sm"}
                 action={() => handleCreateShortcut(vals)}
-                disabled
+                isDisabled={shortcutName.length < 2}
               >
                 create
               </DefaultButton>

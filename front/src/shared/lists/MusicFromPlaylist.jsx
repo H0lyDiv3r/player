@@ -47,7 +47,9 @@ export const MusicFromPlaylist = forwardRef(function MusicFromPlaylist(
               key={index}
               display={"grid"}
               gridTemplateColumns={"10fr 2fr"}
-              _hover={{ bg: "trans.200" }}
+              _hover={{ bg: "neutral.dark.800" }}
+              borderRadius={"6px"}
+              px={"6px"}
               onMouseOver={() => setSelected(index)}
               onMouseLeave={() => setSelected(null)}
             >

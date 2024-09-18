@@ -70,7 +70,8 @@ const PlaybackRateControl = forwardRef(
             ))}
 
             <MenuList
-              bg={"neutral.light.200"}
+              bg={"neutral.dark.800"}
+              border={"none"}
               minW={0}
               width={"70px"}
               p={"4px"}

@@ -35,6 +35,7 @@ export const Layout = () => {
       <GridItem
         ref={containerRef}
         rowSpan={10}
+        overflow={"hidden"}
         display={"grid"}
         gridTemplateColumns={"300px 1fr"}
       >
@@ -59,7 +60,7 @@ export const Layout = () => {
               {currentTab === "directory" ? (
                 <MusicFromDirectoryList
                   list={activeList.list}
-                  ref={listContainerRef}
+                  ref={containerRef}
                 />
               ) : (
                 <MusicFromPlaylist

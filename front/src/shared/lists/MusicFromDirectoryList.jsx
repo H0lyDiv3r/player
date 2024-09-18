@@ -41,7 +41,7 @@ export const MusicFromDirectoryList = forwardRef(
         <List
           itemCount={list.length}
           itemSize={42}
-          height={height - 32}
+          height={height}
           width={"100%"}
         >
           {({ index, style }) => {
