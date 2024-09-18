@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import Player from "../shared/player/Player";
 import PlayerContextProvider from "../shared/player/PlayerContextProvider";
 import { GlobalContext } from "../store/GlobalContextProvider";
@@ -23,20 +23,20 @@ export const Layout = () => {
     // console.log("plaplaplaplaplaplap", activePlaylist);
   }, [activeList, queue]);
   return (
-    <Box
+    <Grid
       bg={"neutral.dark.900"}
       w={"100%"}
       height={"100vh"}
       fontSize={"14px"}
+      templateRows={"repeat(12,1fr)"}
       // display={"grid"}
       // gridTemplateRows={"85% 1fr"}
     >
-      <Box
+      <GridItem
+        ref={containerRef}
+        rowSpan={10}
         display={"grid"}
         gridTemplateColumns={"300px 1fr"}
-        w={"100%"}
-        height={"85%"}
-        ref={containerRef}
       >
         <Box
           height={
@@ -71,13 +71,15 @@ export const Layout = () => {
           </Box>
           <Box></Box>
         </Box>
-      </Box>
-
-      <Box height={"15%"}>
+      </GridItem>
+      <GridItem rowSpan={2}>
         <PlayerContextProvider>
           <Player />
         </PlayerContextProvider>
-      </Box>
-    </Box>
+      </GridItem>
+    </Grid>
   );
 };
+// <Box height={"15%"}>
+
+// </Box>

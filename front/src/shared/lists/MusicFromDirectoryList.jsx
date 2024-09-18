@@ -66,7 +66,7 @@ export const MusicFromDirectoryList = forwardRef(
                   fontSize={"12px"}
                   color={
                     index === indexOfCurrentTrack
-                      ? "brand.500"
+                      ? "brand.400"
                       : "neutral.dark.100"
                   }
                 >

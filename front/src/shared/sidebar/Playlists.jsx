@@ -24,6 +24,7 @@ import colors from "../../themes/colors";
 import { DefaultButton } from "../bottons";
 import { useState } from "react";
 import { TbDots } from "react-icons/tb";
+import { BsCassetteFill } from "react-icons/bs";
 
 export const Playlists = () => {
   const [playlists] = useRequest();
@@ -81,8 +82,9 @@ export const Playlists = () => {
                 <Box
                   onClick={() => handleSetActivePlaylist(playlist)}
                   display={"flex"}
+                  alignItems={"center"}
                 >
-                  <Icon as={FaRecordVinyl} mr={"6px"} />
+                  <Icon as={BsCassetteFill} mr={"12px"} />
                   <Text>{playlist}</Text>
                 </Box>
                 <ConfirmationMoadal

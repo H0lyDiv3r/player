@@ -130,7 +130,7 @@ export const Directories = () => {
                     alignItems={"center"}
                     justifyContent={"center"}
                   >
-                    <Icon as={FaFolder} mr={"6px"} />
+                    <Icon as={FaFolder} mr={"12px"} />
                     <Text>{dir.name}</Text>
                   </Box>
                   <Icon
