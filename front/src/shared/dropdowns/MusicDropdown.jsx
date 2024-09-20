@@ -20,15 +20,24 @@ import { GlobalContext } from "../../store/GlobalContextProvider";
 import { CreatePlaylist } from "./CreatePlaylist";
 import { useState } from "react";
 import { TbDots } from "react-icons/tb";
+import { useShowToast } from "../../hooks/useShowToast";
 
 export const MusicDropdown = ({ audio }) => {
-  const { activePlaylist, currentTab } = useContext(GlobalContext);
+  const { activePlaylist, currentTab, handleSetActivePlaylist } =
+    useContext(GlobalContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [showToast] = useShowToast();
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const handleAddtoPlaylist = (playlist) => {
-    api.post("/playlist/addToPlaylist", { ...audio, playlist }).then((res) => {
-      console.log(res.data);
-    });
+    api
+      .post("/playlist/addToPlaylist", { ...audio, playlist })
+      .then((res) => {
+        showToast("success", "added to playlist");
+      })
+      .catch(() => {
+        showToast("error", "failed to add to playlist");
+      });
   };
   const handleRemoveFromPlaylist = (track) => {
     api
@@ -39,9 +48,14 @@ export const MusicDropdown = ({ audio }) => {
         },
       })
       .then((res) => {
-        console.log("removed", res.data);
+        showToast("success", "removed from playlist");
+        handleSetActivePlaylist(activePlaylist.active);
+      })
+      .catch(() => {
+        showToast("success", "failed to remove");
       });
   };
+
   return (
     <>
       <Button
@@ -99,6 +113,18 @@ export const MusicDropdown = ({ audio }) => {
 const PlaylistMenu = ({ handleAddToPlaylist }) => {
   const [playlists] = useRequest();
 
+  const [showToast] = useShowToast();
+  const handleCreatePlaylist = (playlistName) => {
+    api
+      .post("/playlist/createPlaylist", { name: playlistName })
+      .then(() => {
+        showToast("success", "created playlist");
+      })
+      .catch(() => {
+        showToast("error", "failed to create playlist");
+      });
+    console.log("hanele", playlistName);
+  };
   const { onOpen } = useDisclosure();
 
   const handleOpen = () => {
@@ -118,7 +144,7 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
           add to playlist
         </MenuButton>
         <MenuList bg={"neutral.dark.800"} border={"none"} p={"6px"}>
-          <CreatePlaylist />
+          <CreatePlaylist action={handleCreatePlaylist} />
           <Box mt={"8px"}>
             {playlists.response &&
               playlists.response.map((item) => (

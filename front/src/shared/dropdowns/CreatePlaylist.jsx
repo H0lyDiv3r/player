@@ -5,26 +5,20 @@ import {
   Input,
   Menu,
   MenuButton,
+  MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { api } from "../../utils";
-import { DefaultButton } from "../bottons";
 import { useState } from "react";
 
-export const CreatePlaylist = () => {
-  const [playlistName, handleSetPlaylistName] = useState("");
+export const CreatePlaylist = ({ action }) => {
+  const [playlistName, SetPlaylistName] = useState("");
   const handleChange = (e) => {
-    handleSetPlaylistName(e.target.value);
+    SetPlaylistName(e.target.value);
   };
-  const handleCreatePlaylist = () => {
-    api
-      .post("/playlist/createPlaylist", { name: playlistName })
-      .then((res) => console.log(res));
-    console.log("hanele", playlistName);
-  };
+
   return (
     <>
-      <Menu placement="auto">
+      <Menu placement="auto" onClose={() => SetPlaylistName("")}>
         <MenuButton
           minWidth={"100%"}
           fontSize={"14px"}
@@ -58,14 +52,17 @@ export const CreatePlaylist = () => {
                 onChange={(e) => handleChange(e)}
               />
             </FormControl>
-            <DefaultButton
-              size={"sm"}
-              action={handleCreatePlaylist}
-              isDisabled={playlistName < 2}
-            >
-              create
-            </DefaultButton>
           </Box>
+          <MenuItem
+            onClick={() => action(playlistName)}
+            isDisabled={playlistName < 2}
+            bg={"brand.500"}
+            justifyContent={"center"}
+            borderRadius={"6px"}
+            fontSize={"14px"}
+          >
+            create
+          </MenuItem>
         </MenuList>
       </Menu>
     </>

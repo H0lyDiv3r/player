@@ -65,11 +65,13 @@ export const MusicFromPlaylist = forwardRef(function MusicFromPlaylist(
                 <Box>
                   <Text>{index + 1}</Text>
                 </Box>
-                <Box>
-                  <Text my={0} fontWeight={500}>
+                <Box overflow={"hidden"}>
+                  <Text my={0} fontWeight={500} whiteSpace={"nowrap"}>
                     {list[index].title || list[index].name}
                   </Text>
-                  <Text color={"gray"}>{list[index].artist || "unknown"}</Text>
+                  <Text color={"gray"} whiteSpace={"nowrap"}>
+                    {list[index].artist || "unknown"}
+                  </Text>
                 </Box>
                 <Box>
                   <Text>{list[index].album || "unknown"}</Text>

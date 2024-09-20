@@ -45,14 +45,14 @@ export const playlistControllers = {
     }
 
     if (Object.keys(JSON.parse(data)).includes(req.body.name)) {
-      res.status(500).json({ message: "already exists" });
+      return res.status(500).json({ message: "already exists" });
     }
     let playlists = JSON.parse(data);
     playlists[req.body.name] = [];
 
     await createFile("playlists", JSON.stringify(playlists));
     // await fs.writeFile(playlistPath, JSON.stringify(playlists));
-    res.send(playlists);
+    res.send(Object.keys(playlists));
   },
   addToPlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
@@ -87,7 +87,6 @@ export const playlistControllers = {
     playlists[req.query.name] = playlists[req.query.name].filter(
       (item) => item.path != req.query.path,
     );
-    await fs.writeFile(playlistPath, JSON.stringify(playlists));
 
     await createFile("playlists", JSON.stringify(playlists));
     res.send(playlists);
@@ -110,6 +109,6 @@ export const playlistControllers = {
 
     await createFile("playlists", JSON.stringify(playlists));
     // await fs.writeFile(playlistPath, JSON.stringify(playlists));
-    res.send(playlists);
+    res.send(Object.keys(playlists));
   },
 };

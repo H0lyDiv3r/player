@@ -25,9 +25,12 @@ import { DefaultButton } from "../bottons";
 import { useState } from "react";
 import { TbDots, TbTrashFilled } from "react-icons/tb";
 import { BsCassetteFill } from "react-icons/bs";
+import { useShowToast } from "../../hooks/useShowToast";
 
 export const Playlists = () => {
-  const [playlists] = useRequest();
+  const [playlistsReq] = useRequest();
+  const [showToast] = useShowToast();
+  const [playlists, setPlaylists] = useState([]);
   const { handleSetActivePlaylist, activePlaylist } = useContext(GlobalContext);
   const handleDeletePlaylist = (playlist) => {
     api
@@ -37,26 +40,41 @@ export const Playlists = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        setPlaylists(res.data);
+        showToast("success", "deleted playlist");
+      })
+      .catch(() => {
+        showToast("error", "failed to delete a playlist");
       });
-    console.log("deleting");
   };
-
+  const handleCreatePlaylist = (playlistName) => {
+    api
+      .post("/playlist/createPlaylist", { name: playlistName })
+      .then((res) => {
+        showToast("success", "created playlist");
+        setPlaylists(res.data);
+      })
+      .catch(() => {
+        showToast("error", "failed to create playlist");
+      });
+    console.log("hanele", playlistName);
+  };
   useEffect(() => {
-    playlists.request("/playlist/getPlaylists", "GET");
+    playlistsReq.request("/playlist/getPlaylists", "GET").then((res) => {
+      setPlaylists(res.data);
+      console.log("i am here showing dara", res.data);
+    });
   }, []);
   useEffect(() => {
-    if (!activePlaylist.name === "") {
-      api
-        .get("/playlist/getPlaylist", {
-          params: {
-            name: activePlaylist.name,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        });
-    }
+    api
+      .get("/playlist/getPlaylist", {
+        params: {
+          name: activePlaylist.name,
+        },
+      })
+      .then((res) => {
+        console.log("i said laaaaaaaaaaaaaaaaand ho", res.data);
+      });
   }, [activePlaylist]);
   return (
     <Grid
@@ -64,14 +82,15 @@ export const Playlists = () => {
       fontSize={"14px"}
       fontWeight={400}
       color={"neutral.dark.100"}
+      height={"100%"}
     >
-      <GridItem rowSpan={2}>
-        <CreatePlaylist />
+      <GridItem rowSpan={1}>
+        <CreatePlaylist action={handleCreatePlaylist} />
       </GridItem>
-      <GridItem rowSpan={10}>
-        <Box mt={"12px"}>
-          {playlists.response &&
-            playlists.response.map((playlist) => (
+      <GridItem rowSpan={11}>
+        <Box height={"100%"} overflow={"scroll"} mt={"12px"}>
+          {playlists &&
+            playlists.map((playlist) => (
               <Box
                 key={playlist}
                 display={"flex"}
@@ -110,6 +129,7 @@ const ConfirmationMoadal = ({ action }) => {
     <>
       <Icon
         as={TbTrashFilled}
+        _hover={{ cursor: "pointer" }}
         boxSize={4}
         onClick={(e) => {
           setModalPosition({ x: e.pageX, y: e.pageY });

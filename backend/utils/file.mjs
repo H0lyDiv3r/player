@@ -144,12 +144,13 @@ export const createFile = async (
   extension = ".json",
   url = files,
 ) => {
-  let title = `${name}${new Date().valueOf()}${extension}`;
+  let title = `${name}${new Date().valueOf()}.tmp`;
   const file = path.join(url, title);
   try {
     await fs.writeFile(file, content);
     await fs.rename(file, path.join(files, `${name}${extension}`));
+    return "success";
   } catch (error) {
-    res.status(500).json({ message: "failed to write file" });
+    return { message: "failed to write file" };
   }
 };

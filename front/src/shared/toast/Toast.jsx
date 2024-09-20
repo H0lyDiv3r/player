@@ -48,7 +48,7 @@ export const Toast = forwardRef(function Toast(
     return () => clearTimeout(timer);
   }, [onClose]);
   useEffect(() => {
-    setWidth(ref.current.offsetWidth / 2 - 175);
+    setWidth(ref.current.offsetWidth / 2 - 150);
   }, []);
   return (
     <MotionBox
@@ -58,8 +58,7 @@ export const Toast = forwardRef(function Toast(
       transition={{
         delay: 0.2,
         duration: 0.2,
-        type: "spring",
-        stiffness: 130,
+        ease: "easeIn",
       }}
       bg={bg[data.status]}
       // bgImage={`linear-gradient(145deg,${bg[data.status]},${lights[data.status]})`}
@@ -67,40 +66,29 @@ export const Toast = forwardRef(function Toast(
       pos={"absolute"}
       bottom={"15%"}
       left={width}
-      width={"350px"}
+      width={"300px"}
       p={"16px"}
       borderRadius={"16px"}
       display={"grid"}
       gridTemplateColumns={"70px 4fr 20px"}
+      alignItems={"center"}
       fontSize={"14px"}
     >
       <Box>
         <Box
           bg={darks[data.status]}
-          width={"50px"}
-          height={"50px"}
-          borderRadius={"50px"}
           display={"flex"}
+          borderRadius={"50px"}
           justifyContent={"center"}
           alignItems={"center"}
-          pos={"absolute"}
-          top={"-25%"}
-          left={0}
+          p={"5px"}
+          width={"fit-content"}
         >
           <Icon as={icons[data.status]} boxSize={5} />
         </Box>
       </Box>
-      <Box>
-        <Box>
-          <Text fontSize={"20px"}>{data.status}</Text>
-        </Box>
-        <Box>
-          <Text>{data.message}</Text>
-        </Box>
-      </Box>
-      <Box>
-        <Icon as={IoClose} boxSize={5} onClick={() => onClose()} />
-      </Box>
+      <Text>{data.message}</Text>
+      <Icon as={IoClose} boxSize={5} onClick={() => onClose()} />
     </MotionBox>
   );
 });

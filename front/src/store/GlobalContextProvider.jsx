@@ -195,6 +195,7 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleSetActivePlaylist = (name) => {
+    console.log("setting");
     playlist
       .request("/playlist/getPlaylist", "GET", {
         name: name,

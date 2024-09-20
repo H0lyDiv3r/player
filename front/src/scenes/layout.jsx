@@ -55,7 +55,7 @@ export const Layout = () => {
           gridTemplateColumns={"1fr 300px"}
         >
           <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
-            <Box></Box>
+            <Box>{activePlaylist.active}</Box>
             <Box ref={listContainerRef} px={"12px"}>
               {currentTab === "directory" ? (
                 <MusicFromDirectoryList
