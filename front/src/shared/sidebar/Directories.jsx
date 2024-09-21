@@ -114,7 +114,7 @@ export const Directories = () => {
         </Box>
       </GridItem>
       <GridItem rowSpan={9}>
-        <Box height={"100%"} overflow={"hidden"}>
+        <Box overflow={"scroll"} height={"100%"}>
           {dirs.response &&
             dirs.response.map((dir, idx) => (
               <Box key={idx} height={"100%"}>

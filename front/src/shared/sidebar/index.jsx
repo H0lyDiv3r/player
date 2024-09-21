@@ -27,7 +27,7 @@ export const Sidebar = () => {
       fontSize={"12px"}
     >
       <GridItem rowSpan={3}>
-        <Box height={"100%"} bg={"black"}>
+        <Box height={"100%"}>
           <Box py={"6px"}>
             <Text>Name and logo</Text>
           </Box>

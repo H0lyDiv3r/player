@@ -39,7 +39,7 @@ export const Layout = () => {
         display={"grid"}
         gridTemplateColumns={"300px 1fr"}
       >
-        <Box px={"12px"} pt={"12px"}>
+        <Box px={"12px"} pt={"12px"} overflow={"scroll"}>
           <Sidebar />
         </Box>
         <Box

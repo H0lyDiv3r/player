@@ -10,4 +10,6 @@ router.get("/getDirs", dirControllers.getDirs);
 
 router.get("/getFromDir", dirControllers.getFromDir);
 
+router.delete("/removeDir", dirControllers.removeDir);
+
 export default router;

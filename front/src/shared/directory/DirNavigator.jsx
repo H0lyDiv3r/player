@@ -28,7 +28,7 @@ export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dir, setDir] = useState([{ name: "", type: "dir" }]);
   const [selected, setSelected] = useState();
-  const [toBeScanned, setToBeScanned] = useState();
+  const [toBeScanned, setToBeScanned] = useState("");
   const [showToast] = useShowToast();
   const { filePath, url, handleAddPath, handlePopPath, handleSetPath } =
     useContext(GlobalContext);
@@ -136,7 +136,7 @@ export const DirNavigator = () => {
                 ))}
               </Box>
             </Box>
-            <Box overflow={"scroll"} height={"100%"}>
+            <Box overflow={"scroll"} height={"100%"} my={"4px"}>
               {dir.map((item, idx) => (
                 <Box
                   key={idx}
@@ -147,8 +147,8 @@ export const DirNavigator = () => {
                   justifyContent={"space-between"}
                   onMouseOver={() => setSelected(idx)}
                   onMouseLeave={() => setSelected(null)}
-                  _hover={{ cursor: "pointer", color: "blue" }}
-                  bg={toBeScanned === item.name && "red"}
+                  _hover={{ cursor: "pointer", color: "brand.500" }}
+                  bg={toBeScanned === item.name && "neutral.dark.700"}
                 >
                   <Box
                     onDoubleClick={() => handleAddPath(item.name)}
@@ -160,16 +160,16 @@ export const DirNavigator = () => {
                     <Icon as={FaFolder} mr={"8px"} />
                     <Text>{item.name}</Text>
                   </Box>
-                  {selected === idx && (
-                    <Icon
-                      as={FaFolderPlus}
-                      boxSize={4}
-                      onClick={() => handleScan(item.name)}
-                    />
-                  )}
                 </Box>
               ))}
-              <Button onClick={() => handleScan(toBeScanned)}>aaa</Button>
+            </Box>
+            <Box mt={"4px"}>
+              <DefaultButton
+                action={() => handleScan(toBeScanned)}
+                isDisabled={toBeScanned === ""}
+              >
+                scan
+              </DefaultButton>
             </Box>
           </ModalBody>
         </ModalContent>

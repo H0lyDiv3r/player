@@ -66,6 +66,16 @@ export const dirControllers = {
         res.status(500).json({ message: "failed to scan directory" });
       });
   },
+  removeDir: async (req, res) => {
+    const dirPath = path.join(root, req.query.dir || "");
+    const jsonFilePath = path.join(files, directoryFile);
+
+    if (!(await fileType.checkFileHealth(jsonFilePath))) {
+      await createFile("dir", JSON.stringify({}));
+    }
+    await createFile("dir", JSON.stringify({}));
+    res.send({});
+  },
   getDirs: async (req, res) => {
     const chain = req.query.url
       ? req.query.url.split("/").slice(1).slice(0, -1)
