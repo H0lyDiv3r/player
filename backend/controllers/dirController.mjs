@@ -71,6 +71,9 @@ export const dirControllers = {
       ? req.query.url.split("/").slice(1).slice(0, -1)
       : [];
     const jsonFilePath = path.join(files, directoryFile);
+    if (!(await fileType.checkFileHealth(jsonFilePath))) {
+      await createFile("dir", JSON.stringify({}));
+    }
     let data = await fs.readFile(jsonFilePath, "utf8");
     if (!data) {
       res.status(500).json({ message: "failed to read data" });
@@ -95,6 +98,9 @@ export const dirControllers = {
   getFromDir: async (req, res) => {
     const dirPath = path.join(root, req.query.dir || "");
     const jsonFilePath = path.join(files, directoryFile);
+    if (!(await fileType.checkFileHealth(jsonFilePath))) {
+      await createFile("dir", JSON.stringify({}));
+    }
     //TODO:check and create
     let data = await fs.readFile(jsonFilePath, "utf8");
     if (!data) {

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Icon,
   Image,
   Modal,
@@ -9,30 +10,39 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
-import { FaArrowLeft, FaFolder, FaFolderPlus } from "react-icons/fa6";
+import {
+  FaArrowLeft,
+  FaFolder,
+  FaFolderPlus,
+  FaRegFolderClosed,
+} from "react-icons/fa6";
 import { ButtonIcon, DefaultButton } from "../bottons";
-import process from "process";
 import { api } from "../../utils";
+import path from "path-browserify";
+import { useShowToast } from "../../hooks/useShowToast";
 
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [dir, setDir] = useState([{ name: "lala", type: "dir" }]);
+  const [dir, setDir] = useState([{ name: "", type: "dir" }]);
+  const [selected, setSelected] = useState();
+  const [toBeScanned, setToBeScanned] = useState();
+  const [showToast] = useShowToast();
   const { filePath, url, handleAddPath, handlePopPath, handleSetPath } =
     useContext(GlobalContext);
 
-  const handleScan = () => {
-    console.log("scannig", filePath);
+  const handleScan = (folder) => {
+    console.log("scannig", path.join(filePath, folder));
     api
       .get(`dir/addDir`, {
         params: {
-          dir: filePath,
+          dir: path.join(filePath, folder, "/"),
         },
       })
       .then((res) => {
+        showToast("success", "added directory");
         console.log(res);
       });
   };
@@ -60,31 +70,21 @@ export const DirNavigator = () => {
           minWidth={"600px"}
           maxWidth={"700px"}
           height={"95%"}
-          // bg={"transparent"}
-          // bgImage={
-          //   "linear-gradient(150deg,rgba(255,255,255,0.2),rgba(0,0,0,0.2))"
-          // }
-
+          bg={"neutral.dark.800"}
           fontSize={"14px"}
-          bg={"white"}
-          backdropFilter={"auto"}
-          backdropBlur={"12px"}
-          borderColor={"neutral.700"}
-          borderStyle={"solid"}
-          borderWidth={"1px"}
           my={"1%"}
           py={"12px"}
           borderRadius={"12px"}
         >
           {/* <ModalCloseButton /> */}
           <ModalBody
-            color={"neutral.300"}
+            color={"neutral.dark.300"}
             height={"100%"}
             display={"flex"}
             flexDir={"column"}
           >
             <Box width={"100%"} p={"6px"}>
-              <Text>Files</Text>
+              <Text>Quick access</Text>
             </Box>
             <Box
               width={"100%"}
@@ -109,17 +109,12 @@ export const DirNavigator = () => {
                 <Text>Downloads</Text>
               </Box>
             </Box>
-            <Box>
-              <Text>Directories</Text>
-              <DefaultButton onClick={handleScan}>scan</DefaultButton>
-            </Box>
             <Box
               my={"6px"}
               display={"flex"}
               alignItems={"center"}
-              borderY={`solid 1px black`}
-              py={"2px"}
-              bg={"trans.100"}
+              py={"6px"}
+              bg={"neutral.dark.700"}
               borderRadius={"4px"}
             >
               <Icon
@@ -145,18 +140,36 @@ export const DirNavigator = () => {
               {dir.map((item, idx) => (
                 <Box
                   key={idx}
-                  p={"4px"}
-                  // bg={"trans.200"}
-                  onClick={() => handleAddPath(item.name)}
+                  p={"8px"}
                   borderRadius={"4px"}
                   display={"flex"}
                   alignItems={"center"}
-                  _hover={{ cursor: "pointer", bg: "trans.600" }}
+                  justifyContent={"space-between"}
+                  onMouseOver={() => setSelected(idx)}
+                  onMouseLeave={() => setSelected(null)}
+                  _hover={{ cursor: "pointer", color: "blue" }}
+                  bg={toBeScanned === item.name && "red"}
                 >
-                  <Icon as={FaFolder} mr={"8px"} />
-                  <Text>{item.name}</Text>
+                  <Box
+                    onDoubleClick={() => handleAddPath(item.name)}
+                    onClick={() => setToBeScanned(item.name)}
+                    display={"flex"}
+                    alignItems={"center"}
+                    width={"full"}
+                  >
+                    <Icon as={FaFolder} mr={"8px"} />
+                    <Text>{item.name}</Text>
+                  </Box>
+                  {selected === idx && (
+                    <Icon
+                      as={FaFolderPlus}
+                      boxSize={4}
+                      onClick={() => handleScan(item.name)}
+                    />
+                  )}
                 </Box>
               ))}
+              <Button onClick={() => handleScan(toBeScanned)}>aaa</Button>
             </Box>
           </ModalBody>
         </ModalContent>
@@ -164,3 +177,5 @@ export const DirNavigator = () => {
     </>
   );
 };
+
+// <DefaultButton onClick={handleScan}>scan</DefaultButton>

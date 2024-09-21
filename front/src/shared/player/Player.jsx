@@ -42,23 +42,22 @@ export default function Player() {
   const MotionBox = motion(Box);
   useEffect(() => {
     if (currentTrack) {
-      jsmediatags.read(
-        `${import.meta.env.VITE_BASE_URL}/${currentTrack.path}`,
-        {
-          onSuccess: (tags) => {
-            if (tags.tags.picture) {
-              let byteCode = tags.tags.picture.data;
-              let base64String = btoa(String.fromCharCode(...byteCode));
-              handleSetCurrentTrackImage(base64String);
-            } else {
-              handleSetCurrentTrackImage(null);
-            }
-          },
-          onError: (error) => {
-            console.log(error);
-          },
+      const trackName = `${import.meta.env.VITE_BASE_URL}${currentTrack.path}`;
+
+      jsmediatags.read(trackName, {
+        onSuccess: (tags) => {
+          if (tags.tags.picture) {
+            let byteCode = tags.tags.picture.data;
+            let base64String = btoa(String.fromCharCode(...byteCode));
+            handleSetCurrentTrackImage(base64String);
+          } else {
+            handleSetCurrentTrackImage(null);
+          }
         },
-      );
+        onError: (error) => {
+          console.log(error);
+        },
+      });
     }
     console.log("loding loading loadlong", currentTrack);
   }, [loaded]);

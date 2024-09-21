@@ -39,13 +39,7 @@ export const Layout = () => {
         display={"grid"}
         gridTemplateColumns={"300px 1fr"}
       >
-        <Box
-          height={
-            containerRef.current ? containerRef.current.offsetHeight : "100%"
-          }
-          px={"12px"}
-          pt={"12px"}
-        >
+        <Box px={"12px"} pt={"12px"}>
           <Sidebar />
         </Box>
         <Box
@@ -56,17 +50,11 @@ export const Layout = () => {
         >
           <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
             <Box>{activePlaylist.active}</Box>
-            <Box ref={listContainerRef} px={"12px"}>
+            <Box px={"12px"} overflow={"scroll"} height={"100%"}>
               {currentTab === "directory" ? (
-                <MusicFromDirectoryList
-                  list={activeList.list}
-                  ref={containerRef}
-                />
+                <MusicFromDirectoryList list={activeList.list} />
               ) : (
-                <MusicFromPlaylist
-                  list={activePlaylist.list}
-                  ref={listContainerRef}
-                />
+                <MusicFromPlaylist list={activePlaylist.list} />
               )}
             </Box>
           </Box>

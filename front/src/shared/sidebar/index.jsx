@@ -26,57 +26,61 @@ export const Sidebar = () => {
       gap={"12px"}
       fontSize={"12px"}
     >
-      <GridItem rowSpan={3} bg={"none"}>
-        <Box py={"6px"}>
-          <Text>Name and logo</Text>
-        </Box>
-        <Box
-          fontSize={"12px"}
-          bg={"neutral.dark.800"}
-          borderRadius={"6px"}
-          display={"grid"}
-          gridTemplateColumns={"1fr 1fr 1fr"}
-          width={"100%"}
-          p={"4px"}
-        >
-          <Box
-            onClick={() => handleSetTab("directory")}
-            bg={tab === "directory" ? "neutral.dark.200" : "none"}
-            color={
-              tab === "directory" ? "neutral.dark.800" : "neutral.dark.200"
-            }
-            py={"6px"}
-            borderRadius={"6px"}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-          >
-            <Icon as={TbHome} boxSize={5} />
+      <GridItem rowSpan={3}>
+        <Box height={"100%"} bg={"black"}>
+          <Box py={"6px"}>
+            <Text>Name and logo</Text>
           </Box>
           <Box
-            onClick={() => handleSetTab("playlist")}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            py={"6px"}
-            bg={tab === "playlist" ? "neutral.dark.200" : "none"}
-            color={tab === "playlist" ? "neutral.dark.800" : "neutral.dark.200"}
+            fontSize={"12px"}
+            bg={"neutral.dark.800"}
             borderRadius={"6px"}
+            display={"grid"}
+            gridTemplateColumns={"1fr 1fr 1fr"}
+            width={"100%"}
+            p={"4px"}
           >
-            <Icon as={TbPlaylist} boxSize={5} />
-          </Box>
-          <Box
-            py={"6px"}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            bg={tab === "shortcuts" ? "neutral.dark.200" : "none"}
-            color={
-              tab === "shortcuts" ? "neutral.dark.800" : "neutral.dark.200"
-            }
-            borderRadius={"6px"}
-          >
-            <Icon as={TbFolderSymlink} boxSize={5} />
+            <Box
+              onClick={() => handleSetTab("directory")}
+              bg={tab === "directory" ? "neutral.dark.200" : "none"}
+              color={
+                tab === "directory" ? "neutral.dark.800" : "neutral.dark.200"
+              }
+              py={"6px"}
+              borderRadius={"6px"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <Icon as={TbHome} boxSize={5} />
+            </Box>
+            <Box
+              onClick={() => handleSetTab("playlist")}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              py={"6px"}
+              bg={tab === "playlist" ? "neutral.dark.200" : "none"}
+              color={
+                tab === "playlist" ? "neutral.dark.800" : "neutral.dark.200"
+              }
+              borderRadius={"6px"}
+            >
+              <Icon as={TbPlaylist} boxSize={5} />
+            </Box>
+            <Box
+              py={"6px"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              bg={tab === "shortcuts" ? "neutral.dark.200" : "none"}
+              color={
+                tab === "shortcuts" ? "neutral.dark.800" : "neutral.dark.200"
+              }
+              borderRadius={"6px"}
+            >
+              <Icon as={TbFolderSymlink} boxSize={5} />
+            </Box>
           </Box>
         </Box>
       </GridItem>

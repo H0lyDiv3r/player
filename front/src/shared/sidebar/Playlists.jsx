@@ -78,17 +78,15 @@ export const Playlists = () => {
   }, [activePlaylist]);
   return (
     <Grid
-      templateRows={"repeat(12,1fr)"}
-      fontSize={"14px"}
-      fontWeight={400}
-      color={"neutral.dark.100"}
       height={"100%"}
+      templateRows={"repeat(12,1fr)"}
+      color={"neutral.dark.200"}
     >
-      <GridItem rowSpan={1}>
+      <GridItem rowSpan={2}>
         <CreatePlaylist action={handleCreatePlaylist} />
       </GridItem>
-      <GridItem rowSpan={11}>
-        <Box height={"100%"} overflow={"scroll"} mt={"12px"}>
+      <GridItem rowSpan={10} display={"grid"}>
+        <Box overflow={"scroll"} mt={"12px"}>
           {playlists &&
             playlists.map((playlist) => (
               <Box
