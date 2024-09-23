@@ -9,7 +9,7 @@ export const playlistControllers = {
   getPlaylists: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
     if (!(await fileType.checkFileHealth(playlistPath))) {
-      res.status(400).json({ message: "you dont have any playlists" });
+      await createFile("playlists", JSON.stringify({ favorites: [] }));
     }
     let data = await fs.readFile(playlistPath, "utf8");
     if (!data) {
@@ -21,7 +21,7 @@ export const playlistControllers = {
   getPlaylist: async (req, res) => {
     const playlistPath = path.join(files, playlistFile);
     if (!(await fileType.checkFileHealth(playlistPath))) {
-      res.status(400).json({ message: "you dont have any playlists" });
+      await createFile("playlists", JSON.stringify({ favorites: [] }));
     }
     let data = await fs.readFile(playlistPath, "utf8");
     if (!data) {
@@ -34,7 +34,7 @@ export const playlistControllers = {
     const playlistPath = path.join(files, playlistFile);
     if (!(await fileType.checkFileHealth(playlistPath))) {
       //fix
-      await createFile("playlists", JSON.stringify({}));
+      await createFile("playlists", JSON.stringify({ favorites: [] }));
       //   await fs
       //     .writeFile(playlistPath, JSON.stringify({}))
       //     .catch(() => res.status(500).json({ message: "failed to write" }));
@@ -65,9 +65,13 @@ export const playlistControllers = {
     }
     let playlists = JSON.parse(data);
     if (!playlists[req.body.playlist]) {
-      res.status(500).json({ message: "Playlist doenst exist" });
+      return res.status(500).json({ message: "Playlist doenst exist" });
     }
     let target = playlists[req.body.playlist];
+
+    if (target.some((obj) => obj["path"] === req.body.path)) {
+      return res.status(409).json({ message: "already in playlist" });
+    }
     delete req.body.playlist;
     target.push(req.body);
 

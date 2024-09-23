@@ -55,7 +55,16 @@ export const MusicDropdown = ({ audio }) => {
         showToast("success", "failed to remove");
       });
   };
-
+  const handleAddToFavourite = (track) => {
+    api
+      .post("/playlist/addToPlaylist", { ...track, playlist: "favorites" })
+      .then(() => {
+        showToast("success", "added to playlist");
+      })
+      .catch(() => {
+        showToast("error", "failed to add to playlist");
+      });
+  };
   return (
     <>
       <Button
@@ -102,6 +111,17 @@ export const MusicDropdown = ({ audio }) => {
                   </Text>
                 </Box>
               )}
+              {activePlaylist.active !== "favorites" ||
+                (currentTab !== "playlist" && (
+                  <Box
+                    p={"8px"}
+                    _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
+                    borderRadius={"6px"}
+                    onClick={() => handleAddToFavourite(audio)}
+                  >
+                    <Text>add to favorites</Text>
+                  </Box>
+                ))}
             </ModalBody>
           </ModalContent>
         </ModalOverlay>

@@ -3,15 +3,16 @@ import { useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { MusicDropdown } from "../dropdowns/MusicDropdown";
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
-import { forwardRef } from "react";
+import { Box, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { useRef } from "react";
+import { TbHeart, TbHeartFilled } from "react-icons/tb";
+import { api } from "../../utils";
+import { Playlists } from "../sidebar/Playlists";
+import { useShowToast } from "../../hooks/useShowToast";
 
 export const MusicFromDirectoryList = ({ list = [] }) => {
   const { handleSetCurrentTrack, indexOfCurrentTrack } =
     useContext(GlobalContext);
-  const [selected, setSelected] = useState(null);
-  const [height, setHeight] = useState(0);
   const heightRef = useRef();
 
   // useEffect(() => {
@@ -50,59 +51,75 @@ export const MusicFromDirectoryList = ({ list = [] }) => {
           >
             {({ index, style }) => {
               return (
-                <Box
+                <ListItem
+                  index={index}
                   style={style}
-                  key={index}
-                  display={"grid"}
-                  gridTemplateColumns={"10fr 2fr"}
-                  _hover={{ bg: "neutral.dark.800" }}
-                  onMouseOver={() => setSelected(index)}
-                  onMouseLeave={() => setSelected(null)}
-                  borderRadius={"6px"}
-                >
-                  <Box
-                    width={"full"}
-                    display={"grid"}
-                    gap={"24px"}
-                    gridTemplateColumns={"40px 6fr 5fr"}
-                    alignItems={"center"}
-                    onClick={() => handleSetCurrentTrack(index)}
-                    fontSize={"12px"}
-                    color={
-                      index === indexOfCurrentTrack
-                        ? "brand.400"
-                        : "neutral.dark.100"
-                    }
-                  >
-                    <Box>
-                      <Text>{index + 1}</Text>
-                    </Box>
-                    <Box overflow={"hidden"}>
-                      <Text my={0} fontWeight={500} whiteSpace={"nowrap"}>
-                        {list[index].title || list[index].name}
-                      </Text>
-                      <Text whiteSpace={"nowrap"} color={"gray"}>
-                        {list[index].artist || "unknown"}
-                      </Text>
-                    </Box>
-                    <Box overflow={"hidden"}>
-                      <Text whiteSpace={"nowrap"}>
-                        {list[index].album || "unknown"}
-                      </Text>
-                    </Box>
-                  </Box>
-
-                  <Box>
-                    {selected === index && (
-                      <MusicDropdown audio={list[index]} />
-                    )}
-                  </Box>
-                </Box>
+                  list={list}
+                  action={handleSetCurrentTrack}
+                  indexOfCurrentTrack={indexOfCurrentTrack}
+                />
               );
             }}
           </List>
         </Box>
       </GridItem>
     </Grid>
+  );
+};
+
+export const ListItem = ({
+  index,
+  style,
+  list = [],
+  action,
+  indexOfCurrentTrack,
+}) => {
+  const [selected, setSelected] = useState("");
+
+  return (
+    <>
+      <Box
+        style={style}
+        key={index}
+        display={"grid"}
+        gridTemplateColumns={"10fr 2fr"}
+        _hover={{ bg: "neutral.dark.800" }}
+        onMouseOver={() => setSelected(index)}
+        onMouseLeave={() => setSelected(null)}
+        borderRadius={"6px"}
+      >
+        <Box
+          width={"full"}
+          display={"grid"}
+          gap={"24px"}
+          gridTemplateColumns={"40px 6fr 5fr"}
+          alignItems={"center"}
+          onClick={() => action(index)}
+          fontSize={"12px"}
+          color={
+            index === indexOfCurrentTrack ? "brand.400" : "neutral.dark.100"
+          }
+        >
+          <Box>
+            <Text>{index + 1}</Text>
+          </Box>
+          <Box overflow={"hidden"}>
+            <Text my={0} fontWeight={500} whiteSpace={"nowrap"}>
+              {list[index].title || list[index].name}
+            </Text>
+            <Text whiteSpace={"nowrap"} color={"gray"}>
+              {list[index].artist || "unknown"}
+            </Text>
+          </Box>
+          <Box overflow={"hidden"}>
+            <Text whiteSpace={"nowrap"}>{list[index].album || "unknown"}</Text>
+          </Box>
+        </Box>
+
+        <Box display={"flex"} alignItems={"center"}>
+          {selected === index && <MusicDropdown audio={list[index]} />}
+        </Box>
+      </Box>
+    </>
   );
 };
