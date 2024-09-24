@@ -13,7 +13,6 @@ import path from "path-browserify";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { api } from "../../utils";
-import { Shortcuts } from "./Shortcuts";
 import { AddShortcut } from "../dropdowns/AddShortcut";
 
 import "./scroll.css";
@@ -114,7 +113,7 @@ export const Directories = () => {
         </Box>
       </GridItem>
       <GridItem rowSpan={9}>
-        <Box overflow={"scroll"} height={"100%"}>
+        <Box overflow={"scroll"} height={"100%"} fontSize={"14px"}>
           {dirs.response &&
             dirs.response.map((dir, idx) => (
               <Box key={idx} height={"100%"}>

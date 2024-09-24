@@ -19,7 +19,8 @@ export const shortcutController = {
   },
   addShortcut: async (req, res) => {
     const shortcutPath = path.join(files, shortcutsFile);
-    if (!(await fileType.checkFileHealth(shortcutsFile))) {
+    if (!(await fileType.checkFileHealth(shortcutPath))) {
+      console.log("file is unreadable");
       await createFile("shortcuts", JSON.stringify({ shortcuts: [] }));
     }
     const data = await fs.readFile(shortcutPath);
@@ -36,12 +37,13 @@ export const shortcutController = {
       active: req.body.active,
     });
 
+    console.log(shortcuts);
     await createFile("shortcuts", JSON.stringify({ shortcuts }));
     res.send(shortcuts);
   },
   deleteShortcut: async (req, res) => {
     const shortcutPath = path.join(files, shortcutsFile);
-    if (!(await fileType.checkFileHealth(shortcutsFile))) {
+    if (!(await fileType.checkFileHealth(shortcutPath))) {
       await createFile("shortcuts", JSON.stringify({ shortcuts: [] }));
     }
     const data = await fs.readFile(shortcutPath);

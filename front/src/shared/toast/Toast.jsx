@@ -60,6 +60,7 @@ export const Toast = forwardRef(function Toast(
         duration: 0.2,
         ease: "easeIn",
       }}
+      zIndex={9999}
       bg={bg[data.status]}
       // bgImage={`linear-gradient(145deg,${bg[data.status]},${lights[data.status]})`}
       color={"white"}

@@ -111,17 +111,16 @@ export const MusicDropdown = ({ audio }) => {
                   </Text>
                 </Box>
               )}
-              {activePlaylist.active !== "favorites" ||
-                (currentTab !== "playlist" && (
-                  <Box
-                    p={"8px"}
-                    _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
-                    borderRadius={"6px"}
-                    onClick={() => handleAddToFavourite(audio)}
-                  >
-                    <Text>add to favorites</Text>
-                  </Box>
-                ))}
+              {activePlaylist.active !== "favorites" && (
+                <Box
+                  p={"8px"}
+                  _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
+                  borderRadius={"6px"}
+                  onClick={() => handleAddToFavourite(audio)}
+                >
+                  <Text>add to favorites</Text>
+                </Box>
+              )}
             </ModalBody>
           </ModalContent>
         </ModalOverlay>

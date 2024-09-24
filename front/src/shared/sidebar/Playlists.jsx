@@ -2,25 +2,21 @@ import { useEffect } from "react";
 import useRequest from "../../hooks/useRequest";
 import {
   Box,
-  Button,
   Grid,
   GridItem,
   Icon,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalOverlay,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FaPlay, FaRecordVinyl } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { api } from "../../utils";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { CreatePlaylist } from "../dropdowns/CreatePlaylist";
-import colors from "../../themes/colors";
 import { DefaultButton } from "../bottons";
 import { useState } from "react";
 import { TbDots, TbTrashFilled } from "react-icons/tb";
@@ -97,6 +93,7 @@ export const Playlists = () => {
                 borderRadius={"4px"}
                 justifyContent={"space-between"}
                 _hover={{ bg: "neutral.dark.700" }}
+                fontSize={"14px"}
                 p={"6px"}
               >
                 <Box

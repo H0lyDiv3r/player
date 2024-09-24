@@ -20,12 +20,14 @@ import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import path from "path-browserify";
 import { TbDots, TbFolderPlus } from "react-icons/tb";
+import { useShowToast } from "../../hooks/useShowToast";
 
 export const AddShortcut = ({ vals }) => {
   const [shortcutName, handleSetShortcutName] = useState("");
   const { activeList } = useContext(GlobalContext);
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [showToast] = useShowToast();
   const handleChange = (e) => {
     handleSetShortcutName(e.target.value);
   };
@@ -36,10 +38,15 @@ export const AddShortcut = ({ vals }) => {
       api
         .post("/shortcut/addShortcut", {
           name: shortcutName,
-          path: path.jpin(url, val.name, "/"),
+          path: path.join(url, val.name, "/"),
           active: "",
         })
-        .then((res) => console.log(res));
+        .then((res) => {
+          showToast("success", "added shortcut");
+        })
+        .catch(() => {
+          showToast("error", "failed to delete");
+        });
       console.log(path.join(url, val.name, "/"));
     } else {
       activeList.url.map((item) => (url = path.join(url, item)));

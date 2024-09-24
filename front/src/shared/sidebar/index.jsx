@@ -13,6 +13,7 @@ import { Playlists } from "./Playlists";
 import { useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { TbFolderSymlink, TbHome, TbPlaylist } from "react-icons/tb";
+import { Shortcuts } from "./Shortcuts";
 
 export const Sidebar = () => {
   const [tab, setTab] = useState("playlist");
@@ -69,6 +70,7 @@ export const Sidebar = () => {
               <Icon as={TbPlaylist} boxSize={5} />
             </Box>
             <Box
+              onClick={() => handleSetTab("shortcuts")}
               py={"6px"}
               display={"flex"}
               alignItems={"center"}
@@ -91,7 +93,9 @@ export const Sidebar = () => {
         borderRadius={"12px"}
       >
         <Box height={"100%"}>
-          {tab === "directory" ? <Directories /> : <Playlists />}
+          {tab === "directory" && <Directories />}
+          {tab === "shortcuts" && <Shortcuts />}
+          {tab === "playlist" && <Playlists />}
         </Box>
       </GridItem>
     </Grid>
