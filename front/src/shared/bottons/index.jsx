@@ -43,7 +43,7 @@ export const DefaultButton = ({ children, action, ...other }) => {
     <Button
       onClick={action}
       bg={"brand.500"}
-      color={"neutral.200"}
+      color={"neutral.dark.200"}
       _hover={{ background: "brand.600" }}
       width={"100%"}
       fontSize={"14px"}
@@ -68,7 +68,7 @@ export const ButtonIcon = ({
       <Button
         onClick={action}
         bg={"brand.500"}
-        color={"neutral.200"}
+        color={"neutral.dark.800"}
         _hover={{ background: "brand.600" }}
         width={"100%"}
         fontSize={"14px"}

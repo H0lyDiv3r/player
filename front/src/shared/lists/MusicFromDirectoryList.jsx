@@ -11,7 +11,7 @@ import { Playlists } from "../sidebar/Playlists";
 import { useShowToast } from "../../hooks/useShowToast";
 
 export const MusicFromDirectoryList = ({ list = [] }) => {
-  const { handleSetCurrentTrack, indexOfCurrentTrack } =
+  const { handleSetCurrentTrack, indexOfCurrentTrack, currentTrack } =
     useContext(GlobalContext);
   const heightRef = useRef();
 
@@ -57,6 +57,7 @@ export const MusicFromDirectoryList = ({ list = [] }) => {
                   list={list}
                   action={handleSetCurrentTrack}
                   indexOfCurrentTrack={indexOfCurrentTrack}
+                  currentTrack={currentTrack}
                 />
               );
             }}
@@ -73,6 +74,7 @@ export const ListItem = ({
   list = [],
   action,
   indexOfCurrentTrack,
+  currentTrack,
 }) => {
   const [selected, setSelected] = useState("");
 
@@ -84,6 +86,7 @@ export const ListItem = ({
         display={"grid"}
         gridTemplateColumns={"10fr 2fr"}
         _hover={{ bg: "neutral.dark.800" }}
+        px={"6px"}
         onMouseOver={() => setSelected(index)}
         onMouseLeave={() => setSelected(null)}
         borderRadius={"6px"}
@@ -97,7 +100,9 @@ export const ListItem = ({
           onClick={() => action(index)}
           fontSize={"12px"}
           color={
-            index === indexOfCurrentTrack ? "brand.400" : "neutral.dark.100"
+            list[index].path === (currentTrack && currentTrack["path"])
+              ? "brand.500"
+              : "neutral.dark.200"
           }
         >
           <Box>

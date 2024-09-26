@@ -44,7 +44,7 @@ const PlaybackRateControl = forwardRef(
           mx={"12px"}
           color={"neutral.dark.200"}
         >
-          <Menu closeOnSelect={true}>
+          <Menu closeOnSelect={false}>
             {speed.map((val) => (
               <Box key={val.id}>
                 {playbackRate == val.value && (
@@ -59,7 +59,6 @@ const PlaybackRateControl = forwardRef(
                       minW={"50px"}
                       fontSize={"12px"}
                       fontWeight={400}
-                      color={"white"}
                       display={"flex"}
                     >
                       {val.name}
@@ -77,6 +76,7 @@ const PlaybackRateControl = forwardRef(
               p={"4px"}
               fontSize={"12px"}
               fontWeight={400}
+              color={"neutral.dark.200"}
             >
               {speed.map((val) => (
                 <MenuItem
@@ -84,7 +84,7 @@ const PlaybackRateControl = forwardRef(
                   id={val.id}
                   onClick={() => handlePlaybackRate(val.value, ref)}
                   bg={val.value == playbackRate && "brand.500"}
-                  color={val.value == playbackRate && "neutral.200"}
+                  color={val.value == playbackRate && "neutral.dark.800"}
                   borderRadius={"8px"}
                   display={"flex"}
                   justifyContent={"center"}

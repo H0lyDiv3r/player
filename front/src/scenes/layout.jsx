@@ -49,7 +49,13 @@ export const Layout = () => {
           gridTemplateColumns={"1fr 300px"}
         >
           <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
-            <Box>{activePlaylist.active}</Box>
+            <Box px={"12px"} marginY={"auto"}>
+              <Text fontSize={"16px"}>
+                {currentTab === "playlist"
+                  ? activePlaylist.active
+                  : "Directory"}
+              </Text>
+            </Box>
             <Box px={"12px"} overflow={"scroll"} height={"100%"}>
               {currentTab === "directory" ? (
                 <MusicFromDirectoryList list={activeList.list} />

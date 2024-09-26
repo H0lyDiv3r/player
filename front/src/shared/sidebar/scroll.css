@@ -3,7 +3,7 @@
     width: 5px;
 }
 .scroll::-webkit-scrollbar-thumb {
-    background: black;
+    background: #abc265;
     height: 50px;
     border-radius: 25px;
 }

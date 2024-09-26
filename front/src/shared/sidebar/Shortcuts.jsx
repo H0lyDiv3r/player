@@ -68,7 +68,6 @@ export const Shortcuts = () => {
   return (
     <>
       <Box color={"neutral.dark.200"}>
-        <Text>Shortcuts</Text>
         {shortcuts.response &&
           shortcuts.response.map((item) => (
             <Box

@@ -25,8 +25,9 @@ export const CreatePlaylist = ({ action }) => {
           fontWeight={400}
           bg={"brand.500"}
           borderRadius={"6px"}
-          color={"white"}
-          py={"6px"}
+          color={"neutral.dark.800"}
+          _hover={{ bg: "brand.600" }}
+          py={"8px"}
         >
           Create Playlist
         </MenuButton>
@@ -54,8 +55,11 @@ export const CreatePlaylist = ({ action }) => {
             </FormControl>
           </Box>
           <MenuItem
+            color={"neutral.dark.800"}
             onClick={() => action(playlistName)}
             isDisabled={playlistName < 2}
+            _disabled={{ bg: "brand.600" }}
+            _hover={{ bg: "brand.600" }}
             bg={"brand.500"}
             justifyContent={"center"}
             borderRadius={"6px"}

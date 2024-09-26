@@ -6,7 +6,7 @@ import { MusicDropdown } from "../dropdowns/MusicDropdown";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 
 export const MusicFromPlaylist = ({ list = [] }) => {
-  const { handleSetCurrentTrack } = useContext(GlobalContext);
+  const { handleSetCurrentTrack, currentTrack } = useContext(GlobalContext);
   const [selected, setSelected] = useState(null);
   const heightRef = useRef();
 
@@ -65,6 +65,12 @@ export const MusicFromPlaylist = ({ list = [] }) => {
                     gridTemplateColumns={"40px 6fr 5fr"}
                     onClick={() => handleSetCurrentTrack(index)}
                     fontSize={"12px"}
+                    color={
+                      list[index].path ===
+                      (currentTrack && currentTrack["path"])
+                        ? "brand.500"
+                        : "neutral.dark.200"
+                    }
                   >
                     <Box>
                       <Text>{index + 1}</Text>

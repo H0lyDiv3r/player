@@ -116,8 +116,11 @@ export const Directories = () => {
         <Box overflow={"scroll"} height={"100%"} fontSize={"14px"}>
           {dirs.response &&
             dirs.response.map((dir, idx) => (
-              <Box key={idx} height={"100%"}>
+              <Box key={idx}>
                 <Box
+                  p={"6px"}
+                  borderRadius={"4px"}
+                  _hover={{ bg: "neutral.dark.700" }}
                   display={"flex"}
                   alignItems={"center"}
                   justifyContent={"space-between"}
