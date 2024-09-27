@@ -4,37 +4,59 @@ import path from "path-browserify";
 import { api, next, prev, shuffle } from "../utils";
 import useRequest from "../hooks/useRequest";
 import { useMemo } from "react";
+import { useEffect } from "react";
 
 export const GlobalContext = createContext();
-
+const playerState = () => {
+  return Boolean(
+    localStorage.getItem("root") &&
+      JSON.parse(localStorage.getItem("root")).global,
+  );
+};
 const initialState = {
-  url: [],
+  url: playerState() ? JSON.parse(localStorage.getItem("root")).global.url : [],
   filePath: "/",
-  currentTrack: null,
-  currentTrackImage: null,
-  indexOfCurrentTrack: 0,
-  queue: {
-    list: [],
-    url: [],
-    active: "",
-    type: "directory",
-  },
+  currentTrack: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.currentTrack
+    : null,
+  currentTrackImage: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.currentTrackImage
+    : null,
+  indexOfCurrentTrack: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.indexOfCurrentTrack
+    : null,
+  queue: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.queue
+    : {
+        list: [],
+        url: [],
+        active: "",
+        type: "directory",
+      },
   activeDir: null,
   currentTab: "directory",
-  activePlaylist: {
-    list: [],
-    url: [],
-    active: "",
-    type: "playlist",
-  },
-  activeList: {
-    list: [],
-    url: [],
-    active: "",
-    type: "directory",
-  },
-  shuffle: false,
-  loop: 0,
+  activePlaylist: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.activePlaylist
+    : {
+        list: [],
+        url: [],
+        active: "",
+        type: "playlist",
+      },
+  activeList: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.activeList
+    : {
+        list: [],
+        url: [],
+        active: "",
+        type: "directory",
+      },
+  shuffle: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.shuffle
+    : false,
+  loop: playerState()
+    ? JSON.parse(localStorage.getItem("root")).global.loop
+    : 0,
   //noLoop,loop,loopOne
 };
 
@@ -421,6 +443,34 @@ export const GlobalContextProvider = ({ children }) => {
     }),
     [state],
   );
+  useEffect(() => {
+    localStorage.setItem(
+      "root",
+      JSON.stringify({
+        global: {
+          shuffle: state.shuffle,
+          loop: state.loop,
+          url: state.url,
+          currentTrack: state.currentTrack,
+          currentTrackImage: state.currentTrackImage,
+          indexOfCurrentTrack: state.indexOfCurrentTrack,
+          queue: state.queue,
+          activeList: state.activeList,
+          activePlaylist: state.activePlaylist,
+        },
+      }),
+    );
+  }, [
+    state.shuffle,
+    state.loop,
+    state.url,
+    state.currentTrack,
+    state.currentTrackImage,
+    state.indexOfCurrentTrack,
+    state.queue,
+    state.activeList,
+    state.activePlaylist,
+  ]);
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>
   );

@@ -165,6 +165,7 @@ export const DirNavigator = () => {
             </Box>
             <Box mt={"4px"}>
               <DefaultButton
+                color={"neutral.dark.800"}
                 action={() => handleScan(toBeScanned)}
                 isDisabled={toBeScanned === ""}
               >

@@ -83,8 +83,10 @@ export const MusicFromPlaylist = ({ list = [] }) => {
                         {list[index].artist || "unknown"}
                       </Text>
                     </Box>
-                    <Box>
-                      <Text>{list[index].album || "unknown"}</Text>
+                    <Box overflow={"hidden"}>
+                      <Text whiteSpace={"nowrap"}>
+                        {list[index].album || "unknown"}
+                      </Text>
                     </Box>
                   </Box>
                   <Box>

@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -19,7 +20,13 @@ import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { CreatePlaylist } from "./CreatePlaylist";
 import { useState } from "react";
-import { TbDots } from "react-icons/tb";
+import {
+  TbDots,
+  TbHeartMinus,
+  TbHeartPlus,
+  TbPlaylistAdd,
+} from "react-icons/tb";
+import { MdOutlineAddToQueue, MdOutlineQueue } from "react-icons/md";
 import { useShowToast } from "../../hooks/useShowToast";
 
 export const MusicDropdown = ({ audio }) => {
@@ -80,7 +87,13 @@ export const MusicDropdown = ({ audio }) => {
         <Icon as={TbDots} />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} isCentered={false}>
-        <ModalOverlay bg={"none"} p={0} m={0}>
+        <ModalOverlay
+          bg={"none"}
+          p={0}
+          m={0}
+          backdropFilter={"auto"}
+          backdropBlur={"2px"}
+        >
           <ModalContent
             pos={"absolute"}
             top={modalPosition.y}
@@ -95,8 +108,11 @@ export const MusicDropdown = ({ audio }) => {
                 p={"8px"}
                 _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
                 borderRadius={"6px"}
+                display={"flex"}
+                alignItems={"center"}
               >
-                <Text>add to queue</Text>
+                <Icon as={MdOutlineQueue} boxSize={5} mr={"6px"} />
+                <Text>Add to Queue</Text>
               </Box>
               <Box
                 _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
@@ -105,20 +121,30 @@ export const MusicDropdown = ({ audio }) => {
                 <PlaylistMenu handleAddToPlaylist={handleAddtoPlaylist} />
               </Box>
               {currentTab === "playlist" && (
-                <Box p={"6px"}>
-                  <Text onClick={() => handleRemoveFromPlaylist(audio)}>
-                    remove from this playlist
-                  </Text>
+                <Box
+                  p={"8px"}
+                  onClick={() => handleRemoveFromPlaylist(audio)}
+                  display={"flex"}
+                  alignItems={"center"}
+                  _hover={{ cursor: "pointer", bg: "neutral.dark.700" }}
+                  borderRadius={"6px"}
+                >
+                  <Icon as={TbHeartMinus} boxSize={5} mr={"6px"} />
+                  <Text>Remove from Playlist</Text>
                 </Box>
               )}
-              {activePlaylist.active !== "favorites" && (
+              {(activePlaylist.active !== "favorites" ||
+                currentTab === "directory") && (
                 <Box
                   p={"8px"}
                   _hover={{ bg: "neutral.dark.700", cursor: "pointer" }}
                   borderRadius={"6px"}
                   onClick={() => handleAddToFavourite(audio)}
+                  display={"flex"}
+                  alignItems={"center"}
                 >
-                  <Text>add to favorites</Text>
+                  <Icon as={TbHeartPlus} boxSize={5} mr={"6px"} />
+                  <Text>Add to Favorites</Text>
                 </Box>
               )}
             </ModalBody>
@@ -158,9 +184,11 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
           p={"8px"}
           height={"100%"}
           width={"full"}
-          textAlign={"left"}
         >
-          add to playlist
+          <Box display={"flex"}>
+            <Icon as={TbPlaylistAdd} boxSize={5} mr={"6px"} />
+            <Text>Add to Playlist</Text>
+          </Box>
         </MenuButton>
         <MenuList bg={"neutral.dark.800"} border={"none"} p={"6px"}>
           <CreatePlaylist action={handleCreatePlaylist} />
