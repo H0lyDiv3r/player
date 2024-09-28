@@ -13,7 +13,7 @@ export const scanDir = async (url, dir) => {
     if (file.isSymbolicLink()) {
       continue;
     }
-    if (!(await fileType.checkHealth(fullPath))) {
+    if (!(await fileType.checkFileHealth(fullPath))) {
       continue;
     }
     const chain = url.split("/").slice(1).slice(0, -1);
@@ -75,11 +75,9 @@ export const hasDirs = (obj) => {
 
 export const getAllAudio = async (dir, store) => {
   let songs = store;
-  // console.log("working here", dir, store);
   try {
     for (const item of Object.keys(dir)) {
       if (item === fileArrayNameInDir || dir[item] instanceof Array) {
-        console.log([...dir[item]], dir[item] instanceof Array);
         songs.push(...dir[item]);
       } else {
         await getAllAudio(dir[item], songs);
@@ -103,11 +101,23 @@ export const fileType = {
       .then((res) => res.isDirectory())
       .catch((error) => false);
   },
-  checkHealth: async (dir) => {
+  checkReadPermission: async (dir) => {
     return fs
       .access(dir, fs.constants.R_OK)
       .then(() => true)
       .catch(() => false);
+  },
+  checkWritePermission: async (dir) => {
+    return fs
+      .access(dir, fs.constants.W_OK)
+      .then(() => true)
+      .catch(() => false);
+  },
+  changeFilePermission: async (dir, code) => {
+    return fs
+      .chmod(dir, code)
+      .then(() => true)
+      .catch((error) => error);
   },
   checkFileHealth: async (dir) => {
     return fs

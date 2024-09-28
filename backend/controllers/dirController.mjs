@@ -18,6 +18,13 @@ export const dirControllers = {
   dir: async (req, res) => {
     const dirPath = path.join(root, req.query.dir || "");
     let directory = [];
+
+    if (!(await fileType.checkReadPermission(dirPath))) {
+      return res
+        .status(401)
+        .json({ message: "you are not allowed to read this directory" });
+    }
+
     if (await fileType.isMusicFile(dirPath)) {
       res.send(dirPath);
     } else {
@@ -31,7 +38,10 @@ export const dirControllers = {
           if (file.isSymbolicLink()) {
             continue;
           }
-          if (!(await fileType.checkHealth(fullPath))) {
+          if (!(await fileType.checkFileHealth(fullPath))) {
+            continue;
+          }
+          if (!(await fileType.checkReadPermission(fullPath))) {
             continue;
           }
           if (await fileType.isDir(fullPath)) {
@@ -40,6 +50,7 @@ export const dirControllers = {
         }
         res.send(directory);
       } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "error" });
       }
     }
