@@ -1,17 +1,7 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  GridItem,
-  Icon,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { Directories } from "./Directories";
 import { Playlists } from "./Playlists";
 import { useState } from "react";
-import { FaHome } from "react-icons/fa";
 import { TbFolderSymlink, TbHome, TbPlaylist } from "react-icons/tb";
 import { Shortcuts } from "./Shortcuts";
 

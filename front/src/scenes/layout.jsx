@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { MusicFromDirectoryList } from "../shared/lists/MusicFromDirectoryList";
 import { useRef } from "react";
 import { MusicFromPlaylist } from "../shared/lists/MusicFromPlaylist";
+import { LeftBar } from "../shared/leftbar";
 
 export const Layout = () => {
   const { queue, activeList, activePlaylist, currentTab } =
@@ -37,17 +38,12 @@ export const Layout = () => {
         rowSpan={10}
         overflow={"hidden"}
         display={"grid"}
-        gridTemplateColumns={"300px 1fr"}
+        gridTemplateColumns={"300px 1fr 300px"}
       >
         <Box px={"12px"} pt={"12px"} overflow={"scroll"}>
           <Sidebar />
         </Box>
-        <Box
-          minW={"500px"}
-          color={"white"}
-          display={"grid"}
-          gridTemplateColumns={"1fr 300px"}
-        >
+        <Box minW={"500px"} color={"white"} display={"grid"} height={"100%"}>
           <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
             <Box px={"12px"} marginY={"auto"}>
               <Text fontSize={"16px"}>
@@ -64,7 +60,9 @@ export const Layout = () => {
               )}
             </Box>
           </Box>
-          <Box></Box>
+        </Box>
+        <Box pt={"12px"} px={"12px"} maxHeight={"100%"} overflow={"hidden"}>
+          <LeftBar />
         </Box>
       </GridItem>
       <GridItem rowSpan={2}>
