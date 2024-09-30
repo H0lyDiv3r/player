@@ -6,6 +6,7 @@ import cors from "cors";
 import dirRoutes from "./routers/dir.mjs";
 import playlistRoutes from "./routers/playlist.mjs";
 import shortcutRoutes from "./routers/shourtcuts.mjs";
+import { errorHandler } from "./middlewares/errorHandler.mjs";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/dir", dirRoutes);
 app.use("/playlist", playlistRoutes);
 app.use("/shortcut", shortcutRoutes);
 
+app.use(errorHandler);
 app.listen(3000, () => {
   console.log("listening on port 3000");
 });
