@@ -156,11 +156,20 @@ export const createFile = async (
 ) => {
   let title = `${name}${new Date().valueOf()}.tmp`;
   const file = path.join(url, title);
+  //check if files folder exist
+  if (!(await fileType.checkFileHealth(url))) {
+    try {
+      await fs.mkdir(url, { recursive: false });
+    } catch (error) {
+      return false;
+    }
+  }
+
   try {
     await fs.writeFile(file, content);
     await fs.rename(file, path.join(files, `${name}${extension}`));
-    return "success";
+    return true;
   } catch (error) {
-    return { message: "failed to write file" };
+    return false;
   }
 };

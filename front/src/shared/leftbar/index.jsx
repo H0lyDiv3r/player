@@ -47,7 +47,7 @@ export const LeftBar = () => {
               }
             >
               <Text mr={"12px"}>{idx + 1}</Text>
-              <Text>{item.name.slice(0, 30)}</Text>
+              <Text>{item.name.slice(0, 25)}</Text>
             </Box>
           ))}
         </Box>
