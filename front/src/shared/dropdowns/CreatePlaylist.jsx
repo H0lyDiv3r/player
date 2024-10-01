@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   FormLabel,
   Input,
@@ -8,17 +9,29 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useRef } from "react";
 import { useState } from "react";
+import { DefaultButton } from "../bottons";
 
 export const CreatePlaylist = ({ action }) => {
   const [playlistName, SetPlaylistName] = useState("");
+  const inputRef = useRef(null);
   const handleChange = (e) => {
     SetPlaylistName(e.target.value);
   };
-
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
   return (
     <>
-      <Menu placement="auto" onClose={() => SetPlaylistName("")}>
+      <Menu
+        placement="auto"
+        onClose={() => SetPlaylistName("")}
+        initialFocusRef={inputRef}
+      >
         <MenuButton
           minWidth={"100%"}
           fontSize={"14px"}
@@ -44,6 +57,7 @@ export const CreatePlaylist = ({ action }) => {
               <FormLabel fontSize={"12px"}>Playlist Name</FormLabel>
               <Input
                 size={"sm"}
+                ref={inputRef}
                 borderRadius={"6px"}
                 border={"none"}
                 bg={"neutral.dark.700"}
@@ -53,20 +67,14 @@ export const CreatePlaylist = ({ action }) => {
                 onChange={(e) => handleChange(e)}
               />
             </FormControl>
+            <DefaultButton
+              action={() => action(playlistName)}
+              isDisabled={playlistName < 2}
+              size={"sm"}
+            >
+              create
+            </DefaultButton>
           </Box>
-          <MenuItem
-            color={"neutral.dark.800"}
-            onClick={() => action(playlistName)}
-            isDisabled={playlistName < 2}
-            _disabled={{ bg: "brand.600" }}
-            _hover={{ bg: "brand.600" }}
-            bg={"brand.500"}
-            justifyContent={"center"}
-            borderRadius={"6px"}
-            fontSize={"14px"}
-          >
-            create
-          </MenuItem>
         </MenuList>
       </Menu>
     </>

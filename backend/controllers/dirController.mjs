@@ -139,7 +139,7 @@ export const dirControllers = {
       }
       let songs = [];
       await getAllAudio(directory, songs);
-      return res.status(200).json({ songs });
+      return res.status(200).json(songs);
     } catch (error) {
       next(error);
     }

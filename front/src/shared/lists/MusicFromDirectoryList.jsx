@@ -15,12 +15,9 @@ export const MusicFromDirectoryList = ({ list = [] }) => {
     useContext(GlobalContext);
   const heightRef = useRef();
 
-  // useEffect(() => {
-  //   if (ref.current.offsetHeight) {
-  //     setHeight(() => ref.current.offsetHeight);
-  //   }
-  //   console.log(ref.current.offsetHeight);
-  // }, []);
+  useEffect(() => {
+    console.log("i have the list", list);
+  }, []);
   return (
     <Grid templateRows={"repeat(12,1fr)"} height={"100%"}>
       <GridItem rowSpan={1}>
@@ -54,7 +51,7 @@ export const MusicFromDirectoryList = ({ list = [] }) => {
                 <ListItem
                   index={index}
                   style={style}
-                  list={list}
+                  track={list[index]}
                   action={handleSetCurrentTrack}
                   indexOfCurrentTrack={indexOfCurrentTrack}
                   currentTrack={currentTrack}
@@ -71,7 +68,7 @@ export const MusicFromDirectoryList = ({ list = [] }) => {
 export const ListItem = ({
   index,
   style,
-  list = [],
+  track = {},
   action,
   indexOfCurrentTrack,
   currentTrack,
@@ -100,7 +97,7 @@ export const ListItem = ({
           onClick={() => action(index)}
           fontSize={"12px"}
           color={
-            list[index].path === (currentTrack && currentTrack["path"])
+            track["path"] === (currentTrack && currentTrack["path"])
               ? "brand.500"
               : "neutral.dark.200"
           }
@@ -110,19 +107,19 @@ export const ListItem = ({
           </Box>
           <Box overflow={"hidden"}>
             <Text my={0} fontWeight={500} whiteSpace={"nowrap"}>
-              {list[index].title || list[index].name}
+              {track.title || track.name}
             </Text>
             <Text whiteSpace={"nowrap"} color={"gray"}>
-              {list[index].artist || "unknown"}
+              {track.artist || "unknown"}
             </Text>
           </Box>
           <Box overflow={"hidden"}>
-            <Text whiteSpace={"nowrap"}>{list[index].album || "unknown"}</Text>
+            <Text whiteSpace={"nowrap"}>{track.album || "unknown"}</Text>
           </Box>
         </Box>
 
         <Box display={"flex"} alignItems={"center"}>
-          {selected === index && <MusicDropdown audio={list[index]} />}
+          {selected === index && <MusicDropdown audio={track} />}
         </Box>
       </Box>
     </>

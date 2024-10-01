@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Portal } from "@chakra-ui/react";
 import { createContext, useReducer } from "react";
 import { Toast } from "./Toast";
 import { useRef } from "react";
@@ -62,21 +62,23 @@ export const ToastProvider = ({ children }) => {
       <Box
         height={"100vh"}
         width={"100%"}
-        pos={"absolute"}
+        pos={"relative"}
         ref={containerRef}
         bg={"red"}
         zIndex={"999"}
       >
         {children}
-        <AnimatePresence>
-          {state.toast && (
-            <Toast
-              data={state.toast}
-              onClose={() => handleRemoveToast()}
-              ref={containerRef}
-            />
-          )}
-        </AnimatePresence>
+        <Portal>
+          <AnimatePresence>
+            {state.toast && (
+              <Toast
+                data={state.toast}
+                onClose={() => handleRemoveToast()}
+                ref={containerRef}
+              />
+            )}
+          </AnimatePresence>
+        </Portal>
       </Box>
     </ToastContext.Provider>
   );

@@ -19,9 +19,9 @@ export const Layout = () => {
   const listContainerRef = useRef(null);
   const containerRef = useRef(null);
   useEffect(() => {
-    // console.log("active list", activeList);
-    // console.log("queueueueueq", queue);
-    // console.log("plaplaplaplaplaplap", activePlaylist);
+    console.log("active list", activeList);
+    console.log("queueueueueq", queue);
+    console.log("plaplaplaplaplaplap", activePlaylist);
   }, [activeList, queue]);
   return (
     <Grid
