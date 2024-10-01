@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Icon,
   Image,
   Modal,
@@ -13,12 +12,7 @@ import {
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
-import {
-  FaArrowLeft,
-  FaFolder,
-  FaFolderPlus,
-  FaRegFolderClosed,
-} from "react-icons/fa6";
+import { FaArrowLeft, FaFolder, FaFolderPlus } from "react-icons/fa6";
 import { ButtonIcon, DefaultButton } from "../bottons";
 import { api } from "../../utils";
 import path from "path-browserify";
@@ -27,7 +21,6 @@ import { useShowToast } from "../../hooks/useShowToast";
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dir, setDir] = useState([{ name: "", type: "dir" }]);
-  const [selected, setSelected] = useState();
   const [toBeScanned, setToBeScanned] = useState("");
   const [showToast] = useShowToast();
   const { filePath, url, handleAddPath, handlePopPath, handleSetPath } =
@@ -45,6 +38,10 @@ export const DirNavigator = () => {
         showToast("success", "added directory");
         console.log(res);
       });
+  };
+  const handleCloseNavigator = () => {
+    handleSetPath([]);
+    onClose();
   };
   useEffect(() => {
     api
@@ -64,7 +61,7 @@ export const DirNavigator = () => {
         Add Directory
       </ButtonIcon>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleCloseNavigator}>
         <ModalOverlay p={0} bg={"none"} />
         <ModalContent
           minWidth={"600px"}
@@ -145,8 +142,6 @@ export const DirNavigator = () => {
                   display={"flex"}
                   alignItems={"center"}
                   justifyContent={"space-between"}
-                  onMouseOver={() => setSelected(idx)}
-                  onMouseLeave={() => setSelected(null)}
                   _hover={{ cursor: "pointer", color: "brand.500" }}
                   bg={toBeScanned === item.name && "neutral.dark.700"}
                 >
