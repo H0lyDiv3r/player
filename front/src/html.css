@@ -15,7 +15,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 25px;
 } */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     background: transparent;
     width: 5px;
 }
@@ -29,4 +29,4 @@ body::-webkit-scrollbar-thumb {
 }
 ::-webkit-scrollbar-corner {
     background: transparent;
-}
+} */

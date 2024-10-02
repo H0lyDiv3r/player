@@ -39,6 +39,7 @@ export const MusicFromPlaylist = ({ list = [] }) => {
       <GridItem rowSpan={11}>
         <Box ref={heightRef} height={"100%"}>
           <List
+            className="scroll"
             itemCount={list.length}
             itemSize={42}
             height={heightRef.current ? heightRef.current.offsetHeight : 200}

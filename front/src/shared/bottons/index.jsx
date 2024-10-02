@@ -42,8 +42,9 @@ export const DefaultButton = ({ children, action, ...other }) => {
   return (
     <Button
       onClick={action}
-      bg={"brand.500"}
-      color={"neutral.dark.200"}
+      bg={"transparent"}
+      bgImage={"linear-gradient(120deg,brand.700,brand.500)"}
+      color={"neutral.dark.800"}
       _hover={{ background: "brand.600" }}
       width={"100%"}
       fontSize={"14px"}

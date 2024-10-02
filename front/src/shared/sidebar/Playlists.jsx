@@ -82,7 +82,7 @@ export const Playlists = () => {
         <CreatePlaylist action={handleCreatePlaylist} />
       </GridItem>
       <GridItem rowSpan={10} display={"grid"}>
-        <Box overflow={"scroll"} mt={"12px"}>
+        <Box overflow={"auto"} mt={"12px"}>
           {playlists &&
             playlists.map((playlist) => (
               <Box

@@ -27,8 +27,9 @@ export const LeftBar = () => {
         borderRadius={"12px"}
       >
         <Box
+          className="scroll"
           height={"100%"}
-          overflowY={"scroll"}
+          overflowY={"auto"}
           display={"flex"}
           flexDir={"column"}
         >

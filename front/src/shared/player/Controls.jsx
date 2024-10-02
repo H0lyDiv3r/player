@@ -40,7 +40,7 @@ const Controls = forwardRef(function Controls(props, ref) {
       >
         <PlayerButton
           action={() => handleLoop()}
-          color={loop === 0 ? "neutral.dark.300" : "brand.400"}
+          color={loop === 0 ? "neutral.dark.300" : "brand.500"}
           _hover={{ bg: "none" }}
         >
           <Icon as={loopVals[loop]} boxSize={4} />

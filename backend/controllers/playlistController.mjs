@@ -89,6 +89,30 @@ export const playlistControllers = {
       next(error);
     }
   },
+  inInFavorites: async (req, res, next) => {
+    try {
+      const playlistPath = path.join(files, playlistFile);
+      if (!(await fileType.checkFileHealth(playlistPath))) {
+        return res.status(500).json({ message: "cant write to playlist" });
+      }
+      let data = await fs.readFile(playlistPath, "utf8");
+      if (!data) {
+        return res.status(500).json({ message: "failed to read data" });
+      }
+      let playlists = JSON.parse(data);
+      if (!playlists["favorites"]) {
+        return res.status(404).json({ message: "Playlist doenst exist" });
+      }
+      let target = playlists["favorites"];
+
+      if (target.some((obj) => obj["path"] === req.query.path)) {
+        return res.status(200).send(true);
+      }
+      return res.status(200).send(false);
+    } catch (error) {
+      next(error);
+    }
+  },
   deleteFromPlaylist: async (req, res, next) => {
     try {
       const playlistPath = path.join(files, playlistFile);

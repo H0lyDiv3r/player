@@ -113,7 +113,7 @@ export const Directories = () => {
         </Box>
       </GridItem>
       <GridItem rowSpan={9}>
-        <Box overflow={"scroll"} height={"100%"} fontSize={"14px"}>
+        <Box overflow={"auto"} height={"100%"} fontSize={"14px"}>
           {dirs.response &&
             dirs.response.map((dir, idx) => (
               <Box key={idx}>
@@ -145,7 +145,7 @@ export const Directories = () => {
                   flexDir={"column"}
                   height={"90%"}
                   className="scroll"
-                  overflow={"scroll"}
+                  overflow={"auto"}
                   p={"12px"}
                   borderRadius={"12px"}
                 >
@@ -184,6 +184,3 @@ export const Directories = () => {
     </Grid>
   );
 };
-// <Box>
-//   <Shortcuts />
-// </Box>

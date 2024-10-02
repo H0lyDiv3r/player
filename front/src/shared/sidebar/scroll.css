@@ -3,8 +3,7 @@
     width: 5px;
 }
 .scroll::-webkit-scrollbar-thumb {
-    background: #abc265;
-    height: 50px;
+    background: rgba(171, 194, 101, 0.1);
     border-radius: 25px;
 }
 .scroll::-webkit-scrollbar-track {

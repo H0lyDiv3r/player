@@ -1,6 +1,6 @@
 import React, { useRef, useContext } from "react";
 import "./player.css";
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Icon, Image, Text } from "@chakra-ui/react";
 import Controls from "./Controls";
 import TimeLine from "./TimeLine";
 
@@ -13,6 +13,9 @@ import VolumeControl from "./VolumeControl";
 import { motion } from "framer-motion";
 import { Cassette } from "../other/cassette";
 import { useState } from "react";
+import { TbHeart, TbHeartFilled } from "react-icons/tb";
+import { api } from "../../utils";
+import { useShowToast } from "../../hooks/useShowToast";
 
 export default function Player() {
   const {
@@ -31,12 +34,45 @@ export default function Player() {
     loop,
     handleSetCurrentTrackImage,
   } = useContext(GlobalContext);
-  const [image, setImage] = useState(null);
+  const [favorite, setFavorite] = useState(true);
+  const [showToast] = useShowToast();
   const audioRef = useRef(null);
 
   const handleLoad = (ref) => {
     handleSetPlayerValues(ref);
     handlePosition(0, ref);
+  };
+  const handleSetFavorite = () => {
+    if (favorite) {
+      api
+        .delete("/playlist/deleteFromPlaylist", {
+          params: {
+            name: "favorites",
+            path: currentTrack.path,
+          },
+        })
+        .then((res) => {
+          showToast("success", "removed from playlist");
+          setFavorite(false);
+          // handleSetActivePlaylist(activePlaylist.active);
+        })
+        .catch(() => {
+          showToast("success", "failed to remove");
+        });
+    } else {
+      api
+        .post("/playlist/addToPlaylist", {
+          ...currentTrack,
+          playlist: "favorites",
+        })
+        .then(() => {
+          showToast("success", "added to playlist");
+          setFavorite(true);
+        })
+        .catch(() => {
+          showToast("error", "failed to add to playlist");
+        });
+    }
   };
 
   const MotionBox = motion(Box);
@@ -59,7 +95,15 @@ export default function Player() {
         },
       });
     }
-    console.log("loding loading loadlong", currentTrack);
+    api
+      .get("/playlist/inFav", {
+        params: {
+          path: currentTrack.path,
+        },
+      })
+      .then((res) => {
+        setFavorite(res.data);
+      });
   }, [loaded]);
 
   return (
@@ -114,18 +158,29 @@ export default function Player() {
             />
           </Box>
           <Box
+            height={"60px"}
             display={"flex"}
             flexDir={"column"}
             justifyContent={"space-between"}
             overflow={"hidden"}
             mr={"6px"}
           >
-            <Text fontSize={"12px"} whiteSpace={"nowrap"}>
-              {currentTrack ? currentTrack.title || currentTrack.name : ""}
-            </Text>
-            <Text fontSize={"10px"} color={"neutral.dark.300"}>
-              {currentTrack ? currentTrack.artist || "unknown" : ""}
-            </Text>
+            <Box>
+              <Text fontSize={"12px"} whiteSpace={"nowrap"}>
+                {currentTrack ? currentTrack.title || currentTrack.name : ""}
+              </Text>
+              <Text fontSize={"10px"} color={"neutral.dark.300"}>
+                {currentTrack ? currentTrack.artist || "unknown" : ""}
+              </Text>
+            </Box>
+            <Box display={"flex"}>
+              <Icon
+                onClick={handleSetFavorite}
+                as={favorite ? TbHeartFilled : TbHeart}
+                boxSize={4}
+                color={favorite ? "secondary.500" : "neutral.dark.500"}
+              />
+            </Box>
           </Box>
         </Box>
 

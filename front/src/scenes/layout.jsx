@@ -40,7 +40,7 @@ export const Layout = () => {
         display={"grid"}
         gridTemplateColumns={"300px 1fr 300px"}
       >
-        <Box px={"12px"} pt={"12px"} overflow={"scroll"}>
+        <Box px={"12px"} pt={"12px"} overflow={"auto"}>
           <Sidebar />
         </Box>
         <Box minW={"500px"} color={"white"} display={"grid"} height={"100%"}>
@@ -52,7 +52,7 @@ export const Layout = () => {
                   : "Directory"}
               </Text>
             </Box>
-            <Box px={"12px"} overflow={"scroll"} height={"100%"}>
+            <Box px={"12px"} overflow={"auto"} height={"100%"}>
               {currentTab === "directory" ? (
                 <MusicFromDirectoryList list={activeList.list} />
               ) : (

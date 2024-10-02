@@ -133,7 +133,7 @@ export const DirNavigator = () => {
                 ))}
               </Box>
             </Box>
-            <Box overflow={"scroll"} height={"100%"} my={"4px"}>
+            <Box overflow={"auto"} height={"100%"} my={"4px"}>
               {dir.map((item, idx) => (
                 <Box
                   key={idx}

@@ -6,6 +6,7 @@ router.get("/getPlaylists", playlistControllers.getPlaylists);
 router.post("/createPlaylist", playlistControllers.createPlaylist);
 router.delete("/deletePlaylist", playlistControllers.deletePlaylist);
 router.get("/getPlaylist", playlistControllers.getPlaylist);
+router.get("/inFav", playlistControllers.inInFavorites);
 router.post("/addToPlaylist", playlistControllers.addToPlaylist);
 router.delete("/deleteFromPlaylist", playlistControllers.deleteFromPlaylist);
 

@@ -6,9 +6,6 @@ import { MusicDropdown } from "../dropdowns/MusicDropdown";
 import { Box, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { useRef } from "react";
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
-import { api } from "../../utils";
-import { Playlists } from "../sidebar/Playlists";
-import { useShowToast } from "../../hooks/useShowToast";
 
 export const MusicFromDirectoryList = ({ list = [] }) => {
   const { handleSetCurrentTrack, indexOfCurrentTrack, currentTrack } =
@@ -41,9 +38,10 @@ export const MusicFromDirectoryList = ({ list = [] }) => {
       <GridItem rowSpan={11}>
         <Box ref={heightRef} height={"100%"}>
           <List
+            className="scroll"
             itemCount={list.length}
             itemSize={42}
-            height={heightRef.current ? heightRef.current.offsetHeight : 200}
+            height={heightRef.current ? heightRef.current.offsetHeight : 400}
             width={"100%"}
           >
             {({ index, style }) => {
