@@ -8,6 +8,15 @@ export const scanDir = async (url, dir) => {
   const files = await fs.readdir(url, { withFileTypes: true });
   let current = dir;
 
+  const chain = url.split("/").slice(1).slice(0, -1);
+  let fileArray = current;
+  for (let i = 0; i < chain.length; i++) {
+    if (fileArray[chain[i]]) {
+      fileArray = fileArray[chain[i]];
+    }
+  }
+  fileArray[fileArrayNameInDir] = [];
+
   for (const file of files) {
     const fullPath = path.join(url, file.name);
     if (file.isSymbolicLink()) {
@@ -16,7 +25,6 @@ export const scanDir = async (url, dir) => {
     if (!(await fileType.checkFileHealth(fullPath))) {
       continue;
     }
-    const chain = url.split("/").slice(1).slice(0, -1);
 
     if (
       (await fileType.isDir(fullPath)) &&
@@ -39,24 +47,29 @@ export const scanDir = async (url, dir) => {
       }
 
       // const metadata = await parseFile(path.join(file.path, file.name));
-      jsMediaTags.read(path.join(file.path, file.name), {
-        onSuccess: (tags) => {
-          tempCurrent[fileArrayNameInDir] = tempCurrent[fileArrayNameInDir]
-            ? [
-                ...tempCurrent[fileArrayNameInDir],
-                {
-                  name: file.name,
-                  path: path.join(file.path, file.name),
-                  title: tags.tags.title || null,
-                  album: tags.tags.album || null,
-                  artist: tags.tags.artist || null,
-                  genre: tags.tags.genre || null,
-                  year: tags.tags.year || null,
-                },
-              ]
-            : [];
-        },
-        onError: (error) => {},
+      await new Promise((resolve, reject) => {
+        jsMediaTags.read(path.join(file.path, file.name), {
+          onSuccess: (tags) => {
+            tempCurrent[fileArrayNameInDir] = tempCurrent[fileArrayNameInDir]
+              ? [
+                  ...tempCurrent[fileArrayNameInDir],
+                  {
+                    name: file.name,
+                    path: path.join(file.path, file.name),
+                    title: tags.tags.title || null,
+                    album: tags.tags.album || null,
+                    artist: tags.tags.artist || null,
+                    genre: tags.tags.genre || null,
+                    year: tags.tags.year || null,
+                  },
+                ]
+              : [];
+            resolve();
+          },
+          onError: (error) => {
+            reject(error);
+          },
+        });
       });
     }
   }

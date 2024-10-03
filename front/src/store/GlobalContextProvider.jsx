@@ -7,56 +7,44 @@ import { useMemo } from "react";
 import { useEffect } from "react";
 
 export const GlobalContext = createContext();
-const playerState = () => {
-  return Boolean(
-    localStorage.getItem("root") &&
-      JSON.parse(localStorage.getItem("root")).global,
-  );
-};
+
+const global = localStorage.getItem("global")
+  ? JSON.parse(localStorage.getItem("global"))
+  : null;
 const initialState = {
-  url: playerState() ? JSON.parse(localStorage.getItem("root")).global.url : [],
+  url: [],
   filePath: "/",
-  currentTrack: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.currentTrack
-    : null,
-  currentTrackImage: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.currentTrackImage
-    : null,
-  indexOfCurrentTrack: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.indexOfCurrentTrack
-    : null,
-  queue: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.queue
+  currentTrack: global ? global.currentTrack : "",
+  currentTrackImage: global ? global.currentTrackImage : null,
+  indexOfCurrentTrack: global ? global.indexOfCurrentTrack : null,
+  queue: global
+    ? global.queue
     : {
         list: [],
         url: [],
         active: "",
         type: "directory",
       },
-  activeDir: null,
+  activeDir: global ? global.activeDir : null,
   currentTab: "directory",
-  activePlaylist: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.activePlaylist
+  activePlaylist: global
+    ? global.activePlaylist
     : {
         list: [],
         url: [],
         active: "",
         type: "playlist",
       },
-  activeList: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.activeList
+  activeList: global
+    ? global.activeList
     : {
         list: [],
         url: [],
         active: "",
         type: "directory",
       },
-  shuffle: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.shuffle
-    : false,
-  loop: playerState()
-    ? JSON.parse(localStorage.getItem("root")).global.loop
-    : 0,
+  shuffle: global ? global.shuffle : false,
+  loop: global ? global.loop : 0,
   //noLoop,loop,loopOne
 };
 
@@ -445,19 +433,18 @@ export const GlobalContextProvider = ({ children }) => {
   );
   useEffect(() => {
     localStorage.setItem(
-      "root",
+      "global",
       JSON.stringify({
-        global: {
-          shuffle: state.shuffle,
-          loop: state.loop,
-          url: state.url,
-          currentTrack: state.currentTrack,
-          currentTrackImage: state.currentTrackImage,
-          indexOfCurrentTrack: state.indexOfCurrentTrack,
-          queue: state.queue,
-          activeList: state.activeList,
-          activePlaylist: state.activePlaylist,
-        },
+        shuffle: state.shuffle,
+        loop: state.loop,
+        url: state.url,
+        currentTrack: state.currentTrack,
+        currentTrackImage: state.currentTrackImage,
+        indexOfCurrentTrack: state.indexOfCurrentTrack,
+        queue: state.queue,
+        activeList: state.activeList,
+        activeDir: state.activeDir,
+        activePlaylist: state.activePlaylist,
       }),
     );
   }, [
@@ -470,6 +457,7 @@ export const GlobalContextProvider = ({ children }) => {
     state.queue,
     state.activeList,
     state.activePlaylist,
+    state.activeDir,
   ]);
   return (
     <GlobalContext.Provider value={vals}>{children}</GlobalContext.Provider>

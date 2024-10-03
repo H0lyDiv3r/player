@@ -3,25 +3,22 @@ import { useMemo } from "react";
 
 export const PlayerContext = createContext();
 
-const playerState = () => {
-  return Boolean(
-    localStorage.getItem("root") &&
-      JSON.parse(localStorage.getItem("root")).playerState,
-  );
-};
+// const playerState = () => {
+//   return Boolean(
+//      &&
+//       ,
+//   );
+// };
+const playerState = localStorage.getItem("playerState")
+  ? JSON.parse(localStorage.getItem("playerState"))
+  : null;
 
 const initialState = {
   paused: true,
-  volume: playerState()
-    ? JSON.parse(localStorage.getItem("root")).playerState.volume
-    : 50,
+  volume: playerState ? playerState.volume : 50,
   position: 0,
-  playbackRate: playerState()
-    ? JSON.parse(localStorage.getItem("root")).playerState.playbackRate
-    : 1,
-  muted: playerState()
-    ? JSON.parse(localStorage.getItem("root")).playerState.muted
-    : false,
+  playbackRate: playerState ? playerState.playbackRate : 1,
+  muted: playerState ? playerState.muted : false,
   length: 0,
   loaded: false,
 };
@@ -232,13 +229,11 @@ const PlayerContextProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem(
-      "root",
+      "playerState",
       JSON.stringify({
-        playerState: {
-          volume: state.volume,
-          muted: state.muted,
-          playbackRate: state.playbackRate,
-        },
+        volume: state.volume,
+        muted: state.muted,
+        playbackRate: state.playbackRate,
       }),
     );
   }, [state.volume, state.muted, state.playbackRate]);
