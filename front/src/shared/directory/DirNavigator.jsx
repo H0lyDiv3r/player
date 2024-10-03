@@ -17,30 +17,32 @@ import { ButtonIcon, DefaultButton } from "../bottons";
 import { api } from "../../utils";
 import path from "path-browserify";
 import { useShowToast } from "../../hooks/useShowToast";
+import useRequest from "../../hooks/useRequest";
+import { DotLoader } from "../loading";
 
 export const DirNavigator = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dir, setDir] = useState([{ name: "", type: "dir" }]);
+  const [scan] = useRequest();
   const [toBeScanned, setToBeScanned] = useState("");
   const [showToast] = useShowToast();
   const { filePath, url, handleAddPath, handlePopPath, handleSetPath } =
     useContext(GlobalContext);
 
-  const handleScan = (folder) => {
+  const handleScan = async (folder) => {
     console.log("scannig", path.join(filePath, folder));
-    api
-      .get(`dir/addDir`, {
-        params: {
-          dir: path.join(filePath, folder, "/"),
-        },
+    scan
+      .request(`dir/addDir`, "GET", {
+        dir: path.join(filePath, folder, "/"),
       })
       .then((res) => {
         showToast("success", "added directory");
-        console.log(res);
+        handleCloseNavigator();
       });
   };
   const handleCloseNavigator = () => {
     handleSetPath([]);
+    setToBeScanned("");
     onClose();
   };
   useEffect(() => {
@@ -80,93 +82,94 @@ export const DirNavigator = () => {
             display={"flex"}
             flexDir={"column"}
           >
-            <Box width={"100%"} p={"6px"}>
-              <Text>Quick access</Text>
-            </Box>
-            <Box
-              width={"100%"}
-              px={"12px"}
-              display={"flex"}
-              justifyContent={"space-between"}
-            >
-              <Box onClick={() => handleSetPath(["home", "yuri", "Desktop"])}>
-                <Image src={"./folder3.svg"} width={"80px"} />
-                <Text>Desktop</Text>
-              </Box>
-              <Box onClick={() => handleSetPath(["home", "yuri", "Music"])}>
-                <Image src={"./folder3.svg"} width={"80px"} />
-                <Text>Music</Text>
-              </Box>
-              <Box onClick={() => handleSetPath(["home", "yuri", "Videos"])}>
-                <Image src={"./folder3.svg"} width={"80px"} />
-                <Text>Videos</Text>
-              </Box>
-              <Box onClick={() => handleSetPath(["home", "yuri", "Downloads"])}>
-                <Image src={"./folder3.svg"} width={"80px"} />
-                <Text>Downloads</Text>
-              </Box>
-            </Box>
-            <Box
-              my={"6px"}
-              display={"flex"}
-              alignItems={"center"}
-              py={"6px"}
-              bg={"neutral.dark.700"}
-              borderRadius={"4px"}
-            >
-              <Icon
-                as={FaArrowLeft}
-                onClick={() => handlePopPath()}
-                _hover={{ cursor: "pointer" }}
-                mx={"8px"}
-              />
+            {scan.loading && (
               <Box
                 display={"flex"}
-                width={"100%"}
-                flexWrap={"nowrap"}
-                overflow={"hidden"}
-                whiteSpace={"nowrap"}
+                flexDir={"column"}
+                height={"100%"}
+                alignItems={"center"}
+                justifyContent={"center"}
               >
-                <Text>root:/</Text>
-                {url.map((item, idx) => (
-                  <Text key={idx}>{item}/</Text>
-                ))}
+                <DotLoader />
+                <Box textAlign={"center"} color={"neutral.dark.300"}>
+                  <Text fontSize={"1.25rem"} fontWeight={500}>
+                    HOLD ON THERE!!
+                  </Text>
+                  <Text
+                    fontSize={"1rem"}
+                    fontWeight={400}
+                    color={"neutral.dark.400"}
+                  >
+                    Scaning your directory
+                  </Text>
+                </Box>
               </Box>
-            </Box>
-            <Box overflow={"auto"} height={"100%"} my={"4px"}>
-              {dir.map((item, idx) => (
+            )}
+            {!scan.loading && (
+              <>
                 <Box
-                  key={idx}
-                  p={"8px"}
-                  borderRadius={"4px"}
+                  my={"6px"}
                   display={"flex"}
                   alignItems={"center"}
-                  justifyContent={"space-between"}
-                  _hover={{ cursor: "pointer", color: "brand.500" }}
-                  bg={toBeScanned === item.name && "neutral.dark.700"}
+                  py={"6px"}
+                  bg={"neutral.dark.700"}
+                  borderRadius={"4px"}
                 >
+                  <Icon
+                    as={FaArrowLeft}
+                    onClick={() => handlePopPath()}
+                    _hover={{ cursor: "pointer" }}
+                    mx={"8px"}
+                  />
                   <Box
-                    onDoubleClick={() => handleAddPath(item.name)}
-                    onClick={() => setToBeScanned(item.name)}
                     display={"flex"}
-                    alignItems={"center"}
-                    width={"full"}
+                    width={"100%"}
+                    flexWrap={"nowrap"}
+                    overflow={"hidden"}
+                    whiteSpace={"nowrap"}
                   >
-                    <Icon as={FaFolder} mr={"8px"} />
-                    <Text>{item.name}</Text>
+                    <Text>root:/</Text>
+                    {url.map((item, idx) => (
+                      <Text key={idx}>{item}/</Text>
+                    ))}
                   </Box>
                 </Box>
-              ))}
-            </Box>
-            <Box mt={"4px"}>
-              <DefaultButton
-                color={"neutral.dark.800"}
-                action={() => handleScan(toBeScanned)}
-                isDisabled={toBeScanned === ""}
-              >
-                scan
-              </DefaultButton>
-            </Box>
+                <Box overflow={"auto"} height={"100%"} my={"4px"}>
+                  {dir.map((item, idx) => (
+                    <Box
+                      key={idx}
+                      p={"8px"}
+                      borderRadius={"4px"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      justifyContent={"space-between"}
+                      _hover={{ cursor: "pointer", color: "brand.500" }}
+                      bg={toBeScanned === item.name && "neutral.dark.700"}
+                    >
+                      <Box
+                        onDoubleClick={() => handleAddPath(item.name)}
+                        onClick={() => setToBeScanned(item.name)}
+                        display={"flex"}
+                        alignItems={"center"}
+                        width={"full"}
+                      >
+                        <Icon as={FaFolder} mr={"8px"} />
+                        <Text>{item.name}</Text>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+                <Box mt={"4px"}>
+                  <DefaultButton
+                    color={"neutral.dark.800"}
+                    action={() => handleScan(toBeScanned)}
+                    isDisabled={toBeScanned === ""}
+                  >
+                    scan
+                  </DefaultButton>
+                </Box>
+              </>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

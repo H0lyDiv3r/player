@@ -97,7 +97,7 @@ export const ListItem = ({
           color={
             track["path"] === (currentTrack && currentTrack["path"])
               ? "brand.500"
-              : "neutral.dark.200"
+              : "neutral.dark.300"
           }
         >
           <Box>
@@ -107,7 +107,14 @@ export const ListItem = ({
             <Text my={0} fontWeight={500} whiteSpace={"nowrap"}>
               {track.title || track.name}
             </Text>
-            <Text whiteSpace={"nowrap"} color={"gray"}>
+            <Text
+              whiteSpace={"nowrap"}
+              color={
+                track["path"] === (currentTrack && currentTrack["path"])
+                  ? "brand.500"
+                  : "neutral.dark.500"
+              }
+            >
               {track.artist || "unknown"}
             </Text>
           </Box>

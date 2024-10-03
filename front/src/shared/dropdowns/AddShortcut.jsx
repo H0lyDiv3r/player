@@ -56,7 +56,12 @@ export const AddShortcut = ({ vals }) => {
           path: path.join(url, "/"),
           active: val.name,
         })
-        .then((res) => console.log(res));
+        .then((res) => {
+          showToast("success", "added shortcut");
+        })
+        .catch((error) => {
+          showToast("error", "failed to create shortcut");
+        });
     }
   };
   return (

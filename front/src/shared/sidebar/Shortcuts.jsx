@@ -67,42 +67,60 @@ export const Shortcuts = () => {
   }, [activeList.active, activeList.url]);
   return (
     <>
-      <Box color={"neutral.dark.200"}>
-        {shortcuts.response &&
-          shortcuts.response.map((item) => (
-            <Box
-              key={item.name}
-              display={"flex"}
-              alignItems={"center"}
-              width={"100%"}
-              borderRadius={"4px"}
-              justifyContent={"space-between"}
-              _hover={{ bg: "neutral.dark.700" }}
-              p={"6px"}
-              fontSize={"14px"}
-            >
+      <Box color={"neutral.dark.200"} h={"100%"}>
+        {shortcuts.response && (
+          <>
+            {shortcuts.response.length < 1 ? (
               <Box
-                display={"flex"}
-                alignItems={"center"}
-                width={"100%"}
                 height={"100%"}
-                onClick={() =>
-                  handleSetShortcut({
-                    path: item.path,
-                    active: item.active,
-                  })
-                }
+                display={"flex"}
+                flexDir={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}
               >
-                <Icon as={TbFolderFilled} boxSize={4} mr={"12px"} />
-                <Text>{item.name}</Text>
+                <Box height={"100px"} width={"100px"} bg={"blue"}>
+                  aaa
+                </Box>
+                <Box>you dont have any shortcuts!!!</Box>
               </Box>
-              <Icon
-                as={TbTrashFilled}
-                boxSize={4}
-                onClick={() => handleDeleteShortcut(item.name)}
-              />
-            </Box>
-          ))}
+            ) : (
+              shortcuts.response.map((item) => (
+                <Box
+                  key={item.name}
+                  display={"flex"}
+                  alignItems={"center"}
+                  width={"100%"}
+                  borderRadius={"4px"}
+                  justifyContent={"space-between"}
+                  _hover={{ bg: "neutral.dark.700" }}
+                  p={"6px"}
+                  fontSize={"14px"}
+                >
+                  <Box
+                    display={"flex"}
+                    alignItems={"center"}
+                    width={"100%"}
+                    height={"100%"}
+                    onClick={() =>
+                      handleSetShortcut({
+                        path: item.path,
+                        active: item.active,
+                      })
+                    }
+                  >
+                    <Icon as={TbFolderFilled} boxSize={4} mr={"12px"} />
+                    <Text>{item.name}</Text>
+                  </Box>
+                  <Icon
+                    as={TbTrashFilled}
+                    boxSize={4}
+                    onClick={() => handleDeleteShortcut(item.name)}
+                  />
+                </Box>
+              ))
+            )}
+          </>
+        )}
       </Box>
     </>
   );

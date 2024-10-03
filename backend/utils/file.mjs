@@ -46,7 +46,6 @@ export const scanDir = async (url, dir) => {
         tempCurrent = tempCurrent[chain[i]];
       }
 
-      // const metadata = await parseFile(path.join(file.path, file.name));
       await new Promise((resolve, reject) => {
         jsMediaTags.read(path.join(file.path, file.name), {
           onSuccess: (tags) => {
@@ -67,7 +66,7 @@ export const scanDir = async (url, dir) => {
             resolve();
           },
           onError: (error) => {
-            reject(error);
+            resolve();
           },
         });
       });

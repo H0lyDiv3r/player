@@ -12,6 +12,7 @@ import { MusicFromDirectoryList } from "../shared/lists/MusicFromDirectoryList";
 import { useRef } from "react";
 import { MusicFromPlaylist } from "../shared/lists/MusicFromPlaylist";
 import { LeftBar } from "../shared/leftbar";
+import { DotLoader } from "../shared/loading";
 
 export const Layout = () => {
   const { queue, activeList, activePlaylist, currentTab } =
