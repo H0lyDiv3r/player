@@ -3,8 +3,11 @@ html {
     width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Standard syntax */
 }
-
 /* body::-webkit-scrollbar {
     width: 3px;
     background: transparent;

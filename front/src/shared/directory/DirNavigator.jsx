@@ -143,7 +143,11 @@ export const DirNavigator = () => {
                       display={"flex"}
                       alignItems={"center"}
                       justifyContent={"space-between"}
-                      _hover={{ cursor: "pointer", color: "brand.500" }}
+                      _hover={{
+                        cursor: "pointer",
+                        color: "brand.500",
+                        bg: "neutral.dark.700",
+                      }}
                       bg={toBeScanned === item.name && "neutral.dark.700"}
                     >
                       <Box
