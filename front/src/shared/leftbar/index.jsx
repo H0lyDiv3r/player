@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Divider, Grid, GridItem, Image, Text } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 
@@ -33,24 +33,60 @@ export const LeftBar = () => {
           display={"flex"}
           flexDir={"column"}
         >
-          {queue.list.map((item, idx) => (
-            <Box
-              key={idx}
-              p={"6px"}
-              borderRadius={"6px"}
-              my={"2px"}
-              display={"flex"}
-              _hover={{ bg: "neutral.dark.600" }}
-              color={
-                item.path === (currentTrack && currentTrack["path"])
-                  ? "brand.500"
-                  : "neutral.dark.200"
-              }
-            >
-              <Text mr={"12px"}>{idx + 1}</Text>
-              <Text>{item.name.slice(0, 25)}</Text>
-            </Box>
-          ))}
+          {queue.list.length < 1 ? (
+            <>
+              <Box
+                height={"100%"}
+                display={"flex"}
+                flexDir={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                color={"neutral.dark.500"}
+              >
+                <Text
+                  fontSize={"1.25rem"}
+                  fontWeight={500}
+                  color={"neutral.dark.300"}
+                >
+                  WHOOPS!
+                </Text>
+                <Box
+                  width={"100%"}
+                  display={"flex"}
+                  justifyContent={"center"}
+                  my={"12px"}
+                >
+                  <Image src={"./noMusic.png"} width={"150px"} />
+                </Box>
+                <Box>
+                  <Text fontSize={"0.8rem"} my={"8px"}>
+                    you need to play some music.
+                  </Text>
+                </Box>
+              </Box>
+            </>
+          ) : (
+            <>
+              {queue.list.map((item, idx) => (
+                <Box
+                  key={idx}
+                  p={"6px"}
+                  borderRadius={"6px"}
+                  my={"2px"}
+                  display={"flex"}
+                  _hover={{ bg: "neutral.dark.600" }}
+                  color={
+                    item.path === (currentTrack && currentTrack["path"])
+                      ? "brand.500"
+                      : "neutral.dark.200"
+                  }
+                >
+                  <Text mr={"12px"}>{idx + 1}</Text>
+                  <Text>{item.name.slice(0, 25)}</Text>
+                </Box>
+              ))}
+            </>
+          )}
         </Box>
       </GridItem>
     </Grid>

@@ -1,18 +1,24 @@
-import { Box, Divider, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
-import { DirNavigator } from "../directory/DirNavigator";
-import useRequest from "../../hooks/useRequest";
-import { useEffect } from "react";
+import {
+  Box,
+  Divider,
+  Grid,
+  GridItem,
+  Icon,
+  Image,
+  Text,
+} from "@chakra-ui/react";
+import path from "path-browserify";
+import { useContext, useEffect, useState } from "react";
 import {
   FaArrowLeft,
   FaChevronDown,
   FaChevronUp,
   FaFolder,
 } from "react-icons/fa6";
-import { useState } from "react";
-import path from "path-browserify";
-import { useContext } from "react";
+import useRequest from "../../hooks/useRequest";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { api } from "../../utils";
+import { DirNavigator } from "../directory/DirNavigator";
 import { AddShortcut } from "../dropdowns/AddShortcut";
 
 import "./scroll.css";
@@ -86,99 +92,140 @@ export const Directories = () => {
       templateRows={"repeat(12,1fr)"}
       color={"neutral.dark.200"}
     >
-      <GridItem rowSpan={2}>
-        <DirNavigator />
-      </GridItem>
-      <GridItem rowSpan={1} overflow={"hidden"}>
-        <Box
-          display={"flex"}
-          width={"100%"}
-          overflow={"hidden"}
-          alignItems={"center"}
-          whiteSpace={"nowrap"}
-          p={"4px"}
-        >
-          <Icon
-            as={FaArrowLeft}
-            onClick={() => handlePopActiveUrl()}
-            _hover={{ cursor: "pointer" }}
-            mr={"8px"}
-          />
-          <Box display={"flex"}>
-            <Text>root:/</Text>
-            {activeList.url.map((item, idx) => (
-              <Text key={idx}>{item}/</Text>
-            ))}
-          </Box>
-        </Box>
-      </GridItem>
-      <GridItem rowSpan={9}>
+      {dirs.response && dirs.response.length > 0 && (
+        <>
+          <GridItem rowSpan={2}>
+            <DirNavigator />
+          </GridItem>
+          <GridItem rowSpan={1} overflow={"hidden"}>
+            <Box
+              display={"flex"}
+              width={"100%"}
+              overflow={"hidden"}
+              alignItems={"center"}
+              whiteSpace={"nowrap"}
+              p={"4px"}
+            >
+              <Icon
+                as={FaArrowLeft}
+                onClick={() => handlePopActiveUrl()}
+                _hover={{ cursor: "pointer" }}
+                mr={"8px"}
+              />
+              <Box display={"flex"}>
+                <Text>root:/</Text>
+                {activeList.url.map((item, idx) => (
+                  <Text key={idx}>{item}/</Text>
+                ))}
+              </Box>
+            </Box>
+          </GridItem>
+        </>
+      )}
+
+      <GridItem rowSpan={dirs.response && dirs.response.length < 1 ? 12 : 9}>
         <Box overflow={"auto"} height={"100%"} fontSize={"14px"}>
-          {dirs.response &&
-            dirs.response.map((dir, idx) => (
-              <Box key={idx}>
+          {dirs.response && (
+            <>
+              {dirs.response.length < 1 ? (
                 <Box
-                  p={"6px"}
-                  borderRadius={"4px"}
-                  _hover={{ bg: "neutral.dark.700" }}
+                  height={"100%"}
                   display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  height={"10%"}
-                  onClick={() => handleSetActiveDir(dir.name)}
-                >
-                  <Box
-                    display={"flex"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                  >
-                    <Icon as={FaFolder} mr={"12px"} />
-                    <Text>{dir.name}</Text>
-                  </Box>
-                  <Icon
-                    as={dir.name != activeDir ? FaChevronDown : FaChevronUp}
-                    mr={"6px"}
-                  />
-                </Box>
-                <Box
-                  display={dir.name == activeDir ? "flex" : "none"}
                   flexDir={"column"}
-                  height={"90%"}
-                  className="scroll"
-                  overflow={"auto"}
-                  p={"12px"}
-                  borderRadius={"12px"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  color={"neutral.dark.500"}
                 >
-                  {subDirs.response &&
-                    subDirs.response.map((item, idx) => (
+                  <Text
+                    fontSize={"1.25rem"}
+                    fontWeight={500}
+                    color={"neutral.dark.300"}
+                  >
+                    WHOOPS!
+                  </Text>
+                  <Box
+                    width={"100%"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    my={"12px"}
+                  >
+                    <Image src={"./emptyFolder.png"} width={"150px"} />
+                  </Box>
+                  <Box>
+                    <Text fontSize={"0.8rem"} my={"8px"}>
+                      you need to tell us where your music is.
+                    </Text>
+                    <DirNavigator />
+                  </Box>
+                </Box>
+              ) : (
+                dirs.response.map((dir, idx) => (
+                  <Box key={idx}>
+                    <Box
+                      p={"6px"}
+                      borderRadius={"4px"}
+                      _hover={{ bg: "neutral.dark.700" }}
+                      display={"flex"}
+                      alignItems={"center"}
+                      justifyContent={"space-between"}
+                      height={"10%"}
+                      onClick={() => handleSetActiveDir(dir.name)}
+                    >
                       <Box
-                        key={idx}
                         display={"flex"}
                         alignItems={"center"}
-                        justifyContent={"space-between"}
-                        onMouseOver={() => setSelected(idx)}
-                        onMouseLeave={() => setSelected(null)}
-                        p={"6px"}
-                        borderRadius={"4px"}
-                        _hover={{ bg: "neutral.dark.700" }}
+                        justifyContent={"center"}
                       >
-                        <Box
-                          onClick={() => handleSetActiveUrl(item)}
-                          display={"flex"}
-                          alignItems={"center"}
-                          width={"full"}
-                        >
-                          <Icon as={FaFolder} mr={"6px"} />
-                          <Text whiteSpace={"nowrap"}>
-                            {item.name.slice(0, 25)}
-                          </Text>
-                        </Box>
-                        {selected === idx && <AddShortcut vals={item} />}
+                        <Icon as={FaFolder} mr={"12px"} />
+                        <Text>{dir.name}</Text>
                       </Box>
-                    ))}
-                </Box>
-              </Box>
-            ))}
+                      <Icon
+                        as={dir.name != activeDir ? FaChevronDown : FaChevronUp}
+                        mr={"6px"}
+                      />
+                    </Box>
+                    <Box
+                      display={dir.name == activeDir ? "flex" : "none"}
+                      flexDir={"column"}
+                      height={"90%"}
+                      className="scroll"
+                      overflow={"auto"}
+                      p={"12px"}
+                      borderRadius={"12px"}
+                    >
+                      {subDirs.response &&
+                        subDirs.response.map((item, idx) => (
+                          <Box
+                            key={idx}
+                            display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            onMouseOver={() => setSelected(idx)}
+                            onMouseLeave={() => setSelected(null)}
+                            p={"6px"}
+                            borderRadius={"4px"}
+                            _hover={{ bg: "neutral.dark.700" }}
+                          >
+                            <Box
+                              onClick={() => handleSetActiveUrl(item)}
+                              display={"flex"}
+                              alignItems={"center"}
+                              width={"full"}
+                            >
+                              <Icon as={FaFolder} mr={"6px"} />
+                              <Text whiteSpace={"nowrap"}>
+                                {item.name.slice(0, 20)}
+                              </Text>
+                            </Box>
+                            {selected === idx && <AddShortcut vals={item} />}
+                          </Box>
+                        ))}
+                    </Box>
+                  </Box>
+                ))
+              )}
+            </>
+          )}
         </Box>
       </GridItem>
     </Grid>

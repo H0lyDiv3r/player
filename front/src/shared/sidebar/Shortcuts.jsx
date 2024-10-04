@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useRequest from "../../hooks/useRequest";
-import { Box, Button, Icon, Text } from "@chakra-ui/react";
+import { Box, Button, Icon, Image, Text } from "@chakra-ui/react";
 import {
   TbFolderFilled,
   TbFolderSymlink,
@@ -77,11 +77,24 @@ export const Shortcuts = () => {
                 flexDir={"column"}
                 alignItems={"center"}
                 justifyContent={"center"}
+                color={"neutral.dark.500"}
               >
-                <Box height={"100px"} width={"100px"} bg={"blue"}>
-                  aaa
+                <Text
+                  fontSize={"1.25rem"}
+                  fontWeight={500}
+                  color={"neutral.dark.300"}
+                >
+                  WHOOPS!
+                </Text>
+                <Box
+                  width={"100%"}
+                  display={"flex"}
+                  justifyContent={"center"}
+                  my={"12px"}
+                >
+                  <Image src={"./emptyFolder.png"} width={"150px"} />
                 </Box>
-                <Box>you dont have any shortcuts!!!</Box>
+                <Text fontSize={"0.8rem"}>you dont have any shortcuts</Text>
               </Box>
             ) : (
               shortcuts.response.map((item) => (
