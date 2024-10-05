@@ -12,6 +12,7 @@ import {
   scanDir,
   getAllAudio,
   createFile,
+  getSongs,
 } from "../utils/file.mjs";
 
 export const dirControllers = {
@@ -140,6 +141,26 @@ export const dirControllers = {
       let songs = [];
       await getAllAudio(directory, songs);
       return res.status(200).json(songs);
+    } catch (error) {
+      next(error);
+    }
+  },
+  search: async (req, res, next) => {
+    try {
+      const jsonFilePath = path.join(files, directoryFile);
+      if (!(await fileType.checkFileHealth(jsonFilePath))) {
+        await createFile("dir", JSON.stringify({}));
+      }
+      let data = await fs.readFile(jsonFilePath, "utf8");
+      if (!data) {
+        return res.status(404).json({ message: "failed to read data" });
+      }
+      const directory = JSON.parse(data);
+
+      let songs = [];
+      await getSongs(req.query.search, songs, directory);
+      console.log("im here", req.query.search);
+      res.send(songs);
     } catch (error) {
       next(error);
     }

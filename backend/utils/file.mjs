@@ -100,6 +100,29 @@ export const getAllAudio = async (dir, store) => {
   }
 };
 
+export const getSongs = async (string, store, dir) => {
+  let songs = store;
+  try {
+    for (const item of Object.keys(dir)) {
+      if (item === fileArrayNameInDir || dir[item] instanceof Array) {
+        songs.push(
+          ...dir[item].filter((song) => {
+            return (
+              (Boolean(song.name) && song.name.includes(string)) ||
+              (Boolean(song.title) && song.title.includes(string)) ||
+              (Boolean(song.artist) && song.artist.includes(string))
+            );
+          }),
+        );
+      } else {
+        await getSongs(string, songs, dir[item]);
+      }
+    }
+  } catch (error) {
+    return songs;
+  }
+};
+
 export const fileType = {
   isMusicFile: async (dir) => {
     return fs
