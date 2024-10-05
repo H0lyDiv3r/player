@@ -64,8 +64,7 @@ export const ToastProvider = ({ children }) => {
         width={"100%"}
         pos={"relative"}
         ref={containerRef}
-        zIndex={"999"}
-        bg={"rgba(0,0,0,0)"}
+        bg={"none"}
       >
         {children}
         <Portal>

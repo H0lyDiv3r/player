@@ -25,52 +25,54 @@ export const Layout = () => {
     console.log("plaplaplaplaplaplap", activePlaylist);
   }, [activeList, queue]);
   return (
-    <Grid
-      bg={"neutral.dark.900"}
-      w={"100%"}
-      height={"100vh"}
-      fontSize={"14px"}
-      templateRows={"repeat(12,1fr)"}
-      // display={"grid"}
-      // gridTemplateRows={"85% 1fr"}
-    >
-      <GridItem
-        ref={containerRef}
-        rowSpan={10}
-        overflow={"hidden"}
-        display={"grid"}
-        gridTemplateColumns={"300px 1fr 300px"}
+    <Box bg={"neutral.dark.900"}>
+      <Grid
+        bg={"rgba(0,0,0,0.5)"}
+        w={"100%"}
+        height={"100vh"}
+        fontSize={"14px"}
+        templateRows={"repeat(12,1fr)"}
+        // display={"grid"}
+        // gridTemplateRows={"85% 1fr"}
       >
-        <Box px={"12px"} pt={"12px"} overflow={"auto"}>
-          <Sidebar />
-        </Box>
-        <Box minW={"500px"} color={"white"} display={"grid"} height={"100%"}>
-          <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
-            <Box px={"12px"} display={"flex"} alignItems={"center"}>
-              <Text fontSize={"16px"} marginY={"auto"}>
-                {currentTab === "playlist"
-                  ? activePlaylist.active
-                  : "Directory"}
-              </Text>
-            </Box>
-            <Box px={"12px"} overflow={"auto"} height={"100%"}>
-              {currentTab === "directory" ? (
-                <MusicFromDirectoryList list={activeList.list} />
-              ) : (
-                <MusicFromPlaylist list={activePlaylist.list} />
-              )}
+        <GridItem
+          ref={containerRef}
+          rowSpan={10}
+          overflow={"hidden"}
+          display={"grid"}
+          gridTemplateColumns={"300px 1fr 300px"}
+        >
+          <Box px={"12px"} pt={"12px"} overflow={"auto"}>
+            <Sidebar />
+          </Box>
+          <Box minW={"500px"} color={"white"} display={"grid"} height={"100%"}>
+            <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
+              <Box px={"12px"} display={"flex"} alignItems={"center"}>
+                <Text fontSize={"16px"} marginY={"auto"}>
+                  {currentTab === "playlist"
+                    ? activePlaylist.active
+                    : "Directory"}
+                </Text>
+              </Box>
+              <Box px={"12px"} overflow={"auto"} height={"100%"}>
+                {currentTab === "directory" ? (
+                  <MusicFromDirectoryList list={activeList.list} />
+                ) : (
+                  <MusicFromPlaylist list={activePlaylist.list} />
+                )}
+              </Box>
             </Box>
           </Box>
-        </Box>
-        <Box pt={"12px"} px={"12px"} maxHeight={"100%"} overflow={"hidden"}>
-          <LeftBar />
-        </Box>
-      </GridItem>
-      <GridItem rowSpan={2}>
-        <PlayerContextProvider>
-          <Player />
-        </PlayerContextProvider>
-      </GridItem>
-    </Grid>
+          <Box pt={"12px"} px={"12px"} maxHeight={"100%"} overflow={"hidden"}>
+            <LeftBar />
+          </Box>
+        </GridItem>
+        <GridItem rowSpan={2}>
+          <PlayerContextProvider>
+            <Player />
+          </PlayerContextProvider>
+        </GridItem>
+      </Grid>
+    </Box>
   );
 };

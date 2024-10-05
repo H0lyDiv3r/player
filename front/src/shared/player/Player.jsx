@@ -107,9 +107,20 @@ export default function Player() {
   }, [loaded]);
 
   return (
-    <>
+    <Box
+      bg={"none"}
+      bgImage={"./musicLine.svg"}
+      bgSize={"cover"}
+      bgPos={"left"}
+      width={"100%"}
+      height={"100%"}
+      overflow={"hidden"}
+      display={"flex"}
+    >
       <Box
-        bg={"none"}
+        bg={"rgba(0,0,0,0)"}
+        backdropFilter={"auto"}
+        backdropBlur={"1px"}
         width={"100%"}
         height={"100%"}
         overflow={"hidden"}
@@ -149,6 +160,8 @@ export default function Player() {
             height={"60px"}
             bg={"white"}
             mx={"6px"}
+            borderRadius={"4px"}
+            overflow={"hidden"}
           >
             <Image
               src={
@@ -212,6 +225,6 @@ export default function Player() {
           <VolumeControl ref={audioRef} />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }

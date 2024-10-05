@@ -70,7 +70,7 @@ export const MusicFromPlaylist = ({ list = [] }) => {
                       list[index].path ===
                       (currentTrack && currentTrack["path"])
                         ? "brand.500"
-                        : "neutral.dark.200"
+                        : "neutral.dark.400"
                     }
                   >
                     <Box>
@@ -80,7 +80,15 @@ export const MusicFromPlaylist = ({ list = [] }) => {
                       <Text my={0} fontWeight={500} whiteSpace={"nowrap"}>
                         {list[index].title || list[index].name}
                       </Text>
-                      <Text color={"gray"} whiteSpace={"nowrap"}>
+                      <Text
+                        whiteSpace={"nowrap"}
+                        color={
+                          list[index].path ===
+                          (currentTrack && currentTrack["path"])
+                            ? "brand.500"
+                            : "neutral.dark.400"
+                        }
+                      >
                         {list[index].artist || "unknown"}
                       </Text>
                     </Box>
