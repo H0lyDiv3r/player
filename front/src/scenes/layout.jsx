@@ -46,12 +46,7 @@ export const Layout = () => {
         </Box>
         <Box minW={"500px"} color={"white"} display={"grid"} height={"100%"}>
           <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
-            <Box
-              px={"12px"}
-              bg={"neutral.dark.800"}
-              display={"flex"}
-              alignItems={"center"}
-            >
+            <Box px={"12px"} display={"flex"} alignItems={"center"}>
               <Text fontSize={"16px"} marginY={"auto"}>
                 {currentTab === "playlist"
                   ? activePlaylist.active

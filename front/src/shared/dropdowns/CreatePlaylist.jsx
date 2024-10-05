@@ -28,7 +28,7 @@ export const CreatePlaylist = ({ action }) => {
   return (
     <>
       <Menu
-        placement="auto"
+        placement={"left"}
         onClose={() => SetPlaylistName("")}
         initialFocusRef={inputRef}
       >

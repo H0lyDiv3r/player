@@ -33,10 +33,3 @@ function App() {
 }
 
 export default App;
-// <Button
-//   onClick={() =>
-//     handleAddToast({ status: "error", message: "wwwwww", delay: 5000 })
-//   }
-// >
-//   Add toast
-// </Button>

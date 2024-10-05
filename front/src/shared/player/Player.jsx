@@ -151,7 +151,11 @@ export default function Player() {
             mx={"6px"}
           >
             <Image
-              src={`data:image/jpeg;base64,${currentTrackImage}`}
+              src={
+                currentTrackImage
+                  ? `data:image/jpeg;base64,${currentTrackImage}`
+                  : "./trackImage.png"
+              }
               width={"100%"}
               height={"100%"}
               fit={"cover"}

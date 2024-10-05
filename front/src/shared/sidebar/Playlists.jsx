@@ -148,7 +148,12 @@ const ConfirmationMoadal = ({ action }) => {
               <Box textAlign={"center"}>
                 are you sure you want to delete this playlist?
               </Box>
-              <DefaultButton size={"sm"} action={action}>
+              <DefaultButton
+                size={"sm"}
+                action={action}
+                bg={"secondary.500"}
+                _hover={{ bg: "secondary.600" }}
+              >
                 delete
               </DefaultButton>
             </ModalBody>

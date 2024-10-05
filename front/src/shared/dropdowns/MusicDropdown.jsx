@@ -178,7 +178,7 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
   };
   return (
     <>
-      <Menu>
+      <Menu placement={"auto"}>
         <MenuButton
           onClick={handleOpen}
           p={"8px"}
