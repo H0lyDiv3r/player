@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { PlayerContext } from "./PlayerContextProvider";
 import { IoSpeedometer } from "react-icons/io5";
+import colors from "../../themes/colors";
 const speed = [
   {
     id: 0,
@@ -44,7 +45,7 @@ const PlaybackRateControl = forwardRef(
           mx={"12px"}
           color={"neutral.dark.200"}
         >
-          <Menu closeOnSelect={false}>
+          <Menu closeOnSelect={false} placement={"top"}>
             {speed.map((val) => (
               <Box key={val.id}>
                 {playbackRate == val.value && (
@@ -70,7 +71,7 @@ const PlaybackRateControl = forwardRef(
 
             <MenuList
               bg={"neutral.dark.800"}
-              border={"none"}
+              border={`1px solid ${colors.neutral.dark[600]}`}
               minW={0}
               width={"70px"}
               p={"4px"}

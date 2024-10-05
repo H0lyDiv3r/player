@@ -114,7 +114,6 @@ export default function Player() {
       bgPos={"left"}
       width={"100%"}
       height={"100%"}
-      overflow={"hidden"}
       display={"flex"}
     >
       <Box
@@ -123,7 +122,6 @@ export default function Player() {
         backdropBlur={"1px"}
         width={"100%"}
         height={"100%"}
-        overflow={"hidden"}
         display={"flex"}
       >
         <Box display={"none"}>
@@ -220,6 +218,7 @@ export default function Player() {
           alignItems={"center"}
           justifyContent={"flex-end"}
           px={"6px"}
+          overflow={"hidden"}
         >
           <PlaybackRateControl ref={audioRef} />
           <VolumeControl ref={audioRef} />

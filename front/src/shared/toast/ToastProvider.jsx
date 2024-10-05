@@ -59,13 +59,7 @@ export const ToastProvider = ({ children }) => {
   const vals = { ...state, handleAddToast };
   return (
     <ToastContext.Provider value={vals}>
-      <Box
-        height={"100vh"}
-        width={"100%"}
-        pos={"relative"}
-        ref={containerRef}
-        bg={"none"}
-      >
+      <Box height={"100vh"} width={"100%"} pos={"relative"} ref={containerRef}>
         {children}
         <Portal>
           <AnimatePresence>

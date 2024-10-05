@@ -25,7 +25,7 @@ export const Layout = () => {
     console.log("plaplaplaplaplaplap", activePlaylist);
   }, [activeList, queue]);
   return (
-    <Box bg={"neutral.dark.900"}>
+    <Box bg={"neutral.dark.900"} overflow={"hidden"}>
       <Grid
         bg={"rgba(0,0,0,0.5)"}
         w={"100%"}
