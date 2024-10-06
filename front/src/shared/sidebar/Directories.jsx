@@ -149,7 +149,7 @@ export const Directories = () => {
                     justifyContent={"center"}
                     my={"12px"}
                   >
-                    <Image src={"./emptyFolder.png"} width={"150px"} />
+                    <Image src={"./emptyFolder.svg"} width={"150px"} />
                   </Box>
                   <Box>
                     <Text fontSize={"0.8rem"} my={"8px"}>

@@ -76,7 +76,6 @@ const reducer = (state = initialState, action) => {
         filePath: path.join(action.payload.newPath, "/"),
       };
     case setCurrentTrack:
-      console.log("setting");
       return { ...state, currentTrack: action.payload.currentTrack };
     case setPath:
       return {
@@ -205,7 +204,6 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleSetActivePlaylist = (name) => {
-    console.log("setting");
     playlist
       .request("/playlist/getPlaylist", "GET", {
         name: name,
@@ -225,62 +223,63 @@ export const GlobalContextProvider = ({ children }) => {
       });
   };
   const handleNextPrev = (type) => {
-    switch (state.loop) {
-      case 0:
-        dispatch({
-          type: setCurrentTrack,
-          payload: {
-            currentTrack:
-              type === "next"
-                ? state.queue.list[state.indexOfCurrentTrack + 1]
-                : state.queue.list[state.indexOfCurrentTrack - 1],
-          },
-        });
-        handleSetIndexOfCurrentTrack(
-          type === "next"
-            ? state.indexOfCurrentTrack + 1
-            : state.indexOfCurrentTrack - 1,
-        );
-        break;
-      case 1:
-        dispatch({
-          type: setCurrentTrack,
-          payload: {
-            currentTrack:
-              type === "next"
-                ? state.queue.list[
-                    next(state.queue.list.length, state.indexOfCurrentTrack)
-                  ]
-                : state.queue.list[
-                    prev(state.queue.list.length, state.indexOfCurrentTrack)
-                  ],
-          },
-        });
-        handleSetIndexOfCurrentTrack(
-          type === "next"
-            ? next(state.queue.list.length, state.indexOfCurrentTrack)
-            : prev(state.queue.list.length, state.indexOfCurrentTrack),
-        );
-        break;
-      case 2:
-        dispatch({
-          type: setCurrentTrack,
-          payload: {
-            currentTrack:
-              type === "next"
-                ? state.queue.list[state.indexOfCurrentTrack]
-                : state.queue.list[state.indexOfCurrentTrack],
-          },
-        });
-        handleSetIndexOfCurrentTrack(
-          type === "next"
-            ? state.indexOfCurrentTrack
-            : state.indexOfCurrentTrack,
-        );
-        break;
-      default:
-        return;
-    }
+    console.log(state.loop);
+    // switch (state.loop) {
+    //   case 0:
+    //     dispatch({
+    //       type: setCurrentTrack,
+    //       payload: {
+    //         currentTrack:
+    //           type === "next"
+    //             ? state.queue.list[state.indexOfCurrentTrack + 1]
+    //             : state.queue.list[state.indexOfCurrentTrack - 1],
+    //       },
+    //     });
+    //     handleSetIndexOfCurrentTrack(
+    //       type === "next"
+    //         ? state.indexOfCurrentTrack + 1
+    //         : state.indexOfCurrentTrack - 1,
+    //     );
+    //     break;
+    //   case 1:
+    //     dispatch({
+    //       type: setCurrentTrack,
+    //       payload: {
+    //         currentTrack:
+    //           type === "next"
+    //             ? state.queue.list[
+    //                 next(state.queue.list.length, state.indexOfCurrentTrack)
+    //               ]
+    //             : state.queue.list[
+    //                 prev(state.queue.list.length, state.indexOfCurrentTrack)
+    //               ],
+    //       },
+    //     });
+    //     handleSetIndexOfCurrentTrack(
+    //       type === "next"
+    //         ? next(state.queue.list.length, state.indexOfCurrentTrack)
+    //         : prev(state.queue.list.length, state.indexOfCurrentTrack),
+    //     );
+    //     break;
+    //   case 2:
+    //     dispatch({
+    //       type: setCurrentTrack,
+    //       payload: {
+    //         currentTrack:
+    //           type === "next"
+    //             ? state.queue.list[state.indexOfCurrentTrack]
+    //             : state.queue.list[state.indexOfCurrentTrack],
+    //       },
+    //     });
+    //     handleSetIndexOfCurrentTrack(
+    //       type === "next"
+    //         ? state.indexOfCurrentTrack
+    //         : state.indexOfCurrentTrack,
+    //     );
+    //     break;
+    //   default:
+    //     return;
+    // }
   };
   const handleSetIndexOfCurrentTrack = (index) => {
     dispatch({
@@ -393,7 +392,6 @@ export const GlobalContextProvider = ({ children }) => {
         loop: val,
       },
     });
-    console.log(val);
   };
   const handleSetCurrentTab = (currentTab) => {
     dispatch({

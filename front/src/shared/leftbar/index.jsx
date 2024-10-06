@@ -56,7 +56,7 @@ export const LeftBar = () => {
                   justifyContent={"center"}
                   my={"12px"}
                 >
-                  <Image src={"./noMusic.png"} width={"150px"} />
+                  <Image src={"./noMusic.svg"} width={"150px"} />
                 </Box>
                 <Box>
                   <Text fontSize={"0.8rem"} my={"8px"}>

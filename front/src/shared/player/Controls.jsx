@@ -49,7 +49,7 @@ const Controls = forwardRef(function Controls(props, ref) {
           action={() => handleNextPrev("prev")}
           isDisabled={queue.list.length < 1}
           color={"neutral.dark.300"}
-          _hover={{ bg: "none", color: "neutral.dark.100" }}
+          _hover={{ bg: "none", color: "neutral.dark.400" }}
         >
           <Icon as={TbPlayerTrackPrevFilled} boxSize={4} />
         </PlayerButton>

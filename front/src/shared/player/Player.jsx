@@ -165,7 +165,7 @@ export default function Player() {
               src={
                 currentTrackImage
                   ? `data:image/jpeg;base64,${currentTrackImage}`
-                  : "./trackImage.png"
+                  : "./trackImage.svg"
               }
               width={"100%"}
               height={"100%"}

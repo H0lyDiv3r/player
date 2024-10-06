@@ -92,7 +92,7 @@ export const Shortcuts = () => {
                   justifyContent={"center"}
                   my={"12px"}
                 >
-                  <Image src={"./emptyFolder.png"} width={"150px"} />
+                  <Image src={"./emptyFolder.svg"} width={"150px"} />
                 </Box>
                 <Text fontSize={"0.8rem"}>you dont have any shortcuts</Text>
               </Box>

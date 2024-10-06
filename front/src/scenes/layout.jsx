@@ -13,12 +13,21 @@ import { useRef } from "react";
 import { MusicFromPlaylist } from "../shared/lists/MusicFromPlaylist";
 import { LeftBar } from "../shared/leftbar";
 import { DotLoader } from "../shared/loading";
+import { Search } from "../shared/input/Search";
+import useRequest from "../hooks/useRequest";
 
 export const Layout = () => {
   const { queue, activeList, activePlaylist, currentTab } =
     useContext(GlobalContext);
-  const listContainerRef = useRef(null);
+
+  const [search] = useRequest();
   const containerRef = useRef(null);
+  const handleSearch = () => {
+    search.request("/dir/search", "GET", { search: "s" }).then((res) => {
+      console.log(res.data);
+    });
+    console.log("searching");
+  };
   useEffect(() => {
     console.log("active list", activeList);
     console.log("queueueueueq", queue);
@@ -47,12 +56,18 @@ export const Layout = () => {
           </Box>
           <Box minW={"500px"} color={"white"} display={"grid"} height={"100%"}>
             <Box display={"grid"} gridTemplateRows={"50px 1fr"}>
-              <Box px={"12px"} display={"flex"} alignItems={"center"}>
+              <Box
+                px={"12px"}
+                display={"flex"}
+                alignItems={"center"}
+                color={"neutral.dark.400"}
+              >
                 <Text fontSize={"16px"} marginY={"auto"}>
                   {currentTab === "playlist"
                     ? activePlaylist.active
                     : "Directory"}
                 </Text>
+                <Search action={handleSearch} />
               </Box>
               <Box px={"12px"} overflow={"auto"} height={"100%"}>
                 {currentTab === "directory" ? (
