@@ -54,6 +54,7 @@ export const Layout = () => {
                 px={"12px"}
                 display={"flex"}
                 alignItems={"center"}
+                justifyContent={"space-between"}
                 color={"neutral.dark.400"}
               >
                 <Text fontSize={"16px"} marginY={"auto"}>

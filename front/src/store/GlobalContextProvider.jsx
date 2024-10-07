@@ -26,7 +26,7 @@ const initialState = {
         year: "",
       },
   currentTrackImage: global ? global.currentTrackImage : null,
-  indexOfCurrentTrack: global ? global.indexOfCurrentTrack : null,
+  indexOfCurrentTrack: Math.abs(global ? global.indexOfCurrentTrack : null),
   queue: global
     ? global.queue
     : {
@@ -159,8 +159,6 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const handleSetCurrentTrack = (index) => {
-
   const handleSetCurrentTrack = async (index) => {
     const active =
       state.currentTab === "directory"
@@ -331,13 +329,14 @@ export const GlobalContextProvider = ({ children }) => {
           ...active,
           list: await shuffle(
             active.list,
-            state.queue.list.findIndex(
-              (obj) => obj.name === state.currentTrack.name,
-            ),
+            state.indexOfCurrentTrack,
+            // state.queue.list.findIndex(
+            //   (obj) => obj.name === state.currentTrack.name,
+            // ),
           ),
         });
         handleSetIndexOfCurrentTrack(0);
-        console.log(state.queue.list.indexOf(state.currentTrack), active.list);
+        console.log(state.indexOfCurrentTrack, active.list);
       } else {
         if (state.queue.type === "directory") {
           handleShuffleDir();
@@ -387,7 +386,9 @@ export const GlobalContextProvider = ({ children }) => {
           list: res.data,
         });
         handleSetIndexOfCurrentTrack(
-          res.data.findIndex((obj) => obj.name === state.currentTrack.name),
+          res.data.findIndex((obj) => obj.name === state.currentTrack.name) < 0
+            ? res.data.findIndex((obj) => obj.name === state.currentTrack.name)
+            : state.indexOfCurrentTrack,
         );
         console.log("i am un shuffling man", state.currentTrack);
       });
@@ -404,9 +405,10 @@ export const GlobalContextProvider = ({ children }) => {
           ...state.activePlaylist,
           list: res.data,
         });
-        console.log(res.data);
         handleSetIndexOfCurrentTrack(
-          res.data.findIndex((obj) => obj.name === state.currentTrack.name),
+          res.data.findIndex((obj) => obj.name === state.currentTrack.name) < 0
+            ? res.data.findIndex((obj) => obj.name === state.currentTrack.name)
+            : state.indexOfCurrentTrack,
         );
         console.log("i am un shuffling man", state.currentTrack);
       });

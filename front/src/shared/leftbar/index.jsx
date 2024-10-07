@@ -7,6 +7,10 @@ export const LeftBar = () => {
   const { queue, currentTrack } = useContext(GlobalContext);
 
   const heightRef = useRef(null);
+
+  useEffect(() => {
+    console.log(queue);
+  }, [queue]);
   return (
     <Grid
       height={"100%"}
@@ -77,6 +81,7 @@ export const LeftBar = () => {
                 {({ index, style }) => {
                   return (
                     <>
+                      {index}
                       <Box
                         style={style}
                         key={index}

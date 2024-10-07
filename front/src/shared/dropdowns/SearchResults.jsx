@@ -30,10 +30,12 @@ export const SearchMoadal = ({ action, phrase }) => {
   const [selected, setSelected] = useState("");
   const heightRef = useRef(null);
   const handleSearch = (phrase) => {
-    search.request("/dir/search", "GET", { search: phrase }).then((res) => {
-      console.log(res.data);
-    });
-    console.log("searching");
+    if (phrase !== "") {
+      search.request("/dir/search", "GET", { search: phrase }).then((res) => {
+        console.log(res.data);
+      });
+      console.log("searching");
+    }
   };
   useEffect(() => {
     if (isOpen) {
