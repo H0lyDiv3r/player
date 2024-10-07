@@ -160,11 +160,8 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleSetCurrentTrack = (index) => {
-||||||| 5e4114b
-  const handleSetCurrentTrack = (index) => {
-=======
+
   const handleSetCurrentTrack = async (index) => {
->>>>>>> main
     const active =
       state.currentTab === "directory"
         ? state.activeList
