@@ -141,6 +141,14 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
+  const handleSetTrack = (track) => {
+    dispatch({
+      type: setCurrentTrack,
+      payload: {
+        currentTrack: track,
+      },
+    });
+  };
   const handleSetCurrentTrack = (index) => {
     const active =
       state.currentTab === "directory"
@@ -426,6 +434,7 @@ export const GlobalContextProvider = ({ children }) => {
       handleNextPrev,
       handleSetIndexOfCurrentTrack,
       handleSetCurrentTab,
+      handleSetTrack,
     }),
     [state],
   );

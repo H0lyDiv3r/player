@@ -108,9 +108,15 @@ export const getSongs = async (string, store, dir) => {
         songs.push(
           ...dir[item].filter((song) => {
             return (
-              (Boolean(song.name) && song.name.includes(string)) ||
-              (Boolean(song.title) && song.title.includes(string)) ||
-              (Boolean(song.artist) && song.artist.includes(string))
+              (Boolean(song.name) &&
+                song.name.toLowerCase().replaceAll(" ", "").includes(string)) ||
+              (Boolean(song.title) &&
+                song.title
+                  .toLowerCase()
+                  .replaceAll(" ", "")
+                  .includes(string)) ||
+              (Boolean(song.artist) &&
+                song.artist.toLowerCase().replaceAll(" ", "").includes(string))
             );
           }),
         );

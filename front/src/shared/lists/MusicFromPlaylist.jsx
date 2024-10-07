@@ -42,7 +42,7 @@ export const MusicFromPlaylist = ({ list = [] }) => {
             className="scroll"
             itemCount={list.length}
             itemSize={42}
-            height={heightRef.current ? heightRef.current.offsetHeight : 200}
+            height={heightRef.current ? heightRef.current.offsetHeight : 400}
             width={"100%"}
           >
             {({ index, style }) => {

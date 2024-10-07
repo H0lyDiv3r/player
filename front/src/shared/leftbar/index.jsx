@@ -75,11 +75,11 @@ export const LeftBar = () => {
                   my={"2px"}
                   display={"flex"}
                   _hover={{ bg: "neutral.dark.600" }}
-                  color={
-                    item.path === (currentTrack && currentTrack["path"])
-                      ? "brand.500"
-                      : "neutral.dark.200"
-                  }
+                  // color={
+                  //   item.path === (currentTrack && currentTrack["path"])
+                  //     ? "brand.500"
+                  //     : "neutral.dark.200"
+                  // }
                 >
                   <Text mr={"12px"}>{idx + 1}</Text>
                   <Text>{item.name.slice(0, 25)}</Text>

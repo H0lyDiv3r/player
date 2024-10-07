@@ -9,26 +9,28 @@ import {
 import colors from "../../themes/colors";
 import { TbSearch } from "react-icons/tb";
 import { useState } from "react";
+import { SearchMoadal } from "../dropdowns/SearchResults";
 
 export const Search = ({ action }) => {
-  const [string, setString] = useState("");
+  const [phrase, setPhrase] = useState("");
   return (
     <>
       <FormControl _focus={{ border: "none", outline: "none" }} maxW={"200px"}>
         <FormLabel display={"none"}>Search</FormLabel>
         <InputGroup display={"flex"} alignItems={"center"} size={"sm"}>
-          <InputRightElement _hover={{ cursor: "pointer" }} onClick={action}>
-            <Icon as={TbSearch} />
+          <InputRightElement _hover={{ cursor: "pointer" }}>
+            {/* <Icon as={TbSearch} /> */}
+            <SearchMoadal phrase={phrase} />
           </InputRightElement>
           <Input
             size={"sm"}
             borderRadius={"4px"}
             bg={"neutral.dark.800"}
             border={"none"}
-            value={string}
+            value={phrase}
             onChange={(e) => {
               e.preventDefault();
-              setString(e.target.value);
+              setPhrase(e.target.value);
             }}
             placeholder={"search for music..."}
             focusBorderColor="none"

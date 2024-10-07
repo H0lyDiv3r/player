@@ -46,16 +46,18 @@ export const DirNavigator = () => {
     onClose();
   };
   useEffect(() => {
-    api
-      .get(`/dir`, {
-        params: {
-          dir: filePath,
-        },
-      })
-      .then((res) => {
-        console.log(res, import.meta.env);
-        setDir(res.data);
-      });
+    if (isOpen) {
+      api
+        .get(`/dir`, {
+          params: {
+            dir: filePath,
+          },
+        })
+        .then((res) => {
+          console.log(res, import.meta.env);
+          setDir(res.data);
+        });
+    }
   }, [filePath]);
   return (
     <>

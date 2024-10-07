@@ -20,14 +20,8 @@ export const Layout = () => {
   const { queue, activeList, activePlaylist, currentTab } =
     useContext(GlobalContext);
 
-  const [search] = useRequest();
   const containerRef = useRef(null);
-  const handleSearch = () => {
-    search.request("/dir/search", "GET", { search: "s" }).then((res) => {
-      console.log(res.data);
-    });
-    console.log("searching");
-  };
+
   useEffect(() => {
     console.log("active list", activeList);
     console.log("queueueueueq", queue);
@@ -67,7 +61,7 @@ export const Layout = () => {
                     ? activePlaylist.active
                     : "Directory"}
                 </Text>
-                <Search action={handleSearch} />
+                <Search />
               </Box>
               <Box px={"12px"} overflow={"auto"} height={"100%"}>
                 {currentTab === "directory" ? (
