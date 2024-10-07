@@ -108,7 +108,7 @@ const reducer = (state = initialState, action) => {
     case setIndexOfCurrentTrack:
       return {
         ...state,
-        indexOfCurrentTrack: action.payload.index,
+        indexOfCurrentTrack: Math.abs(action.payload.index),
       };
     case toggleShuffle:
       return { ...state, shuffle: !state.shuffle };
