@@ -151,7 +151,7 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const handleSetCurrentTrack = (index) => {
+  const handleSetCurrentTrack = async (index) => {
     const active =
       state.currentTab === "directory"
         ? state.activeList
@@ -166,7 +166,7 @@ export const GlobalContextProvider = ({ children }) => {
     if (state.shuffle) {
       handleSetQueue({
         ...active,
-        list: shuffle(active.list, index),
+        list: await shuffle(active.list, index),
       });
       handleSetIndexOfCurrentTrack(0);
     } else {
@@ -307,7 +307,10 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const handleShuffle = () => {
+  const handleShuffle = async () => {
+    dispatch({
+      type: toggleShuffle,
+    });
     const active =
       state.queue.type === "directory"
         ? state.activeList
@@ -316,7 +319,7 @@ export const GlobalContextProvider = ({ children }) => {
       if (!state.shuffle) {
         handleSetQueue({
           ...active,
-          list: shuffle(
+          list: await shuffle(
             active.list,
             state.queue.list.findIndex(
               (obj) => obj.name === state.currentTrack.name,
@@ -333,9 +336,6 @@ export const GlobalContextProvider = ({ children }) => {
         }
       }
     }
-    dispatch({
-      type: toggleShuffle,
-    });
   };
   const handleSetActiveDir = (dir = null) => {
     if (state.activeDir) {
