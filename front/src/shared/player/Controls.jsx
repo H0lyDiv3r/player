@@ -71,12 +71,12 @@ const Controls = forwardRef(function Controls(props, ref) {
           action={() => handleNextPrev("next")}
           isDisabled={queue.list.length < 1}
           color="neutral.dark.300"
-          _hover={{ bg: "none", color: "neutral.dark.100" }}
+          _hover={{ bg: "none", color: "neutral.dark.400" }}
         >
           <Icon as={TbPlayerTrackNextFilled} boxSize={4} />
         </PlayerButton>
         <PlayerButton
-          action={() => handleShuffle()}
+          action={async () => await handleShuffle()}
           _hover={{ bg: "none" }}
           color={shuffle ? "brand.500" : "neutral.dark.300"}
         >
@@ -88,15 +88,3 @@ const Controls = forwardRef(function Controls(props, ref) {
 });
 
 export default Controls;
-
-// <Box width={"25%"}>
-//   <PlaybackRateControl ref={ref} />
-// </Box>
-// <Box
-//   display={"flex"}
-//   minWidth={"25%"}
-//   justifyContent={"flex-end"}
-//   alignItems={"center"}
-// >
-
-// </Box>

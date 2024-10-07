@@ -14,7 +14,17 @@ const global = localStorage.getItem("global")
 const initialState = {
   url: [],
   filePath: "/",
-  currentTrack: global ? global.currentTrack : "",
+  currentTrack: global
+    ? global.currentTrack
+    : {
+        name: "",
+        path: "",
+        title: "",
+        album: "",
+        artist: "",
+        genre: "",
+        year: "",
+      },
   currentTrackImage: global ? global.currentTrackImage : null,
   indexOfCurrentTrack: global ? global.indexOfCurrentTrack : null,
   queue: global
@@ -150,6 +160,11 @@ export const GlobalContextProvider = ({ children }) => {
     });
   };
   const handleSetCurrentTrack = (index) => {
+||||||| 5e4114b
+  const handleSetCurrentTrack = (index) => {
+=======
+  const handleSetCurrentTrack = async (index) => {
+>>>>>>> main
     const active =
       state.currentTab === "directory"
         ? state.activeList
@@ -164,7 +179,7 @@ export const GlobalContextProvider = ({ children }) => {
     if (state.shuffle) {
       handleSetQueue({
         ...active,
-        list: shuffle(active.list, index),
+        list: await shuffle(active.list, index),
       });
       handleSetIndexOfCurrentTrack(0);
     } else {
@@ -232,62 +247,70 @@ export const GlobalContextProvider = ({ children }) => {
   };
   const handleNextPrev = (type) => {
     console.log(state.loop);
-    // switch (state.loop) {
-    //   case 0:
-    //     dispatch({
-    //       type: setCurrentTrack,
-    //       payload: {
-    //         currentTrack:
-    //           type === "next"
-    //             ? state.queue.list[state.indexOfCurrentTrack + 1]
-    //             : state.queue.list[state.indexOfCurrentTrack - 1],
-    //       },
-    //     });
-    //     handleSetIndexOfCurrentTrack(
-    //       type === "next"
-    //         ? state.indexOfCurrentTrack + 1
-    //         : state.indexOfCurrentTrack - 1,
-    //     );
-    //     break;
-    //   case 1:
-    //     dispatch({
-    //       type: setCurrentTrack,
-    //       payload: {
-    //         currentTrack:
-    //           type === "next"
-    //             ? state.queue.list[
-    //                 next(state.queue.list.length, state.indexOfCurrentTrack)
-    //               ]
-    //             : state.queue.list[
-    //                 prev(state.queue.list.length, state.indexOfCurrentTrack)
-    //               ],
-    //       },
-    //     });
-    //     handleSetIndexOfCurrentTrack(
-    //       type === "next"
-    //         ? next(state.queue.list.length, state.indexOfCurrentTrack)
-    //         : prev(state.queue.list.length, state.indexOfCurrentTrack),
-    //     );
-    //     break;
-    //   case 2:
-    //     dispatch({
-    //       type: setCurrentTrack,
-    //       payload: {
-    //         currentTrack:
-    //           type === "next"
-    //             ? state.queue.list[state.indexOfCurrentTrack]
-    //             : state.queue.list[state.indexOfCurrentTrack],
-    //       },
-    //     });
-    //     handleSetIndexOfCurrentTrack(
-    //       type === "next"
-    //         ? state.indexOfCurrentTrack
-    //         : state.indexOfCurrentTrack,
-    //     );
-    //     break;
-    //   default:
-    //     return;
-    // }
+    switch (state.loop) {
+      case 0:
+        dispatch({
+          type: setCurrentTrack,
+          payload: {
+            currentTrack:
+              type === "next"
+                ? state.queue.list[
+                    Math.min(
+                      state.queue.list.length - 1,
+                      state.indexOfCurrentTrack + 1,
+                    )
+                  ]
+                : state.queue.list[Math.max(state.indexOfCurrentTrack - 1, 0)],
+          },
+        });
+        handleSetIndexOfCurrentTrack(
+          type === "next"
+            ? Math.min(
+                state.queue.list.length - 1,
+                state.indexOfCurrentTrack + 1,
+              )
+            : Math.max(state.indexOfCurrentTrack - 1, 0),
+        );
+        break;
+      case 1:
+        dispatch({
+          type: setCurrentTrack,
+          payload: {
+            currentTrack:
+              type === "next"
+                ? state.queue.list[
+                    next(state.queue.list.length, state.indexOfCurrentTrack)
+                  ]
+                : state.queue.list[
+                    prev(state.queue.list.length, state.indexOfCurrentTrack)
+                  ],
+          },
+        });
+        handleSetIndexOfCurrentTrack(
+          type === "next"
+            ? next(state.queue.list.length, state.indexOfCurrentTrack)
+            : prev(state.queue.list.length, state.indexOfCurrentTrack),
+        );
+        break;
+      case 2:
+        dispatch({
+          type: setCurrentTrack,
+          payload: {
+            currentTrack:
+              type === "next"
+                ? state.queue.list[state.indexOfCurrentTrack]
+                : state.queue.list[state.indexOfCurrentTrack],
+          },
+        });
+        handleSetIndexOfCurrentTrack(
+          type === "next"
+            ? state.indexOfCurrentTrack
+            : state.indexOfCurrentTrack,
+        );
+        break;
+      default:
+        return;
+    }
   };
   const handleSetIndexOfCurrentTrack = (index) => {
     dispatch({
@@ -297,7 +320,10 @@ export const GlobalContextProvider = ({ children }) => {
       },
     });
   };
-  const handleShuffle = () => {
+  const handleShuffle = async () => {
+    dispatch({
+      type: toggleShuffle,
+    });
     const active =
       state.queue.type === "directory"
         ? state.activeList
@@ -306,7 +332,7 @@ export const GlobalContextProvider = ({ children }) => {
       if (!state.shuffle) {
         handleSetQueue({
           ...active,
-          list: shuffle(
+          list: await shuffle(
             active.list,
             state.queue.list.findIndex(
               (obj) => obj.name === state.currentTrack.name,
@@ -323,9 +349,6 @@ export const GlobalContextProvider = ({ children }) => {
         }
       }
     }
-    dispatch({
-      type: toggleShuffle,
-    });
   };
   const handleSetActiveDir = (dir = null) => {
     if (state.activeDir) {

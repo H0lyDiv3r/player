@@ -95,15 +95,17 @@ export default function Player() {
         },
       });
     }
-    api
-      .get("/playlist/inFav", {
-        params: {
-          path: currentTrack.path,
-        },
-      })
-      .then((res) => {
-        setFavorite(res.data);
-      });
+    if (currentTrack) {
+      api
+        .get("/playlist/inFav", {
+          params: {
+            path: currentTrack.path,
+          },
+        })
+        .then((res) => {
+          setFavorite(res.data);
+        });
+    }
   }, [loaded]);
 
   return (
@@ -182,10 +184,12 @@ export default function Player() {
           >
             <Box>
               <Text fontSize={"12px"} whiteSpace={"nowrap"}>
-                {currentTrack ? currentTrack.title || currentTrack.name : ""}
+                {currentTrack
+                  ? currentTrack.title || currentTrack.name || "unknown"
+                  : "unknown"}
               </Text>
               <Text fontSize={"10px"} color={"neutral.dark.300"}>
-                {currentTrack ? currentTrack.artist || "unknown" : ""}
+                {currentTrack ? currentTrack.artist || "unknown" : "unknown"}
               </Text>
             </Box>
             <Box display={"flex"}>
