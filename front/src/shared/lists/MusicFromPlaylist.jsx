@@ -70,7 +70,7 @@ export const MusicFromPlaylist = ({ list = [] }) => {
                       list[index].path ===
                       (currentTrack && currentTrack["path"])
                         ? "brand.500"
-                        : "neutral.dark.400"
+                        : "neutral.dark.300"
                     }
                   >
                     <Box>
@@ -86,7 +86,7 @@ export const MusicFromPlaylist = ({ list = [] }) => {
                           list[index].path ===
                           (currentTrack && currentTrack["path"])
                             ? "brand.500"
-                            : "neutral.dark.400"
+                            : "neutral.dark.500"
                         }
                       >
                         {list[index].artist || "unknown"}

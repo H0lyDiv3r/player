@@ -63,8 +63,13 @@ export const SearchMoadal = ({ action, phrase }) => {
             height={"500px"}
             my={"auto"}
           >
-            <ModalBody p={"12px"} display={"flex"} flexDir={"column"}>
-              <Icon as={IoClose} onClick={() => onClose()} />
+            <ModalBody
+              px={"12px"}
+              py={"24px"}
+              display={"flex"}
+              flexDir={"column"}
+            >
+              <Icon as={IoClose} onClick={() => onClose()} my={"5px"} />
               <Box height={"100%"}>
                 {search.loading && (
                   <Box
@@ -96,7 +101,7 @@ export const SearchMoadal = ({ action, phrase }) => {
                       itemCount={search.response.length}
                       itemSize={42}
                       height={
-                        heightRef.current ? heightRef.current.offsetHeight : 200
+                        heightRef.current ? heightRef.current.offsetHeight : 300
                       }
                       width={"100%"}
                     >
@@ -107,7 +112,7 @@ export const SearchMoadal = ({ action, phrase }) => {
                             key={index}
                             display={"grid"}
                             gridTemplateColumns={"10fr 2fr"}
-                            _hover={{ bg: "neutral.dark.800" }}
+                            _hover={{ bg: "neutral.dark.700" }}
                             borderRadius={"6px"}
                             px={"6px"}
                             onMouseOver={() => setSelected(index)}
