@@ -5,6 +5,7 @@ import { api, next, prev, shuffle } from "../utils";
 import useRequest from "../hooks/useRequest";
 import { useMemo } from "react";
 import { useEffect } from "react";
+import { useCallback } from "react";
 
 export const GlobalContext = createContext();
 
@@ -128,21 +129,24 @@ const reducer = (state = initialState, action) => {
 export const GlobalContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [playlist] = useRequest();
-  const handleAddPath = (dir) => {
-    const newUrl = [...state.url, dir];
-    let newPath = "";
-    newUrl.map((item) => {
-      newPath = path.join(newPath, item);
-    });
-    dispatch({
-      type: addPath,
-      payload: {
-        dir,
-        newPath,
-      },
-    });
-  };
-  const handlePopPath = () => {
+  const handleAddPath = useCallback(
+    (dir) => {
+      const newUrl = [...state.url, dir];
+      let newPath = "";
+      newUrl.map((item) => {
+        newPath = path.join(newPath, item);
+      });
+      dispatch({
+        type: addPath,
+        payload: {
+          dir,
+          newPath,
+        },
+      });
+    },
+    [state.url],
+  );
+  const handlePopPath = useCallback(() => {
     state.url.pop();
     dispatch({
       type: popPath,
@@ -150,42 +154,45 @@ export const GlobalContextProvider = ({ children }) => {
         newPath: path.dirname(state.filePath),
       },
     });
-  };
-  const handleSetTrack = (track) => {
+  }, [state.url, state.filePath]);
+  const handleSetTrack = useCallback((track) => {
     dispatch({
       type: setCurrentTrack,
       payload: {
         currentTrack: track,
       },
     });
-  };
-  const handleSetCurrentTrack = async (index) => {
-    const active =
-      state.currentTab === "directory"
-        ? state.activeList
-        : state.activePlaylist;
-    const track = active.list[index];
-    dispatch({
-      type: setCurrentTrack,
-      payload: {
-        currentTrack: track,
-      },
-    });
-    if (state.shuffle) {
-      handleSetQueue({
-        ...active,
-        list: await shuffle(active.list, index),
+  }, []);
+  const handleSetCurrentTrack = useCallback(
+    async (index) => {
+      const active =
+        state.currentTab === "directory"
+          ? state.activeList
+          : state.activePlaylist;
+      const track = active.list[index];
+      dispatch({
+        type: setCurrentTrack,
+        payload: {
+          currentTrack: track,
+        },
       });
-      handleSetIndexOfCurrentTrack(0);
-    } else {
-      handleSetQueue({
-        ...active,
-      });
-      handleSetIndexOfCurrentTrack(index);
-    }
-    // console.log("activelist", state.activeList);
-  };
-  const handleSetPath = (dir) => {
+      if (state.shuffle) {
+        handleSetQueue({
+          ...active,
+          list: await shuffle(active.list, index),
+        });
+        handleSetIndexOfCurrentTrack(0);
+      } else {
+        handleSetQueue({
+          ...active,
+        });
+        handleSetIndexOfCurrentTrack(index);
+      }
+      // console.log("activelist", state.activeList);
+    },
+    [state.currentTab, state.activeList, state.shuffle, state.activePlaylist],
+  );
+  const handleSetPath = useCallback((dir) => {
     const newUrl = dir;
     let newPath = "";
     newUrl.map((item) => {
@@ -198,16 +205,16 @@ export const GlobalContextProvider = ({ children }) => {
         newPath,
       },
     });
-  };
-  const handleSetQueue = (queue) => {
+  }, []);
+  const handleSetQueue = useCallback((queue) => {
     dispatch({
       type: setQueue,
       payload: {
         queue: queue && queue,
       },
     });
-  };
-  const handleSetActiveList = (list) => {
+  }, []);
+  const handleSetActiveList = useCallback((list) => {
     dispatch({
       type: setActiveList,
       payload: {
@@ -220,158 +227,110 @@ export const GlobalContextProvider = ({ children }) => {
         currentTab: "directory",
       },
     });
-  };
-  const handleSetActivePlaylist = (name) => {
-    playlist
-      .request("/playlist/getPlaylist", "GET", {
-        name: name,
-      })
-      .then((res) => {
-        dispatch({
-          type: setActivePlaylist,
-          payload: {
-            activePlaylist: {
-              ...state.activePlaylist,
-              list: res.data,
-              active: name,
+  }, []);
+  const handleSetActivePlaylist = useCallback(
+    (name) => {
+      playlist
+        .request("/playlist/getPlaylist", "GET", {
+          name: name,
+        })
+        .then((res) => {
+          dispatch({
+            type: setActivePlaylist,
+            payload: {
+              activePlaylist: {
+                ...state.activePlaylist,
+                list: res.data,
+                active: name,
+              },
             },
-          },
+          });
+          handleSetCurrentTab("playlist");
         });
-        handleSetCurrentTab("playlist");
-      });
-  };
-  const handleNextPrev = (type) => {
-    console.log(state.loop);
-    switch (state.loop) {
-      case 0:
-        dispatch({
-          type: setCurrentTrack,
-          payload: {
-            currentTrack:
-              type === "next"
-                ? state.queue.list[
-                    Math.min(
-                      state.queue.list.length - 1,
-                      state.indexOfCurrentTrack + 1,
-                    )
-                  ]
-                : state.queue.list[Math.max(state.indexOfCurrentTrack - 1, 0)],
-          },
-        });
-        handleSetIndexOfCurrentTrack(
-          type === "next"
-            ? Math.min(
-                state.queue.list.length - 1,
-                state.indexOfCurrentTrack + 1,
-              )
-            : Math.max(state.indexOfCurrentTrack - 1, 0),
-        );
-        break;
-      case 1:
-        dispatch({
-          type: setCurrentTrack,
-          payload: {
-            currentTrack:
-              type === "next"
-                ? state.queue.list[
-                    next(state.queue.list.length, state.indexOfCurrentTrack)
-                  ]
-                : state.queue.list[
-                    prev(state.queue.list.length, state.indexOfCurrentTrack)
-                  ],
-          },
-        });
-        handleSetIndexOfCurrentTrack(
-          type === "next"
-            ? next(state.queue.list.length, state.indexOfCurrentTrack)
-            : prev(state.queue.list.length, state.indexOfCurrentTrack),
-        );
-        break;
-      case 2:
-        dispatch({
-          type: setCurrentTrack,
-          payload: {
-            currentTrack:
-              type === "next"
-                ? state.queue.list[state.indexOfCurrentTrack]
-                : state.queue.list[state.indexOfCurrentTrack],
-          },
-        });
-        handleSetIndexOfCurrentTrack(
-          type === "next"
-            ? state.indexOfCurrentTrack
-            : state.indexOfCurrentTrack,
-        );
-        break;
-      default:
-        return;
-    }
-  };
-  const handleSetIndexOfCurrentTrack = (index) => {
+    },
+    [state.activePlaylist, playlist],
+  );
+  const handleNextPrev = useCallback(
+    (type) => {
+      console.log(state.loop);
+      switch (state.loop) {
+        case 0:
+          dispatch({
+            type: setCurrentTrack,
+            payload: {
+              currentTrack:
+                type === "next"
+                  ? state.queue.list[
+                      Math.min(
+                        state.queue.list.length - 1,
+                        state.indexOfCurrentTrack + 1,
+                      )
+                    ]
+                  : state.queue.list[
+                      Math.max(state.indexOfCurrentTrack - 1, 0)
+                    ],
+            },
+          });
+          handleSetIndexOfCurrentTrack(
+            type === "next"
+              ? Math.min(
+                  state.queue.list.length - 1,
+                  state.indexOfCurrentTrack + 1,
+                )
+              : Math.max(state.indexOfCurrentTrack - 1, 0),
+          );
+          break;
+        case 1:
+          dispatch({
+            type: setCurrentTrack,
+            payload: {
+              currentTrack:
+                type === "next"
+                  ? state.queue.list[
+                      next(state.queue.list.length, state.indexOfCurrentTrack)
+                    ]
+                  : state.queue.list[
+                      prev(state.queue.list.length, state.indexOfCurrentTrack)
+                    ],
+            },
+          });
+          handleSetIndexOfCurrentTrack(
+            type === "next"
+              ? next(state.queue.list.length, state.indexOfCurrentTrack)
+              : prev(state.queue.list.length, state.indexOfCurrentTrack),
+          );
+          break;
+        case 2:
+          dispatch({
+            type: setCurrentTrack,
+            payload: {
+              currentTrack:
+                type === "next"
+                  ? state.queue.list[state.indexOfCurrentTrack]
+                  : state.queue.list[state.indexOfCurrentTrack],
+            },
+          });
+          handleSetIndexOfCurrentTrack(
+            type === "next"
+              ? state.indexOfCurrentTrack
+              : state.indexOfCurrentTrack,
+          );
+          break;
+        default:
+          return;
+      }
+    },
+    [state.loop, state.queue.list, state.indexOfCurrentTrack],
+  );
+  const handleSetIndexOfCurrentTrack = useCallback((index) => {
     dispatch({
       type: setIndexOfCurrentTrack,
       payload: {
         index,
       },
     });
-  };
-  const handleShuffle = async () => {
-    dispatch({
-      type: toggleShuffle,
-    });
-    const active =
-      state.queue.type === "directory"
-        ? state.activeList
-        : state.activePlaylist;
-    if (state.queue.list.length > 0) {
-      if (!state.shuffle) {
-        handleSetQueue({
-          ...active,
-          list: await shuffle(
-            active.list,
-            state.indexOfCurrentTrack,
-            // state.queue.list.findIndex(
-            //   (obj) => obj.name === state.currentTrack.name,
-            // ),
-          ),
-        });
-        handleSetIndexOfCurrentTrack(0);
-        console.log(state.indexOfCurrentTrack, active.list);
-      } else {
-        if (state.queue.type === "directory") {
-          handleShuffleDir();
-        } else {
-          handleShufflePlaylist();
-        }
-      }
-    }
-  };
-  const handleSetActiveDir = (dir = null) => {
-    if (state.activeDir) {
-      dispatch({
-        type: setActiveDir,
-        payload: {
-          dir: null,
-        },
-      });
-      handleSetActiveList({ ...state.activeList, url: [], active: "" });
-    } else {
-      dispatch({
-        type: setActiveDir,
-        payload: {
-          dir,
-        },
-      });
-      handleSetActiveList({
-        ...state.activeList,
-        url:
-          state.activeList.url.length < 1
-            ? [...state.activeList.url, dir]
-            : state.activeList.url,
-      });
-    }
-  };
-  const handleShuffleDir = () => {
+  }, []);
+  const handleShuffleDir = useCallback(() => {
     let url = "/";
     state.queue.url.map((item) => (url = path.join(url, item)));
     api
@@ -390,10 +349,17 @@ export const GlobalContextProvider = ({ children }) => {
             ? res.data.findIndex((obj) => obj.name === state.currentTrack.name)
             : state.indexOfCurrentTrack,
         );
-        console.log("i am un shuffling man", state.currentTrack);
       });
-  };
-  const handleShufflePlaylist = () => {
+  }, [
+    state.queue.url,
+    handleSetIndexOfCurrentTrack,
+    state.indexOfCurrentTrack,
+    state.currentTrack,
+    state.queue.active,
+    handleSetQueue,
+    state.activeList,
+  ]);
+  const handleShufflePlaylist = useCallback(() => {
     api
       .get("/playlist/getPlaylist", {
         params: {
@@ -410,10 +376,79 @@ export const GlobalContextProvider = ({ children }) => {
             ? res.data.findIndex((obj) => obj.name === state.currentTrack.name)
             : state.indexOfCurrentTrack,
         );
-        console.log("i am un shuffling man", state.currentTrack);
       });
-  };
-  const handleLoop = () => {
+  }, [
+    state.activePlaylist,
+    state.indexOfCurrentTrack,
+    state.queue.active,
+    state.currentTrack,
+    handleSetIndexOfCurrentTrack,
+    handleSetQueue,
+  ]);
+  const handleShuffle = useCallback(async () => {
+    dispatch({
+      type: toggleShuffle,
+    });
+    const active =
+      state.queue.type === "directory"
+        ? state.activeList
+        : state.activePlaylist;
+    if (state.queue.list.length > 0) {
+      if (!state.shuffle) {
+        handleSetQueue({
+          ...active,
+          list: await shuffle(active.list, state.indexOfCurrentTrack),
+        });
+        handleSetIndexOfCurrentTrack(0);
+      } else {
+        if (state.queue.type === "directory") {
+          handleShuffleDir();
+        } else {
+          handleShufflePlaylist();
+        }
+      }
+    }
+  }, [
+    state.queue.list,
+    state.shuffle,
+    state.queue.type,
+    state.activeList,
+    state.activePlaylist,
+    state.indexOfCurrentTrack,
+    handleShuffleDir,
+    handleShufflePlaylist,
+    handleSetQueue,
+    handleSetIndexOfCurrentTrack,
+  ]);
+  const handleSetActiveDir = useCallback(
+    (dir = null) => {
+      if (state.activeDir) {
+        dispatch({
+          type: setActiveDir,
+          payload: {
+            dir: null,
+          },
+        });
+        handleSetActiveList({ ...state.activeList, url: [], active: "" });
+      } else {
+        dispatch({
+          type: setActiveDir,
+          payload: {
+            dir,
+          },
+        });
+        handleSetActiveList({
+          ...state.activeList,
+          url:
+            state.activeList.url.length < 1
+              ? [...state.activeList.url, dir]
+              : state.activeList.url,
+        });
+      }
+    },
+    [state.activeList, state.activeDir, handleSetActiveList],
+  );
+  const handleLoop = useCallback(() => {
     let val = state.loop;
     val = (val + 1) % 3;
     dispatch({
@@ -422,23 +457,23 @@ export const GlobalContextProvider = ({ children }) => {
         loop: val,
       },
     });
-  };
-  const handleSetCurrentTab = (currentTab) => {
+  }, [state.loop]);
+  const handleSetCurrentTab = useCallback((currentTab) => {
     dispatch({
       type: setCurrentTab,
       payload: {
         currentTab: currentTab,
       },
     });
-  };
-  const handleSetCurrentTrackImage = (currentTrackImage) => {
+  }, []);
+  const handleSetCurrentTrackImage = useCallback((currentTrackImage) => {
     dispatch({
       type: setCurrentTrackImage,
       payload: {
         currentTrackImage: currentTrackImage,
       },
     });
-  };
+  }, []);
   const vals = useMemo(
     () => ({
       ...state,
