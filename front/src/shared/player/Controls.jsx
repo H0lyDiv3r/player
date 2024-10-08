@@ -1,5 +1,5 @@
 import { Badge, Box, Icon } from "@chakra-ui/react";
-import { forwardRef, useContext } from "react";
+import React, { forwardRef, memo, useContext } from "react";
 import {
   TbRepeat,
   TbRepeatOff,
@@ -87,4 +87,4 @@ const Controls = forwardRef(function Controls(props, ref) {
   );
 });
 
-export default Controls;
+export default memo(Controls);

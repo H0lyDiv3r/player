@@ -1,9 +1,8 @@
 import { Box, Icon, Input, Text } from "@chakra-ui/react";
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef, memo, useContext } from "react";
 import { PlayerContext } from "./PlayerContextProvider";
 import { FaVolumeLow, FaVolumeXmark } from "react-icons/fa6";
 import "./volume.css";
-import colors from "../../themes/colors";
 
 const VolumeControl = forwardRef(function VolumeControl(props, ref) {
   const { handleVolume, volume, muted, handleMute } = useContext(PlayerContext);
@@ -39,4 +38,4 @@ const VolumeControl = forwardRef(function VolumeControl(props, ref) {
   );
 });
 
-export default VolumeControl;
+export default memo(VolumeControl);

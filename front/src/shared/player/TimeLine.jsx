@@ -1,5 +1,5 @@
 import { Box, Text, Input } from "@chakra-ui/react";
-import { forwardRef, useContext } from "react";
+import { forwardRef, useContext, memo } from "react";
 import { PlayerContext } from "./PlayerContextProvider";
 
 const TimeLine = forwardRef(function TimeLine(props, ref) {
@@ -63,4 +63,4 @@ const TimeLine = forwardRef(function TimeLine(props, ref) {
   );
 });
 
-export default TimeLine;
+export default memo(TimeLine);

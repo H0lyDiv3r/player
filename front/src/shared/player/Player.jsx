@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, memo } from "react";
 import "./player.css";
 import { Box, Icon, Image, Text } from "@chakra-ui/react";
 import Controls from "./Controls";
@@ -7,17 +7,16 @@ import TimeLine from "./TimeLine";
 import { PlayerContext } from "./PlayerContextProvider";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect } from "react";
-import colors from "../../themes/colors";
 import PlaybackRateControl from "./PlaybackRateControl";
 import VolumeControl from "./VolumeControl";
 import { motion } from "framer-motion";
-import { Cassette } from "../other/cassette";
 import { useState } from "react";
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
 import { api } from "../../utils";
 import { useShowToast } from "../../hooks/useShowToast";
+import { useCallback } from "react";
 
-export default function Player() {
+const Player = () => {
   const {
     paused,
     handleTimeline,
@@ -38,11 +37,7 @@ export default function Player() {
   const [showToast] = useShowToast();
   const audioRef = useRef(null);
 
-  const handleLoad = (ref) => {
-    handleSetPlayerValues(ref);
-    handlePosition(0, ref);
-  };
-  const handleSetFavorite = () => {
+  const handleSetFavorite = useCallback(() => {
     if (favorite) {
       api
         .delete("/playlist/deleteFromPlaylist", {
@@ -54,7 +49,6 @@ export default function Player() {
         .then((res) => {
           showToast("success", "removed from playlist");
           setFavorite(false);
-          // handleSetActivePlaylist(activePlaylist.active);
         })
         .catch(() => {
           showToast("success", "failed to remove");
@@ -73,7 +67,7 @@ export default function Player() {
           showToast("error", "failed to add to playlist");
         });
     }
-  };
+  }, [favorite, currentTrack, showToast]);
 
   const MotionBox = motion(Box);
   useEffect(() => {
@@ -106,7 +100,7 @@ export default function Player() {
           setFavorite(res.data);
         });
     }
-  }, [loaded]);
+  }, [loaded, currentTrack]);
 
   return (
     <Box
@@ -230,4 +224,6 @@ export default function Player() {
       </Box>
     </Box>
   );
-}
+};
+
+export default memo(Player);

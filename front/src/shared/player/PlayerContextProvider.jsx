@@ -1,14 +1,9 @@
 import React, { createContext, useEffect, useReducer, useState } from "react";
+import { useCallback } from "react";
 import { useMemo } from "react";
 
 export const PlayerContext = createContext();
 
-// const playerState = () => {
-//   return Boolean(
-//      &&
-//       ,
-//   );
-// };
 const playerState = localStorage.getItem("playerState")
   ? JSON.parse(localStorage.getItem("playerState"))
   : null;
@@ -59,7 +54,7 @@ const reducer = (state, action) => {
 const PlayerContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handlePlay = (ref) => {
+  const handlePlay = useCallback((ref) => {
     if (ref.current.paused) {
       ref.current.play();
       dispatch({ type: togglePlay });
@@ -67,20 +62,20 @@ const PlayerContextProvider = ({ children }) => {
       ref.current.pause();
       dispatch({ type: togglePause });
     }
-  };
-  const handlePause = (ref) => {
+  }, []);
+  const handlePause = useCallback((ref) => {
     ref.current.pause();
     dispatch({ type: togglePause });
-  };
-  const handleLoaded = (value) => {
+  }, []);
+  const handleLoaded = useCallback((value) => {
     dispatch({
       type: setLoaded,
       payload: {
         loaded: value,
       },
     });
-  };
-  const handleMute = (ref) => {
+  }, []);
+  const handleMute = useCallback((ref) => {
     if (ref.current.muted) {
       ref.current.muted = false;
       dispatch({ type: toggleMute });
@@ -88,9 +83,9 @@ const PlayerContextProvider = ({ children }) => {
       ref.current.muted = true;
       dispatch({ type: toggleMute });
     }
-  };
+  }, []);
 
-  const handleVolume = (e, ref) => {
+  const handleVolume = useCallback((e, ref) => {
     ref.current.volume = e.target.value / 100;
     dispatch({
       type: setVolume,
@@ -112,9 +107,9 @@ const PlayerContextProvider = ({ children }) => {
         },
       });
     }
-  };
+  }, []);
 
-  const handleTimeline = (ref) => {
+  const handleTimeline = useCallback((ref) => {
     const interval = setInterval(() => {
       if (ref.current.paused) {
         clearInterval(interval);
@@ -127,10 +122,10 @@ const PlayerContextProvider = ({ children }) => {
         });
       }
     }, 1000);
-  };
+    return () => clearInterval(interval);
+  }, []);
 
-  const handlePlaybackRate = (value, ref) => {
-    console.log("reffing", ref);
+  const handlePlaybackRate = useCallback((value, ref) => {
     ref.current.playbackRate = value;
     dispatch({
       type: setPlaybackRate,
@@ -138,9 +133,9 @@ const PlayerContextProvider = ({ children }) => {
         playbackRate: value,
       },
     });
-  };
+  }, []);
 
-  const handlePosition = (value, ref) => {
+  const handlePosition = useCallback((value, ref) => {
     if (ref.current) {
       ref.current.currentTime = value;
       dispatch({
@@ -150,9 +145,9 @@ const PlayerContextProvider = ({ children }) => {
         },
       });
     }
-  };
+  }, []);
 
-  const handleSetCurrentTrack = (value) => {
+  const handleSetCurrentTrack = useCallback((value) => {
     dispatch({
       type: setCurrentTrack,
       payload: {
@@ -160,53 +155,41 @@ const PlayerContextProvider = ({ children }) => {
       },
     });
     dispatch({ type: togglePause });
-  };
+  }, []);
 
-  const handleSetPlayerValues = (ref) => {
-    ref.current.volume = state.volume / 100;
-    ref.current.currentTime = state.position;
-    ref.current.playbackRate = state.playbackRate;
-    ref.current.muted = state.muted;
-    ref.current.currentTime = 0;
-    if (state.paused) {
-      ref.current.pause();
-    } else {
-      ref.current.play();
-    }
-    dispatch({
-      type: setLength,
-      payload: {
-        len: ref.current.duration,
-      },
-    });
-    dispatch({
-      type: setLoaded,
-      payload: {
-        loaded: true,
-      },
-    });
-  };
-
-  const handleFastForward = (ref) => {
-    ref.current.currentTime += 10;
-  };
-
-  const handleFastBackward = (ref) => {
-    ref.current.currentTime -= 10;
-  };
-
-  const handleOverAllState = (state) => {
-    dispatch({
-      type: setAllState,
-      payload: {
-        state: {
-          volume: state.volume,
-          muted: state.muted,
-          playbackRate: state.playbackRate,
+  const handleSetPlayerValues = useCallback(
+    (ref) => {
+      ref.current.volume = state.volume / 100;
+      ref.current.currentTime = state.position;
+      ref.current.playbackRate = state.playbackRate;
+      ref.current.muted = state.muted;
+      ref.current.currentTime = 0;
+      if (state.paused) {
+        ref.current.pause();
+      } else {
+        ref.current.play();
+      }
+      dispatch({
+        type: setLength,
+        payload: {
+          len: ref.current.duration,
         },
-      },
-    });
-  };
+      });
+      dispatch({
+        type: setLoaded,
+        payload: {
+          loaded: true,
+        },
+      });
+    },
+    [
+      state.volume,
+      state.position,
+      state.playbackRate,
+      state.muted,
+      state.paused,
+    ],
+  );
 
   const vals = useMemo(
     () => ({
@@ -221,8 +204,6 @@ const PlayerContextProvider = ({ children }) => {
       handleVolume,
       handleSetCurrentTrack,
       handleSetPlayerValues,
-      handleFastForward,
-      handleFastBackward,
     }),
     [state],
   );

@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useState } from "react";
+import React, { forwardRef, memo, useContext, useState } from "react";
 import {
   Menu,
   MenuButton,
@@ -101,4 +101,4 @@ const PlaybackRateControl = forwardRef(
   },
 );
 
-export default PlaybackRateControl;
+export default memo(PlaybackRateControl);
