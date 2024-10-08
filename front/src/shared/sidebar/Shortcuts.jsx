@@ -1,25 +1,19 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import useRequest from "../../hooks/useRequest";
 import { Box, Button, Icon, Image, Text } from "@chakra-ui/react";
-import {
-  TbFolderFilled,
-  TbFolderSymlink,
-  TbTrash,
-  TbTrashFilled,
-} from "react-icons/tb";
+import { TbFolderFilled, TbTrashFilled } from "react-icons/tb";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { api } from "../../utils";
 import path from "path-browserify";
 import { useShowToast } from "../../hooks/useShowToast";
 
-export const Shortcuts = () => {
+export const Shortcuts = React.memo(function Shortcuts() {
   const { handleSetActiveList, activeList } = useContext(GlobalContext);
   const [shortcuts] = useRequest();
   const [showToast] = useShowToast();
 
   const handleSetShortcut = (vals) => {
-    console.log("wwwwawwwwwwwwwwwwwwwwwwwwwwwaaaaaa", vals);
     handleSetActiveList({
       ...activeList,
       url: vals.path.split("/").slice(1, -1),
@@ -41,9 +35,7 @@ export const Shortcuts = () => {
       });
   };
   useEffect(() => {
-    shortcuts.request("/shortcut/getShortcuts", "GET").then((res) => {
-      console.log("short short short", res.data);
-    });
+    shortcuts.request("/shortcut/getShortcuts", "GET");
   }, []);
   useEffect(() => {
     let url = "/";
@@ -57,13 +49,11 @@ export const Shortcuts = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         handleSetActiveList({
           ...activeList,
           list: res.data,
         });
       });
-    console.log("fetching fetingingingi");
   }, [activeList.active, activeList.url]);
   return (
     <>
@@ -137,4 +127,4 @@ export const Shortcuts = () => {
       </Box>
     </>
   );
-};
+});

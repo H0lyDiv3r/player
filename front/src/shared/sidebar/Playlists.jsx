@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import useRequest from "../../hooks/useRequest";
 import {
   Box,
@@ -22,55 +22,58 @@ import { useState } from "react";
 import { TbDots, TbTrashFilled } from "react-icons/tb";
 import { BsCassetteFill } from "react-icons/bs";
 import { useShowToast } from "../../hooks/useShowToast";
+import { useCallback } from "react";
 
-export const Playlists = () => {
+export const Playlists = React.memo(function Playlist() {
   const [playlistsReq] = useRequest();
   const [showToast] = useShowToast();
   const [playlists, setPlaylists] = useState([]);
   const { handleSetActivePlaylist, activePlaylist } = useContext(GlobalContext);
-  const handleDeletePlaylist = (playlist) => {
-    api
-      .delete("/playlist/deletePlaylist", {
-        params: {
-          name: playlist,
-        },
-      })
-      .then((res) => {
-        setPlaylists(res.data);
-        showToast("success", "deleted playlist");
-      })
-      .catch(() => {
-        showToast("error", "failed to delete a playlist");
-      });
-  };
-  const handleCreatePlaylist = (playlistName) => {
-    api
-      .post("/playlist/createPlaylist", { name: playlistName })
-      .then((res) => {
-        showToast("success", "created playlist");
-        setPlaylists(res.data);
-      })
-      .catch(() => {
-        showToast("error", "failed to create playlist");
-      });
-    console.log("hanele", playlistName);
-  };
+  const handleDeletePlaylist = useCallback(
+    (playlist) => {
+      api
+        .delete("/playlist/deletePlaylist", {
+          params: {
+            name: playlist,
+          },
+        })
+        .then((res) => {
+          setPlaylists(res.data);
+          showToast("success", "deleted playlist");
+        })
+        .catch(() => {
+          showToast("error", "failed to delete a playlist");
+        });
+    },
+    [showToast],
+  );
+  const handleCreatePlaylist = useCallback(
+    (playlistName) => {
+      api
+        .post("/playlist/createPlaylist", { name: playlistName })
+        .then((res) => {
+          showToast("success", "created playlist");
+          setPlaylists(res.data);
+        })
+        .catch(() => {
+          showToast("error", "failed to create playlist");
+        });
+    },
+    [showToast],
+  );
   useEffect(() => {
     playlistsReq.request("/playlist/getPlaylists", "GET").then((res) => {
       setPlaylists(res.data);
-      console.log("i am here showing dara", res.data);
     });
   }, []);
   useEffect(() => {
-    api
-      .get("/playlist/getPlaylist", {
-        params: {
-          name: activePlaylist.name,
-        },
-      })
-      .then((res) => {
-        console.log("i said laaaaaaaaaaaaaaaaand ho", res.data);
-      });
+    // api
+    //   .get("/playlist/getPlaylist", {
+    //     params: {
+    //       name: activePlaylist.name,
+    //     },
+    //   })
+    //   .then((res) => {});
   }, [activePlaylist]);
   return (
     <Grid
@@ -115,7 +118,7 @@ export const Playlists = () => {
       </GridItem>
     </Grid>
   );
-};
+});
 
 const ConfirmationMoadal = ({ action }) => {
   const { onOpen, isOpen, onClose } = useDisclosure();

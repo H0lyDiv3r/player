@@ -3,15 +3,11 @@ import { createContext, useReducer } from "react";
 import { Toast } from "./Toast";
 import { useRef } from "react";
 import { AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
+import { useCallback } from "react";
 
 export const ToastContext = createContext();
-// sample toast
-// {
-// id:id
-// state: success,fail,info,warn
-// message: message
-// delay: time
-// }
+
 const initialState = {
   toast: null,
 };
@@ -32,7 +28,7 @@ const reducer = (state = initialState, action) => {
 
 export const ToastProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const handleAddToast = (toastData) => {
+  const handleAddToast = useCallback((toastData) => {
     const toast = {
       id: new Date().valueOf(),
       status: toastData.status,
@@ -45,21 +41,26 @@ export const ToastProvider = ({ children }) => {
         toast: toast,
       },
     });
-  };
+  }, []);
 
-  const handleRemoveToast = () => {
+  const handleRemoveToast = useCallback(() => {
     dispatch({
       type: updateToasts,
     });
-    console.log(state.toast);
-  };
+  }, []);
 
   const containerRef = useRef(null);
 
-  const vals = { ...state, handleAddToast };
+  const vals = useMemo(() => ({ ...state, handleAddToast }), [state]);
   return (
     <ToastContext.Provider value={vals}>
-      <Box height={"100vh"} width={"100%"} pos={"relative"} ref={containerRef}>
+      <Box
+        height={"100vh"}
+        width={"100%"}
+        pos={"relative"}
+        ref={containerRef}
+        overflow={"hidden"}
+      >
         {children}
         <Portal>
           <AnimatePresence>

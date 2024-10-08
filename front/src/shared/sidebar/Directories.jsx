@@ -1,14 +1,6 @@
-import {
-  Box,
-  Divider,
-  Grid,
-  GridItem,
-  Icon,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, Icon, Image, Text } from "@chakra-ui/react";
 import path from "path-browserify";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FaArrowLeft,
   FaChevronDown,
@@ -23,7 +15,7 @@ import { AddShortcut } from "../dropdowns/AddShortcut";
 
 import "./scroll.css";
 
-export const Directories = () => {
+export const Directories = React.memo(function Directories() {
   const [dirs] = useRequest();
   const [subDirs] = useRequest();
   const [selected, setSelected] = useState();
@@ -230,4 +222,4 @@ export const Directories = () => {
       </GridItem>
     </Grid>
   );
-};
+});
