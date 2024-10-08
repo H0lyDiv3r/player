@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import { GlobalContext } from "../../store/GlobalContextProvider";
@@ -7,61 +7,60 @@ import { Box, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { useRef } from "react";
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
 
-export const MusicFromDirectoryList = ({ list = [] }) => {
-  const { handleSetCurrentTrack, indexOfCurrentTrack, currentTrack } =
-    useContext(GlobalContext);
-  const heightRef = useRef();
+export const MusicFromDirectoryList = React.memo(
+  function MusicFromDirectoryList({ list = [] }) {
+    const { handleSetCurrentTrack, indexOfCurrentTrack, currentTrack } =
+      useContext(GlobalContext);
+    const heightRef = useRef();
 
-  useEffect(() => {
-    console.log("i have the list", list);
-  }, []);
-  return (
-    <Grid templateRows={"repeat(12,1fr)"} height={"100%"}>
-      <GridItem rowSpan={1}>
-        <Box
-          display={"grid"}
-          alignItems={"center"}
-          gridTemplateColumns={"10fr 2fr"}
-          fontSize={"14px"}
-        >
+    return (
+      <Grid templateRows={"repeat(12,1fr)"} height={"100%"}>
+        <GridItem rowSpan={1}>
           <Box
             display={"grid"}
-            gridTemplateColumns={"40px 6fr 5fr"}
-            gap={"24px"}
+            alignItems={"center"}
+            gridTemplateColumns={"10fr 2fr"}
+            fontSize={"14px"}
           >
-            <Text>#</Text>
-            <Text>Title</Text>
-            <Text>Album</Text>
+            <Box
+              display={"grid"}
+              gridTemplateColumns={"40px 6fr 5fr"}
+              gap={"24px"}
+            >
+              <Text>#</Text>
+              <Text>Title</Text>
+              <Text>Album</Text>
+            </Box>
           </Box>
-        </Box>
-      </GridItem>
-      <GridItem rowSpan={11}>
-        <Box ref={heightRef} height={"100%"}>
-          <List
-            className="scroll"
-            itemCount={list.length}
-            itemSize={42}
-            height={heightRef.current ? heightRef.current.offsetHeight : 400}
-            width={"100%"}
-          >
-            {({ index, style }) => {
-              return (
-                <ListItem
-                  index={index}
-                  style={style}
-                  track={list[index]}
-                  action={handleSetCurrentTrack}
-                  indexOfCurrentTrack={indexOfCurrentTrack}
-                  currentTrack={currentTrack}
-                />
-              );
-            }}
-          </List>
-        </Box>
-      </GridItem>
-    </Grid>
-  );
-};
+        </GridItem>
+        <GridItem rowSpan={11}>
+          <Box ref={heightRef} height={"100%"}>
+            <List
+              className="scroll"
+              itemCount={list.length}
+              itemSize={42}
+              height={heightRef.current ? heightRef.current.offsetHeight : 400}
+              width={"100%"}
+            >
+              {({ index, style }) => {
+                return (
+                  <ListItem
+                    index={index}
+                    style={style}
+                    track={list[index]}
+                    action={handleSetCurrentTrack}
+                    indexOfCurrentTrack={indexOfCurrentTrack}
+                    currentTrack={currentTrack}
+                  />
+                );
+              }}
+            </List>
+          </Box>
+        </GridItem>
+      </Grid>
+    );
+  },
+);
 
 export const ListItem = ({
   index,

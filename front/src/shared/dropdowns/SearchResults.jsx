@@ -10,31 +10,26 @@ import {
 } from "@chakra-ui/react";
 import { IoClose } from "react-icons/io5";
 import { TbSearch } from "react-icons/tb";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import useRequest from "../../hooks/useRequest";
 import { DotLoader } from "../loading";
 import { FixedSizeList as List } from "react-window";
 import { useRef } from "react";
-import { ListItem } from "../lists/MusicFromDirectoryList";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useContext } from "react";
 import { MusicDropdown } from "./MusicDropdown";
 import { useState } from "react";
 
-export const SearchMoadal = ({ action, phrase }) => {
+export const SearchMoadal = React.memo(function SearchModal({ phrase }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
-  const { handleSetTrack, indexOfCurrentTrack, currentTrack } =
-    useContext(GlobalContext);
+  const { handleSetTrack, currentTrack } = useContext(GlobalContext);
   const [search] = useRequest();
 
   const [selected, setSelected] = useState("");
   const heightRef = useRef(null);
   const handleSearch = (phrase) => {
     if (phrase !== "") {
-      search.request("/dir/search", "GET", { search: phrase }).then((res) => {
-        console.log(res.data);
-      });
-      console.log("searching");
+      search.request("/dir/search", "GET", { search: phrase });
     }
   };
   useEffect(() => {
@@ -183,4 +178,4 @@ export const SearchMoadal = ({ action, phrase }) => {
       </Modal>
     </>
   );
-};
+});

@@ -1,16 +1,12 @@
-import { Box, Divider, Grid, GridItem, Image, Text } from "@chakra-ui/react";
-import { useContext, useEffect, useRef } from "react";
+import { Box, Grid, GridItem, Image, Text } from "@chakra-ui/react";
+import React, { useContext, useRef } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { FixedSizeList as List } from "react-window";
 
-export const LeftBar = () => {
+export const LeftBar = React.memo(function LeftBar() {
   const { queue, currentTrack } = useContext(GlobalContext);
 
   const heightRef = useRef(null);
-
-  useEffect(() => {
-    console.log(queue);
-  }, [queue]);
   return (
     <Grid
       height={"100%"}
@@ -81,7 +77,6 @@ export const LeftBar = () => {
                 {({ index, style }) => {
                   return (
                     <>
-                      {index}
                       <Box
                         style={style}
                         key={index}
@@ -110,7 +105,7 @@ export const LeftBar = () => {
       </GridItem>
     </Grid>
   );
-};
+});
 // <List
 //   className="scroll"
 //   itemCount={list.length}

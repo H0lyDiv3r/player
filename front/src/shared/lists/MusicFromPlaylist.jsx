@@ -1,20 +1,16 @@
-import { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { MusicDropdown } from "../dropdowns/MusicDropdown";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 
-export const MusicFromPlaylist = ({ list = [] }) => {
+export const MusicFromPlaylist = React.memo(function MusicFromPlaylist({
+  list = [],
+}) {
   const { handleSetCurrentTrack, currentTrack } = useContext(GlobalContext);
   const [selected, setSelected] = useState(null);
   const heightRef = useRef();
-
-  // useEffect(() => {
-  //   if (ref.current.offsetHeight) {
-  //     setHeight(() => ref.current.offsetHeight);
-  //   }
-  // }, []);
   return (
     <Grid templateRows={"repeat(12,1fr)"} height={"100%"}>
       <GridItem rowSpan={1}>
@@ -111,4 +107,4 @@ export const MusicFromPlaylist = ({ list = [] }) => {
       </GridItem>
     </Grid>
   );
-};
+});
