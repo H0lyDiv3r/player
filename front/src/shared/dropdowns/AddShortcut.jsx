@@ -1,13 +1,9 @@
 import {
   Box,
-  Button,
   FormControl,
   FormLabel,
   Icon,
   Input,
-  Menu,
-  MenuButton,
-  MenuList,
   Modal,
   ModalContent,
   ModalOverlay,
@@ -15,14 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { DefaultButton } from "../bottons";
 import { api } from "../../utils";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import path from "path-browserify";
 import { TbDots, TbFolderPlus } from "react-icons/tb";
 import { useShowToast } from "../../hooks/useShowToast";
+import { useCallback } from "react";
 
-export const AddShortcut = ({ vals }) => {
+export const AddShortcut = React.memo(function AddShortcut({ vals }) {
   const [shortcutName, handleSetShortcutName] = useState("");
   const { activeList } = useContext(GlobalContext);
   const { onOpen, isOpen, onClose } = useDisclosure();
@@ -31,39 +28,41 @@ export const AddShortcut = ({ vals }) => {
   const handleChange = (e) => {
     handleSetShortcutName(e.target.value);
   };
-  const handleCreateShortcut = (val) => {
-    let url = "/";
-    if (val.isExpandable) {
-      activeList.url.map((item) => (url = path.join(url, item)));
-      api
-        .post("/shortcut/addShortcut", {
-          name: shortcutName,
-          path: path.join(url, val.name, "/"),
-          active: "",
-        })
-        .then((res) => {
-          showToast("success", "added shortcut");
-        })
-        .catch(() => {
-          showToast("error", "failed to delete");
-        });
-      console.log(path.join(url, val.name, "/"));
-    } else {
-      activeList.url.map((item) => (url = path.join(url, item)));
-      api
-        .post("/shortcut/addShortcut", {
-          name: shortcutName,
-          path: path.join(url, "/"),
-          active: val.name,
-        })
-        .then((res) => {
-          showToast("success", "added shortcut");
-        })
-        .catch((error) => {
-          showToast("error", "failed to create shortcut");
-        });
-    }
-  };
+  const handleCreateShortcut = useCallback(
+    (val) => {
+      let url = "/";
+      if (val.isExpandable) {
+        activeList.url.map((item) => (url = path.join(url, item)));
+        api
+          .post("/shortcut/addShortcut", {
+            name: shortcutName,
+            path: path.join(url, val.name, "/"),
+            active: "",
+          })
+          .then((res) => {
+            showToast("success", "added shortcut");
+          })
+          .catch(() => {
+            showToast("error", "failed to delete");
+          });
+      } else {
+        activeList.url.map((item) => (url = path.join(url, item)));
+        api
+          .post("/shortcut/addShortcut", {
+            name: shortcutName,
+            path: path.join(url, "/"),
+            active: val.name,
+          })
+          .then((res) => {
+            showToast("success", "added shortcut");
+          })
+          .catch((error) => {
+            showToast("error", "failed to create shortcut");
+          });
+      }
+    },
+    [activeList.url, shortcutName, showToast],
+  );
   return (
     <>
       <Icon
@@ -114,4 +113,4 @@ export const AddShortcut = ({ vals }) => {
       </Modal>
     </>
   );
-};
+});

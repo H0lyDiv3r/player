@@ -1,5 +1,4 @@
 export const prev = (length, current) => {
-  console.log("coming form nextprev", length, current);
   if (current == 0) {
     return length - 1;
   } else {
@@ -7,7 +6,6 @@ export const prev = (length, current) => {
   }
 };
 export const next = (length, current) => {
-  console.log("coming form nextprev", length, current);
   if (current == length - 1) {
     return 0;
   } else {

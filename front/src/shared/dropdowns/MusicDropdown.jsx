@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Icon,
-  IconButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -16,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { api } from "../../utils";
 import useRequest from "../../hooks/useRequest";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { CreatePlaylist } from "./CreatePlaylist";
 import { useState } from "react";
@@ -28,40 +27,47 @@ import {
 } from "react-icons/tb";
 import { MdOutlineAddToQueue, MdOutlineQueue } from "react-icons/md";
 import { useShowToast } from "../../hooks/useShowToast";
+import { useCallback } from "react";
 
-export const MusicDropdown = ({ audio }) => {
+export const MusicDropdown = React.memo(function MusicDropdown({ audio }) {
   const { activePlaylist, currentTab, handleSetActivePlaylist } =
     useContext(GlobalContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [showToast] = useShowToast();
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-  const handleAddtoPlaylist = (playlist) => {
-    api
-      .post("/playlist/addToPlaylist", { ...audio, playlist })
-      .then((res) => {
-        showToast("success", "added to playlist");
-      })
-      .catch(() => {
-        showToast("error", "failed to add to playlist");
-      });
-  };
-  const handleRemoveFromPlaylist = (track) => {
-    api
-      .delete("/playlist/deleteFromPlaylist", {
-        params: {
-          name: activePlaylist.active,
-          path: track.path,
-        },
-      })
-      .then((res) => {
-        showToast("success", "removed from playlist");
-        handleSetActivePlaylist(activePlaylist.active);
-      })
-      .catch(() => {
-        showToast("success", "failed to remove");
-      });
-  };
+  const handleAddtoPlaylist = useCallback(
+    (playlist) => {
+      api
+        .post("/playlist/addToPlaylist", { ...audio, playlist })
+        .then((res) => {
+          showToast("success", "added to playlist");
+        })
+        .catch(() => {
+          showToast("error", "failed to add to playlist");
+        });
+    },
+    [audio, showToast],
+  );
+  const handleRemoveFromPlaylist = useCallback(
+    (track) => {
+      api
+        .delete("/playlist/deleteFromPlaylist", {
+          params: {
+            name: activePlaylist.active,
+            path: track.path,
+          },
+        })
+        .then((res) => {
+          showToast("success", "removed from playlist");
+          handleSetActivePlaylist(activePlaylist.active);
+        })
+        .catch(() => {
+          showToast("success", "failed to remove");
+        });
+    },
+    [activePlaylist.active, showToast, handleSetActivePlaylist],
+  );
   const handleAddToFavourite = (track) => {
     api
       .post("/playlist/addToPlaylist", { ...track, playlist: "favorites" })
@@ -153,23 +159,26 @@ export const MusicDropdown = ({ audio }) => {
       </Modal>
     </>
   );
-};
+});
 
-const PlaylistMenu = ({ handleAddToPlaylist }) => {
+const PlaylistMenu = React.memo(function PlaylistMenu({ handleAddToPlaylist }) {
   const [playlists] = useRequest();
 
   const [showToast] = useShowToast();
-  const handleCreatePlaylist = (playlistName) => {
-    api
-      .post("/playlist/createPlaylist", { name: playlistName })
-      .then(() => {
-        showToast("success", "created playlist");
-      })
-      .catch(() => {
-        showToast("error", "failed to create playlist");
-      });
-    console.log("hanele", playlistName);
-  };
+  const handleCreatePlaylist = useCallback(
+    (playlistName) => {
+      api
+        .post("/playlist/createPlaylist", { name: playlistName })
+        .then(() => {
+          showToast("success", "created playlist");
+        })
+        .catch(() => {
+          showToast("error", "failed to create playlist");
+        });
+      console.log("hanele", playlistName);
+    },
+    [showToast],
+  );
   const { onOpen } = useDisclosure();
 
   const handleOpen = () => {
@@ -211,4 +220,4 @@ const PlaylistMenu = ({ handleAddToPlaylist }) => {
       </Menu>
     </>
   );
-};
+});

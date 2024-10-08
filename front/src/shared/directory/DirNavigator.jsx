@@ -9,7 +9,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaFolder, FaFolderPlus } from "react-icons/fa6";
@@ -20,7 +20,7 @@ import { useShowToast } from "../../hooks/useShowToast";
 import useRequest from "../../hooks/useRequest";
 import { DotLoader } from "../loading";
 
-export const DirNavigator = () => {
+export const DirNavigator = React.memo(function DirNavigator() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dir, setDir] = useState([{ name: "", type: "dir" }]);
   const [scan] = useRequest();
@@ -58,7 +58,7 @@ export const DirNavigator = () => {
           setDir(res.data);
         });
     }
-  }, [filePath]);
+  }, [filePath, isOpen]);
   return (
     <>
       <ButtonIcon icon={FaFolderPlus} onClick={onOpen}>
@@ -181,6 +181,6 @@ export const DirNavigator = () => {
       </Modal>
     </>
   );
-};
+});
 
 // <DefaultButton onClick={handleScan}>scan</DefaultButton>
