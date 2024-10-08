@@ -104,8 +104,7 @@ const Player = () => {
 
   return (
     <Box
-      bg={"none"}
-      bgImage={"./musicLine.svg"}
+      bgImage={"./musicLiner.svg"}
       bgSize={"cover"}
       bgPos={"left"}
       width={"100%"}

@@ -59,7 +59,7 @@ export const ToastProvider = ({ children }) => {
         width={"100%"}
         pos={"relative"}
         ref={containerRef}
-        overflow={"hidden"}
+        // overflow={"hidden"}
       >
         {children}
         <Portal>
