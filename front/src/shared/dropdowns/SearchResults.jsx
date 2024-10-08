@@ -65,6 +65,7 @@ export const SearchMoadal = React.memo(function SearchModal({ phrase }) {
               flexDir={"column"}
             >
               <Icon as={IoClose} onClick={() => onClose()} my={"5px"} />
+              <Box>showing results for {phrase}</Box>
               <Box height={"100%"}>
                 {search.loading && (
                   <Box
@@ -94,7 +95,7 @@ export const SearchMoadal = React.memo(function SearchModal({ phrase }) {
                     <List
                       className="scroll"
                       itemCount={search.response.length}
-                      itemSize={42}
+                      itemSize={45}
                       height={
                         heightRef.current ? heightRef.current.offsetHeight : 300
                       }
