@@ -43,7 +43,7 @@ export const SearchMoadal = React.memo(function SearchModal({ phrase }) {
         as={TbSearch}
         _hover={{ cursor: "pointer" }}
         boxSize={4}
-        onClick={(e) => {
+        onClick={() => {
           onOpen();
         }}
       />
