@@ -69,12 +69,11 @@ const Player = () => {
     }
   }, [favorite, currentTrack, showToast]);
 
-  const MotionBox = motion(Box);
   useEffect(() => {
     if (currentTrack) {
       const trackName = `${import.meta.env.VITE_BASE_URL}${currentTrack.path}`;
 
-      jsmediatags.read(trackName, {
+      window.jsmediatags.read(trackName, {
         onSuccess: (tags) => {
           if (tags.tags.picture) {
             let byteCode = tags.tags.picture.data;
@@ -104,8 +103,7 @@ const Player = () => {
 
   return (
     <Box
-      bg={"none"}
-      bgImage={"./musicLine.svg"}
+      bgImage={"./musicLiner.svg"}
       bgSize={"cover"}
       bgPos={"left"}
       width={"100%"}
@@ -127,7 +125,7 @@ const Player = () => {
             onPlaying={() => handleTimeline(audioRef)}
             src={
               currentTrack
-                ? `http://localhost:3000/${currentTrack["path"]}`
+                ? `${import.meta.env.VITE_BASE_URL}${currentTrack.path}`
                 : ""
             }
             loop={loop == 2}

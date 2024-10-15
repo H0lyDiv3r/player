@@ -1,10 +1,12 @@
 {
   "scripts": {
-    "dev": "nodemon app.mjs"
+    "serve": "nodemon app.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "get-port-please": "^3.1.2",
     "jsmediatags": "^3.9.7"
   }
 }

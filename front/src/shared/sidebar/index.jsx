@@ -17,11 +17,8 @@ export const Sidebar = () => {
       gap={"12px"}
       fontSize={"12px"}
     >
-      <GridItem rowSpan={3}>
+      <GridItem rowSpan={1}>
         <Box height={"100%"}>
-          <Box py={"6px"}>
-            <Text>Name and logo</Text>
-          </Box>
           <Box
             fontSize={"12px"}
             bg={"neutral.dark.800"}
@@ -77,7 +74,7 @@ export const Sidebar = () => {
         </Box>
       </GridItem>
       <GridItem
-        rowSpan={9}
+        rowSpan={11}
         bg={"neutral.dark.800"}
         p={"12px"}
         borderRadius={"12px"}
