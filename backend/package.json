@@ -1,12 +1,12 @@
 {
   "scripts": {
-    "serve": "node app.mjs"
+    "serve": "bash build.sh"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "get-port-please": "^3.1.2",
-    "jsmediatags": "^3.9.7"
+    "jsmediatags": "^3.9.7",
+    "nodemon": "^3.1.7"
   }
 }
