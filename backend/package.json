@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "serve": "nodemon app.mjs"
+    "serve": "node app.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",

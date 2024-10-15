@@ -90,7 +90,7 @@ export const AddShortcut = React.memo(function AddShortcut({ vals }) {
                 <FormLabel fontSize={"12px"}>Shortcut Name</FormLabel>
                 <Input
                   size={"sm"}
-                  bg={"neutral.dark.600"}
+                  bg={"neutral.dark.800"}
                   border={"none"}
                   borderRadius={"4px"}
                   color={"neutral.dark.100"}
