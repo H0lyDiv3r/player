@@ -75,7 +75,7 @@ export const Sidebar = () => {
       </GridItem>
       <GridItem
         rowSpan={11}
-        bg={"rgba(100,100,100,0.2)"}
+        bg={"neutral.dark.800"}
         p={"12px"}
         borderRadius={"12px"}
       >
