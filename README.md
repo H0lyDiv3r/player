@@ -6,7 +6,7 @@ go into the backend
 open your terminal and run npm run serve
 
 
-#alternatively
+# alternatively
 
 you need to install the dependencies of both the front end and backend
 build the front end with npm run build
