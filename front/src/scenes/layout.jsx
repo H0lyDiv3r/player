@@ -4,31 +4,19 @@ import PlayerContextProvider from "../shared/player/PlayerContextProvider";
 import { GlobalContext } from "../store/GlobalContextProvider";
 import { useContext } from "react";
 import { Sidebar } from "../shared/sidebar";
-import { MusicDropdown } from "../shared/dropdowns/MusicDropdown";
-import { FixedSizeList as List } from "react-window";
-import { useState } from "react";
-import { useEffect } from "react";
 import { MusicFromDirectoryList } from "../shared/lists/MusicFromDirectoryList";
 import { useRef } from "react";
 import { MusicFromPlaylist } from "../shared/lists/MusicFromPlaylist";
 import { LeftBar } from "../shared/leftbar";
-import { DotLoader } from "../shared/loading";
 import { Search } from "../shared/input/Search";
-import useRequest from "../hooks/useRequest";
 
 export const Layout = () => {
-  const { queue, activeList, activePlaylist, currentTab } =
-    useContext(GlobalContext);
+  const { activeList, activePlaylist, currentTab } = useContext(GlobalContext);
 
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    console.log("active list", activeList);
-    console.log("queueueueueq", queue);
-    console.log("plaplaplaplaplaplap", activePlaylist);
-  }, [activeList, queue]);
   return (
-    <Box bg={"neutral.dark.900"} overflow={"hidden"}>
+    <Box bg={"neutral.dark.900"} overflow={"hidden"} color={"white"}>
       <Grid
         bg={"rgba(0,0,0,0.5)"}
         w={"100%"}
