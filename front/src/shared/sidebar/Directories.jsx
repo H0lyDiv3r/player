@@ -83,10 +83,11 @@ export const Directories = React.memo(function Directories() {
       height={"100%"}
       templateRows={"repeat(12,1fr)"}
       color={"neutral.dark.200"}
+      gap={4}
     >
       {dirs.response && dirs.response.length > 0 && (
         <>
-          <GridItem rowSpan={2}>
+          <GridItem rowSpan={1}>
             <DirNavigator />
           </GridItem>
           <GridItem rowSpan={1} overflow={"hidden"}>
@@ -115,8 +116,13 @@ export const Directories = React.memo(function Directories() {
         </>
       )}
 
-      <GridItem rowSpan={dirs.response && dirs.response.length < 1 ? 12 : 9}>
-        <Box overflow={"auto"} height={"100%"} fontSize={"14px"}>
+      <GridItem rowSpan={dirs.response && dirs.response.length < 1 ? 12 : 10}>
+        <Box
+          overflow={"auto"}
+          height={"100%"}
+          fontSize={"14px"}
+          className="scroll"
+        >
           {dirs.response && (
             <>
               {dirs.response.length < 1 ? (
@@ -152,7 +158,7 @@ export const Directories = React.memo(function Directories() {
                 </Box>
               ) : (
                 dirs.response.map((dir, idx) => (
-                  <Box key={idx}>
+                  <Box key={idx} heigt={"100%"}>
                     <Box
                       p={"6px"}
                       borderRadius={"4px"}

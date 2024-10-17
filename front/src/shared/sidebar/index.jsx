@@ -13,7 +13,7 @@ export const Sidebar = () => {
   return (
     <Grid
       height={"100%"}
-      templateRows={"repeat(12,1fr)"}
+      templateRows={"40px 1fr"}
       gap={"12px"}
       fontSize={"12px"}
     >

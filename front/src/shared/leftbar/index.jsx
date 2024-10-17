@@ -10,12 +10,12 @@ export const LeftBar = React.memo(function LeftBar() {
   return (
     <Grid
       height={"100%"}
-      templateRows={"repeat(12,1fr)"}
+      templateRows={"30px 1fr"}
       gap={"12px"}
       fontSize={"12px"}
       color={"neutral.dark.200"}
     >
-      <GridItem rowSpan={1}>
+      <GridItem>
         <Text fontSize={"16px"}>Queue</Text>
       </GridItem>
       <GridItem
@@ -107,23 +107,3 @@ export const LeftBar = React.memo(function LeftBar() {
     </Grid>
   );
 });
-// <List
-//   className="scroll"
-//   itemCount={list.length}
-//   itemSize={42}
-//   height={heightRef.current ? heightRef.current.offsetHeight : 400}
-//   width={"100%"}
-// >
-//   {({ index, style }) => {
-//     return (
-//       <ListItem
-//         index={index}
-//         style={style}
-//         track={list[index]}
-//         action={handleSetCurrentTrack}
-//         indexOfCurrentTrack={indexOfCurrentTrack}
-//         currentTrack={currentTrack}
-//       />
-//     );
-//   }}
-// </List>;
