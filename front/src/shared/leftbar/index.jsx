@@ -65,13 +65,13 @@ export const LeftBar = React.memo(function LeftBar() {
               </Box>
             </>
           ) : (
-            <Box ref={heightRef}>
+            <Box ref={heightRef} height={"100%"}>
               <List
-                classname="scroll"
+                className="scroll"
                 itemCount={queue.list.length}
                 itemSize={42}
                 height={
-                  heightRef.current ? heightRef.current.offsetHeight : 400
+                  heightRef.current ? heightRef.current.offsetHeight : 100
                 }
                 width={"100%"}
               >
