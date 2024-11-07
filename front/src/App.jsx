@@ -1,10 +1,6 @@
-import { Button } from "@chakra-ui/react";
 import { Layout } from "./scenes/layout";
-import { ToastContext, ToastProvider } from "./shared/toast/ToastProvider";
-import { useContext } from "react";
 
 function App() {
-  const { handleAddToast } = useContext(ToastContext);
   return (
     // <Box
     //   bg={"rgba(0,0,0,0.5)"}

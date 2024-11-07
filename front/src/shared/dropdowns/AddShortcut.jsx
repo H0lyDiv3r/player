@@ -15,9 +15,10 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { GlobalContext } from "../../store/GlobalContextProvider";
 import path from "path-browserify";
-import { TbDots, TbFolderPlus } from "react-icons/tb";
+import { TbFolderPlus } from "react-icons/tb";
 import { useShowToast } from "../../hooks/useShowToast";
 import { useCallback } from "react";
+import colors from "../../themes/colors";
 
 export const AddShortcut = React.memo(function AddShortcut({ vals }) {
   const [shortcutName, handleSetShortcutName] = useState("");
@@ -80,17 +81,18 @@ export const AddShortcut = React.memo(function AddShortcut({ vals }) {
             pos={"absolute"}
             top={modalPosition.y}
             left={modalPosition.x}
-            bg={"neutral.dark.700"}
+            bg={"neutral.dark.800"}
             m={0}
             width={"250px"}
             color={"neutral.dark.100"}
+            border={`1px solid ${colors.neutral.dark[600]}`}
           >
             <Box p={"12px"}>
               <FormControl my={"12px"}>
                 <FormLabel fontSize={"12px"}>Shortcut Name</FormLabel>
                 <Input
                   size={"sm"}
-                  bg={"neutral.dark.800"}
+                  bg={"neutral.dark.700"}
                   border={"none"}
                   borderRadius={"4px"}
                   color={"neutral.dark.100"}
@@ -102,7 +104,10 @@ export const AddShortcut = React.memo(function AddShortcut({ vals }) {
               </FormControl>
               <DefaultButton
                 size={"sm"}
-                action={() => handleCreateShortcut(vals)}
+                action={() => {
+                  handleCreateShortcut(vals);
+                  onClose();
+                }}
                 isDisabled={shortcutName.length < 2}
               >
                 create

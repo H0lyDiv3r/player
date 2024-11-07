@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Icon } from "@chakra-ui/react";
 import { Directories } from "./Directories";
 import { Playlists } from "./Playlists";
 import { useState } from "react";
@@ -56,6 +56,7 @@ export const Sidebar = () => {
             >
               <Icon as={TbPlaylist} boxSize={5} />
             </Box>
+
             <Box
               onClick={() => handleSetTab("shortcuts")}
               py={"6px"}

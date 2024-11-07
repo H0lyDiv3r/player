@@ -66,22 +66,13 @@ export const Playlists = React.memo(function Playlist() {
       setPlaylists(res.data);
     });
   }, []);
-  useEffect(() => {
-    // api
-    //   .get("/playlist/getPlaylist", {
-    //     params: {
-    //       name: activePlaylist.name,
-    //     },
-    //   })
-    //   .then((res) => {});
-  }, [activePlaylist]);
   return (
     <Grid
       height={"100%"}
       templateRows={"repeat(12,1fr)"}
       color={"neutral.dark.200"}
     >
-      <GridItem rowSpan={2}>
+      <GridItem rowSpan={1}>
         <CreatePlaylist action={handleCreatePlaylist} />
       </GridItem>
       <GridItem rowSpan={10} display={"grid"}>

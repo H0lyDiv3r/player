@@ -1,16 +1,6 @@
 import { Box, Button, Icon } from "@chakra-ui/react";
 import { Button3D } from "./Button3D";
 
-export const IconButton = ({ action, children, ...other }) => {
-  return (
-    <>
-      <Button onClick={action} {...other}>
-        {children}
-      </Button>
-    </>
-  );
-};
-
 export const PlayerButton = ({
   children,
   action,
@@ -48,6 +38,7 @@ export const DefaultButton = ({ children, action, ...other }) => {
       width={"100%"}
       fontSize={"14px"}
       fontWeight={400}
+      textTransform={"capitalize"}
       {...other}
     >
       {children}
@@ -73,6 +64,9 @@ export const ButtonIcon = ({
         width={"100%"}
         fontSize={"14px"}
         fontWeight={400}
+        display={"grid"}
+        gridTemplateColumns={"1fr  9fr"}
+        textTransform={"capitalize"}
         {...other}
       >
         {type === "left" && <Icon as={icon} mr={"6px"} boxSize={size} />}
