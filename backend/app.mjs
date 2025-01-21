@@ -10,7 +10,6 @@ import playlistRoutes from "./routers/playlist.mjs";
 import shortcutRoutes from "./routers/shourtcuts.mjs";
 import { errorHandler } from "./middlewares/errorHandler.mjs";
 import { fileURLToPath } from "url";
-import { getPort } from "get-port-please";
 
 // Get the filename from import.meta.url
 const __filename = fileURLToPath(import.meta.url);
