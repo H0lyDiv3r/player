@@ -1,11 +1,13 @@
 #!/bin/bash
 
-if [ ! -d "dist" ]; then
+if [ ! -d "./dist" ]; then
 cd ../front
 npm install
 npm run build
-cp dist ../backend
-npm run serve
+mv dist ../backend
+cd ../backend
+npm install
+npm run start
 else
 npx nodemon -- app.mjs
 fi

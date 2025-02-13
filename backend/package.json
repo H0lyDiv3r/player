@@ -1,12 +1,13 @@
 {
-  "scripts": {
-    "serve": "bash build.sh"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "jsmediatags": "^3.9.7",
-    "nodemon": "^3.1.7"
-  }
+    "scripts": {
+        "build": "bash build.sh",
+        "start": "nodemon app.mjs"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "jsmediatags": "^3.9.7",
+        "nodemon": "^3.1.7"
+    }
 }

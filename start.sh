@@ -2,4 +2,4 @@
 
 cd backend
 sleep 2
-npm run serve
+npm run build
