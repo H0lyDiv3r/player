@@ -35,3 +35,12 @@ select your music and click play!!!
 
 
 ![Screenshot from 2025-02-13 13-54-28](https://github.com/user-attachments/assets/80f01e97-f8ff-41bf-a6c1-8eaec8e4f32a)
+
+## if you dont like the process of navigating your directory map to find your music
+you can create a shortcut to your directories but hovering over the directory you want to create a shortcut of on the side bar and click on the "Add Folder" icon.
+
+![Screenshot from 2025-02-13 14-10-29](https://github.com/user-attachments/assets/edfa4fd3-60d9-4837-9458-9330cfe799f0)
+
+ insert the name of the short cut. and a short cut will appear on the shortcuts tab on the sidebar
+
+![Screenshot from 2025-02-13 14-10-46](https://github.com/user-attachments/assets/3e7be784-7312-4338-9a48-52938dc9358a)
